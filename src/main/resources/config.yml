@@ -1,0 +1,57 @@
+#########################################################################
+#  _____  _                    _     _____              _               #
+# /  __ \| |                  | |   | ___ \            | |              #
+# | /  \/| |__   _   _  _ __  | | __| |_/ / _   _  ___ | |_  ___  _ __  #
+# | |    |  _ \ | | | || '_ \ | |/ /| ___ \| | | |/ __|| __|/ _ \| '__| #
+# | \__/\| | | || |_| || | | ||   < | |_/ /| |_| |\__ \| |_|  __/| |    #
+#  \____/|_| |_| \__,_||_| |_||_|\_\\____/  \__,_||___/ \__|\___||_|    #
+#                                                                       #
+#                            v1.0 by Biscut                             #
+#########################################################################
+
+chunkbuster:
+  # Does not support damage values.
+  material: 'ENDER_PORTAL_FRAME'
+  name: '&aChunk Buster'
+  lore:
+    - '&7Radius: &e{area}'
+    - ''
+    - '&7Right click to place and destroy'
+    - '&7all the blocks in your chunk radius.'
+
+# This amount of blocks will be processed from the queue per second
+# High numbers will make the blocks disappear instantly, but especially with
+# ones with 3 or 5 radius, it may lag the server.
+blocks-removed-per-tick: 600
+
+# Change this to false if you don't want to be able to destroy wilderness chunks.
+can-place-in-wilderness: true
+
+# Whole number - Wait this amount of seconds before executing the chunkbuster.
+# This is useful if your players don't have fly etc. 0 means no delay.
+chunkbuster-warmup: 0
+
+confirm-gui:
+  # Maximum 6
+  rows: 3
+  # Please use 1.8 material names from here or any other 1.8 javadocs.
+  # https://biscut.xyz/javadocs/org/bukkit/Material.html
+  # Damage values supported.
+  confirm-material: 'WOOL:5'
+  cancel-material: 'WOOL:14'
+  # Please do not leave leave any of these below texts empty ('') please
+  title: '&7CONFIRM CHUNK BUSTER'
+  confirm-block-name: '&aCONFIRM'
+  cancel-block-name: '&cDENY'
+
+messages:
+  give: '&aYou gave {player} {amount} chunkbusters.'
+  receive: '&aYou have received {amount} chunkbusters.'
+  no-permission: '&cNo permission!'
+  no-faction: '&cYou must have a faction to use a chunk buster!'
+  # These 2 messages will display depending on what you chose for "can-place-in-wilderness".
+  only-wilderness-and-claim: '&cYou can only place chunk busters in your territory or in wilderness!'
+  only-claim: '&cYou can only place chunk busters in your territory!'
+  clearing-chunks: '&aChunk(s) added to queue, clearing!'
+  #This will only show if "chunkbuster-activation-delay" is above 0
+  clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'

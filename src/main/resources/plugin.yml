@@ -1,0 +1,14 @@
+main: xyz.biscut.chunkbuster.ChunkBuster
+version: 1.0
+name: ChunkBuster
+author: Biscut
+depend: [Factions]
+softdepend: [MassiveCore]
+commands:
+  chunkbuster:
+    description: Give a player (a) chunkbuster(s).
+    aliases: [cb]
+permissions:
+  chunkbuster.admin:
+    description: Access to the /cb command.
+    default: op
