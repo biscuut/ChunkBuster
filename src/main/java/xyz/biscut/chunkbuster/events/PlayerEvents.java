@@ -82,8 +82,12 @@ public class PlayerEvents implements Listener {
                                 if (main.getConfigValues().getChunkBusterWarmup() > 0) {
                                     int seconds = main.getConfigValues().getChunkBusterWarmup();
                                     new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
-                                    Bukkit.getScheduler().runTaskLater(main, () -> main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p), 20L * seconds);
+                                    Bukkit.getScheduler().runTaskLater(main, () -> {
+                                        main.getWaterChunks().add(chunkBusterLocation.getChunk());
+                                        main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                    }, 20L * seconds);
                                 } else {
+                                    main.getWaterChunks().add(chunkBusterLocation.getChunk());
                                     main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
                                 }
                             }

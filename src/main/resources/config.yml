@@ -6,7 +6,7 @@
 # | \__/\| | | || |_| || | | ||   < | |_/ /| |_| |\__ \| |_|  __/| |    #
 #  \____/|_| |_| \__,_||_| |_||_|\_\\____/  \__,_||___/ \__|\___||_|    #
 #                                                                       #
-#                            v1.0 by Biscut                             #
+#                           v1.0.1 by Biscut                            #
 #########################################################################
 
 chunkbuster:
@@ -55,3 +55,6 @@ messages:
   clearing-chunks: '&aChunk(s) added to queue, clearing!'
   #This will only show if "chunkbuster-activation-delay" is above 0
   clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'
+
+# Please do not edit :)
+config-version: 1.0

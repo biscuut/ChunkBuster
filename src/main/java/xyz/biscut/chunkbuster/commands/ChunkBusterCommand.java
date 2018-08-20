@@ -68,7 +68,7 @@ public class ChunkBusterCommand implements CommandExecutor {
                                         sender.sendMessage(ChatColor.RED + "The area must be 1, 3, or 5.");
                                     }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "Please specify a chunk radius!");
+                                    sender.sendMessage(ChatColor.RED + "Please specify a chunk area!");
                                 }
                             } else {
                                 sender.sendMessage(ChatColor.RED + "This player is not online!");
