@@ -1,5 +1,5 @@
 main: xyz.biscut.chunkbuster.ChunkBuster
-version: 1.0
+version: 1.0.1
 name: ChunkBuster
 author: Biscut
 depend: [Factions]

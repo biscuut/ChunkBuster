@@ -1,11 +1,13 @@
 package xyz.biscut.chunkbuster;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.biscut.chunkbuster.commands.ChunkBusterCommand;
+import xyz.biscut.chunkbuster.events.OtherEvents;
 import xyz.biscut.chunkbuster.events.PlayerEvents;
 import xyz.biscut.chunkbuster.utils.HookUtils;
 import xyz.biscut.chunkbuster.hooks.MCoreFactionsHook;
@@ -15,14 +17,16 @@ import xyz.biscut.chunkbuster.utils.ConfigValues;
 import xyz.biscut.chunkbuster.utils.Utils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class ChunkBuster extends JavaPlugin {
 
     private ConfigValues configValues = new ConfigValues(this);
-    private Utils utils = new Utils(this);
     private HashMap<Player, Location> chunkBusterLocations = new HashMap<>();
     private LinkedList<Block> removalQueue = new LinkedList<>();
+    private HashSet<Chunk> waterChunks = new HashSet<>();
+    private Utils utils = new Utils(this);
     private HookUtils hookUtils;
 
     @Override
@@ -35,6 +39,7 @@ public class ChunkBuster extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(new PlayerEvents(this), this);
+        Bukkit.getPluginManager().registerEvents(new OtherEvents(this), this);
         getCommand("chunkbuster").setExecutor(new ChunkBusterCommand(this));
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RemovalQueue(this), 1L, 1L);
     }
@@ -48,4 +53,6 @@ public class ChunkBuster extends JavaPlugin {
     public HashMap<Player, Location> getChunkBusterLocations() { return chunkBusterLocations; }
 
     public LinkedList<Block> getRemovalQueue() { return removalQueue; }
+
+    public HashSet<Chunk> getWaterChunks() { return waterChunks; }
 }
