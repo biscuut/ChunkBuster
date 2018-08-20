@@ -36,7 +36,7 @@ public class ChunkBusterCommand implements CommandExecutor {
                                         sender.sendMessage(ChatColor.RED + "This isn't a valid number!");
                                         return false;
                                     }
-                                    if (chunkArea == 1 || chunkArea == 3 || chunkArea == 5) {
+                                    if (chunkArea > 0 && chunkArea % 2 != 0) { // Is positive and odd number
                                         int giveAmount = 1;
                                         if (args.length > 3) {
                                             try {
@@ -48,7 +48,7 @@ public class ChunkBusterCommand implements CommandExecutor {
                                         }
                                         if (giveAmount < 65) {
                                             if (p.getInventory().firstEmpty() != -1) {
-                                                ItemStack item = new ItemStack(Material.ENDER_PORTAL_FRAME, giveAmount);
+                                                ItemStack item = new ItemStack(main.getConfigValues().getChunkBusterMaterial(), giveAmount, main.getConfigValues().getChunkBusterDamage());
                                                 ItemMeta itemMeta = item.getItemMeta();
                                                 itemMeta.setDisplayName(main.getConfigValues().getChunkBusterName());
                                                 itemMeta.setLore(main.getConfigValues().getChunkBusterLore(chunkArea));
@@ -65,10 +65,10 @@ public class ChunkBusterCommand implements CommandExecutor {
                                             sender.sendMessage(ChatColor.RED + "You can only give 64 at a time!");
                                         }
                                     } else {
-                                        sender.sendMessage(ChatColor.RED + "The area must be 1, 3, or 5.");
+                                        sender.sendMessage(ChatColor.RED + "The area must be greater than 0 and be an odd number!");
                                     }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "Please specify a chunk area!");
+                                    sender.sendMessage(ChatColor.RED + "Please specify the chunk area!");
                                 }
                             } else {
                                 sender.sendMessage(ChatColor.RED + "This player is not online!");

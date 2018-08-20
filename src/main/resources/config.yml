@@ -6,11 +6,10 @@
 # | \__/\| | | || |_| || | | ||   < | |_/ /| |_| |\__ \| |_|  __/| |    #
 #  \____/|_| |_| \__,_||_| |_||_|\_\\____/  \__,_||___/ \__|\___||_|    #
 #                                                                       #
-#                           v1.0.1 by Biscut                            #
+#                           v1.0.2 by Biscut                            #
 #########################################################################
 
 chunkbuster:
-  # Does not support damage values.
   material: 'ENDER_PORTAL_FRAME'
   name: '&aChunk Buster'
   lore:
@@ -45,16 +44,17 @@ confirm-gui:
   cancel-block-name: '&cDENY'
 
 messages:
-  give: '&aYou gave {player} {amount} chunkbusters.'
-  receive: '&aYou have received {amount} chunkbusters.'
+  give: '&aYou gave {player} {amount} chunkbuster(s).'
+  receive: '&aYou have received {amount} chunkbuster(s).'
   no-permission: '&cNo permission!'
   no-faction: '&cYou must have a faction to use a chunk buster!'
   # These 2 messages will display depending on what you chose for "can-place-in-wilderness".
   only-wilderness-and-claim: '&cYou can only place chunk busters in your territory or in wilderness!'
   only-claim: '&cYou can only place chunk busters in your territory!'
+  region-protected: '&cYou cannot place chunk busters in this region!'
   clearing-chunks: '&aChunk(s) added to queue, clearing!'
   #This will only show if "chunkbuster-activation-delay" is above 0
   clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'
 
 # Please do not edit :)
-config-version: 1.0
+config-version: 1.1

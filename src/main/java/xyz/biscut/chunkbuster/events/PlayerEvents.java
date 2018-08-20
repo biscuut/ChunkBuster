@@ -58,18 +58,19 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onConfirmClick(InventoryClickEvent e) {
-        if (e.getClickedInventory().getName().contains(main.getConfigValues().getGUITitle())) {
+        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null &&
+                e.getClickedInventory().getName().contains(main.getConfigValues().getGUITitle())) {
             e.setCancelled(true);
             Player p = (Player)e.getWhoClicked();
             Location chunkBusterLocation = main.getChunkBusterLocations().get(e.getWhoClicked());
             if (chunkBusterLocation != null) {
                 int chunkBusterDiameter = e.getWhoClicked().getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE);
                 if (main.getHookUtils().hasFaction(p)) {
-                    if (main.getHookUtils().compareLocPlayerFaction(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
+                    if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
                         if (main.getHookUtils().isWilderness(chunkBusterLocation) && !main.getConfigValues().canPlaceInWilderness()) {
                             p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
                         } else {
-                            if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
+                            if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
                                 if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
                                     if (p.getItemInHand().getAmount() <= 1) {
                                         p.getInventory().setItemInHand(null);
@@ -82,21 +83,21 @@ public class PlayerEvents implements Listener {
                                 if (main.getConfigValues().getChunkBusterWarmup() > 0) {
                                     int seconds = main.getConfigValues().getChunkBusterWarmup();
                                     new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
-                                    Bukkit.getScheduler().runTaskLater(main, () -> {
-                                        main.getWaterChunks().add(chunkBusterLocation.getChunk());
-                                        main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
-                                    }, 20L * seconds);
+                                    Bukkit.getScheduler().runTaskLater(main, () -> main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p), 20L * seconds);
                                 } else {
-                                    main.getWaterChunks().add(chunkBusterLocation.getChunk());
                                     main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
                                 }
                             }
                         }
                     } else {
-                        if (main.getConfigValues().canPlaceInWilderness()) {
-                            p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                        if (main.getHookUtils().getHookType() == 3) {
+                            p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
                         } else {
-                            p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                            if (main.getConfigValues().canPlaceInWilderness()) {
+                                p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                            } else {
+                                p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                            }
                         }
                     }
                 } else {

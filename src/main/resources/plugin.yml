@@ -1,9 +1,8 @@
 main: xyz.biscut.chunkbuster.ChunkBuster
-version: 1.0.1
+version: 1.0.2
 name: ChunkBuster
 author: Biscut
-depend: [Factions]
-softdepend: [MassiveCore]
+softdepend: [MassiveCore, Factions, WorldGuard]
 commands:
   chunkbuster:
     description: Give a player (a) chunkbuster(s).

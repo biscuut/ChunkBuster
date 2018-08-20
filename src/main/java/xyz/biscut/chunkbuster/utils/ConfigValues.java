@@ -19,14 +19,42 @@ public class ConfigValues {
     }
 
     public Material getChunkBusterMaterial() {
+        String rawMaterial = main.getConfig().getString("chunkbuster.material");
         Material mat;
-        try {
-            mat = Material.valueOf(main.getConfig().getString("chunkbuster.material"));
-        } catch (IllegalArgumentException ex) {
-            mat = Material.ENDER_PORTAL_FRAME;
-            Bukkit.getLogger().severe("[ChunkBuster] Your chunk buster material is invalid!");
+        if (rawMaterial.contains(":")) {
+            String[] materialSplit = rawMaterial.split(":");
+            try {
+                mat = Material.valueOf(materialSplit[0]);
+            } catch (IllegalArgumentException ex) {
+                mat = Material.ENDER_PORTAL_FRAME;
+                Bukkit.getLogger().severe("Your chunk buster material is invalid!");
+            }
+        } else {
+            try {
+                mat = Material.valueOf(rawMaterial);
+            } catch (IllegalArgumentException ex) {
+                mat = Material.ENDER_PORTAL_FRAME;
+                Bukkit.getLogger().severe("Your chunk buster material is invalid!");
+            }
         }
         return mat;
+    }
+
+    public short getChunkBusterDamage() {
+        String rawDamage = main.getConfig().getString("chunkbuster.material");
+        if (rawDamage.contains(":")) {
+            String[] materialSplit = rawDamage.split(":");
+            short damage;
+            try {
+                damage = Short.valueOf(materialSplit[1]);
+            } catch (IllegalArgumentException ex) {
+                damage = 0;
+                Bukkit.getLogger().severe("Your chunk buster damage is invalid!");
+            }
+            return damage;
+        } else {
+            return 0;
+        }
     }
 
     public String getChunkBusterName() { return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("chunkbuster.name")); }
@@ -61,14 +89,14 @@ public class ConfigValues {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
                 mat = Material.WOOL;
-                Bukkit.getLogger().severe("[ChunkBuster] Your accept-block material is invalid!");
+                Bukkit.getLogger().severe("Your accept-block material is invalid!");
             }
             short damage;
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
                 damage = 0;
-                Bukkit.getLogger().severe("[ChunkBuster] Your accept-block damage is invalid!");
+                Bukkit.getLogger().severe("Your accept-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
         } else {
@@ -76,7 +104,7 @@ public class ConfigValues {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
                 mat = Material.WOOL;
-                Bukkit.getLogger().severe("[ChunkBuster] Your accept-block material is invalid!");
+                Bukkit.getLogger().severe("Your accept-block material is invalid!");
             }
             return new ItemStack(mat, 1);
         }
@@ -91,14 +119,14 @@ public class ConfigValues {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
                 mat = Material.WOOL;
-                Bukkit.getLogger().severe("[ChunkBuster] Your cancel-block material is invalid!");
+                Bukkit.getLogger().severe("Your cancel-block material is invalid!");
             }
             short damage;
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
                 damage = 0;
-                Bukkit.getLogger().severe("[ChunkBuster] Your cancel-block damage is invalid!");
+                Bukkit.getLogger().severe("Your cancel-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
         } else {
@@ -106,7 +134,7 @@ public class ConfigValues {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
                 mat = Material.WOOL;
-                Bukkit.getLogger().severe("[ChunkBuster] Your cancel-block material is invalid!");
+                Bukkit.getLogger().severe("Your cancel-block material is invalid!");
             }
             return new ItemStack(mat, 1);
         }
@@ -157,5 +185,9 @@ public class ConfigValues {
     public String getClearingSecondsMessage(int seconds) {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.clearing-in-seconds")
         .replace("{seconds}", String.valueOf(seconds)));
+    }
+
+    public String getRegionProtectedMessage() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.region-protected"));
     }
 }

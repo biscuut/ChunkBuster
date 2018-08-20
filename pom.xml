@@ -6,7 +6,7 @@
 
     <groupId>xyz.biscut.chunkbuster</groupId>
     <artifactId>ChunkBuster</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>ChunkBuster</name>
 
     <build>
@@ -41,6 +41,10 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>sk89q-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -67,6 +71,11 @@
             <artifactId>MassiveCore</artifactId>
             <version>2.14.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-legacy</artifactId>
+            <version>6.2</version>
         </dependency>
     </dependencies>
 </project>
