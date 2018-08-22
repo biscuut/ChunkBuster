@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.biscut.chunkbuster.commands.ChunkBusterCommand;
 import xyz.biscut.chunkbuster.events.OtherEvents;
 import xyz.biscut.chunkbuster.events.PlayerEvents;
+import xyz.biscut.chunkbuster.utils.HookType;
 import xyz.biscut.chunkbuster.utils.HookUtils;
 import xyz.biscut.chunkbuster.timers.RemovalQueue;
 import xyz.biscut.chunkbuster.utils.ConfigValues;
@@ -29,18 +30,18 @@ public class ChunkBuster extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        int hookType;
+        HookType hookType;
         if (getServer().getPluginManager().getPlugin("MassiveCore") != null &&
                 getServer().getPluginManager().getPlugin("Factions") != null) {
             getLogger().info("Hooked into MassiveCore Factions");
-            hookType = 1;
+            hookType = HookType.MCOREFACTIONS;
         } else if (getServer().getPluginManager().getPlugin("Factions") != null) {
             getLogger().info("Hooked into FactionsUUID/SavageFactions");
-            hookType = 2;
+            hookType = HookType.FACTIONSUUID;
         } else {
             getLogger().info("No factions plugin found, attempting to hook into WorldGuard");
             if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
-                hookType = 3;
+                hookType = HookType.WORLDGUARD;
                 getLogger().info("Hooked into WorldGuard");
             } else {
                 getLogger().severe("No factions or worldguard found, disabling...");

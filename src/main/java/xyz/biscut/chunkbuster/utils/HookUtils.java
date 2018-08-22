@@ -11,25 +11,22 @@ public class HookUtils {
     private MCoreFactionsHook mCoreFactionsHook = null;
     private FactionsUUIDHook factionsUUIDHook = null;
     private WorldGuardHook worldGuardHook = null;
-    private int hookType;
+    private HookType hook;
 
     /**
      * Construct the instance with the correct hook
-     * <p><ol>
-     * <li>MassiveCore Factions
-     * <li>FactionsUUID/SavageFactions
-     * <li>WorldGuard
-     * <p></ol>
-     * @param hookType The hook type integer
+     * @param hook The appropriate {@link HookType}
      */
-    public HookUtils(int hookType) {
-        this.hookType = hookType;
-        if (hookType == 1) {
+    public HookUtils(HookType hook) {
+        this.hook = hook;
+        if (hook == HookType.MCOREFACTIONS) {
             mCoreFactionsHook = new MCoreFactionsHook();
-        } else if (hookType == 2) {
+        } else if (hook == HookType.FACTIONSUUID) {
             factionsUUIDHook = new FactionsUUIDHook();
-        } else if (hookType == 3) {
+        } else if (hook == HookType.WORLDGUARD) {
             worldGuardHook = new WorldGuardHook();
+        } else {
+            this.hook = null;
         }
     }
 
@@ -45,9 +42,9 @@ public class HookUtils {
      * @return If this player has a faction
      */
     public boolean hasFaction(Player p) {
-        if (hookType == 1) {
+        if (hook == HookType.MCOREFACTIONS) {
             return mCoreFactionsHook.hasFaction(p);
-        } else if (hookType == 2) {
+        } else if (hook == HookType.FACTIONSUUID) {
             return factionsUUIDHook.hasFaction(p);
         } else {
             return true;
@@ -65,9 +62,9 @@ public class HookUtils {
      * @return If this chunk is wilderness
      */
     public boolean isWilderness(Location loc) {
-        if (hookType == 1) {
+        if (hook == HookType.MCOREFACTIONS) {
             return mCoreFactionsHook.isWilderness(loc);
-        } else if (hookType == 2) {
+        } else if (hook == HookType.FACTIONSUUID) {
             return factionsUUIDHook.isWilderness(loc);
         } else {
             return false;
@@ -85,16 +82,16 @@ public class HookUtils {
      * @return If the player can clear this chunk
      */
     public boolean compareLocToPlayer(Location loc, Player p) {
-        if (hookType == 1) {
+        if (hook == HookType.MCOREFACTIONS) {
             return mCoreFactionsHook.compareLocPlayerFaction(loc, p);
-        } else if (hookType == 2) {
+        } else if (hook == HookType.FACTIONSUUID) {
             return factionsUUIDHook.compareLocPlayerFaction(loc, p);
         } else {
             return worldGuardHook.checkLocationBreakFlag(loc, p);
         }
     }
 
-    public int getHookType() {
-        return hookType;
+    public HookType getHookType() {
+        return hook;
     }
 }

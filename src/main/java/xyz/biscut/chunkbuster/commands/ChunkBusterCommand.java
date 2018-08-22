@@ -59,7 +59,7 @@ public class ChunkBusterCommand implements CommandExecutor {
                                                 p.sendMessage(main.getConfigValues().getReceiveMessage(giveAmount));
 
                                             } else {
-                                                sender.sendMessage(ChatColor.RED + "This player doesn't have any empty slots!");
+                                                sender.sendMessage(ChatColor.RED + "This player doesn't have any empty slots in their inventory!");
                                             }
                                         } else {
                                             sender.sendMessage(ChatColor.RED + "You can only give 64 at a time!");

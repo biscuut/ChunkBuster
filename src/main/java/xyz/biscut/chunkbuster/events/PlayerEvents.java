@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.biscut.chunkbuster.ChunkBuster;
 import xyz.biscut.chunkbuster.timers.MessageTimer;
+import xyz.biscut.chunkbuster.utils.HookType;
 
 public class PlayerEvents implements Listener {
 
@@ -90,7 +91,7 @@ public class PlayerEvents implements Listener {
                             }
                         }
                     } else {
-                        if (main.getHookUtils().getHookType() == 3) {
+                        if (main.getHookUtils().getHookType() == HookType.WORLDGUARD) {
                             p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
                         } else {
                             if (main.getConfigValues().canPlaceInWilderness()) {

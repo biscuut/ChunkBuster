@@ -20,7 +20,7 @@ chunkbuster:
 
 # This amount of blocks will be processed from the queue per second
 # High numbers will make the blocks disappear instantly, but especially with
-# ones with 3 or 5 radius, it may lag the server.
+# chunkbusters with 5+ radius, it may lag the server.
 blocks-removed-per-tick: 600
 
 # Change this to false if you don't want to be able to destroy wilderness chunks.
