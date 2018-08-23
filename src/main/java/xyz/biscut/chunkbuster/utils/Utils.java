@@ -36,7 +36,7 @@ public class Utils {
         if (chunkBusterArea == 1) {
             RemovalQueue removalQueue = new RemovalQueue(main);
             waterChunks.add(chunkBusterLocation.getChunk());
-            for (int y = 127; y > -1; y--) {
+            for (int y = chunkBusterLocation.getWorld().getMaxHeight(); y >= 0; y--) {
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         Block b = chunkBusterLocation.getChunk().getBlock(x, y, z);
@@ -54,11 +54,11 @@ public class Utils {
             int lowerSearchBound = (chunkBusterArea - 1) / -2;
             int startingX = chunkBusterLocation.getChunk().getX();
             int startingZ = chunkBusterLocation.getChunk().getZ();
-            for (int y = 127; y > -1; y--) {
+            for (int y = chunkBusterLocation.getWorld().getMaxHeight(); y >= 0; y--) {
                 for (int chunkX = lowerSearchBound; chunkX < upperSearchBound; chunkX++) {
                     for (int chunkZ = lowerSearchBound; chunkZ < upperSearchBound; chunkZ++) {
                         Chunk chunk = chunkBusterLocation.getWorld().getChunkAt(startingX + chunkX, startingZ + chunkZ);
-                        Location chunkCheckLoc = chunk.getBlock(7, 63, 7).getLocation();
+                        Location chunkCheckLoc = chunk.getBlock(7, 60, 7).getLocation();
                         if (main.getHookUtils().compareLocToPlayer(chunkCheckLoc, p) || main.getHookUtils().isWilderness(chunkCheckLoc)) {
                             if (main.getHookUtils().isWilderness(chunkCheckLoc) && !main.getConfigValues().canPlaceInWilderness()) {
                                 continue;
