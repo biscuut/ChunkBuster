@@ -11,10 +11,14 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.biscut.chunkbuster.ChunkBuster;
+import xyz.biscut.chunkbuster.timers.RemovalQueue;
+
+import java.util.HashSet;
 
 public class Utils {
 
     private ChunkBuster main;
+    private HashSet<Chunk> waterChunks = new HashSet<>();
 
     public Utils(ChunkBuster main) {
         this.main = main;
@@ -30,19 +34,22 @@ public class Utils {
 
     public void clearChunks(int chunkBusterArea, Location chunkBusterLocation, Player p) {
         if (chunkBusterArea == 1) {
-            main.getWaterChunks().add(chunkBusterLocation.getChunk());
+            RemovalQueue removalQueue = new RemovalQueue(main);
+            waterChunks.add(chunkBusterLocation.getChunk());
             for (int y = 127; y > -1; y--) {
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         Block b = chunkBusterLocation.getChunk().getBlock(x, y, z);
                         if (!b.getType().equals(Material.BEDROCK) && !b.getType().equals(Material.AIR)) {
-                            main.getRemovalQueue().add(b);
+                            removalQueue.getBlocks().add(b);
                         }
                     }
                 }
             }
+            removalQueue.runTaskTimer(main, 1L, 1L);
             p.sendMessage(main.getConfigValues().getClearingMessage());
         } else if (chunkBusterArea > 2 && chunkBusterArea % 2 != 0) {
+            RemovalQueue removalQueue = new RemovalQueue(main);
             int upperSearchBound = ((chunkBusterArea - 1) / 2) + 1;
             int lowerSearchBound = (chunkBusterArea - 1) / -2;
             int startingX = chunkBusterLocation.getChunk().getX();
@@ -56,12 +63,12 @@ public class Utils {
                             if (main.getHookUtils().isWilderness(chunkCheckLoc) && !main.getConfigValues().canPlaceInWilderness()) {
                                 continue;
                             }
-                            main.getWaterChunks().add(chunk);
+                            waterChunks.add(chunk);
                             for (int x = 0; x < 16; x++) {
                                 for (int z = 0; z < 16; z++) {
                                     Block b = chunk.getBlock(x, y, z);
                                     if (!b.getType().equals(Material.BEDROCK) && !b.getType().equals(Material.AIR)) {
-                                        main.getRemovalQueue().add(b);
+                                        removalQueue.getBlocks().add(b);
                                     }
                                 }
                             }
@@ -69,6 +76,7 @@ public class Utils {
                     }
                 }
             }
+            removalQueue.runTaskTimer(main, 1L, 1L);
             p.sendMessage(main.getConfigValues().getClearingMessage());
         } else {
             p.sendMessage(ChatColor.RED + "Invalid chunk buster!");
@@ -84,4 +92,6 @@ public class Utils {
             main.saveConfig();
         }
     }
+
+    public HashSet<Chunk> getWaterChunks() { return waterChunks; }
 }

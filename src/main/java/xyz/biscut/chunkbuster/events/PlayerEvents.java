@@ -16,9 +16,12 @@ import xyz.biscut.chunkbuster.ChunkBuster;
 import xyz.biscut.chunkbuster.timers.MessageTimer;
 import xyz.biscut.chunkbuster.utils.HookType;
 
+import java.util.HashMap;
+
 public class PlayerEvents implements Listener {
 
     private ChunkBuster main;
+    private HashMap<Player, Location> chunkBusterLocations = new HashMap<>();
 
     public PlayerEvents(ChunkBuster main) {
         this.main = main;
@@ -28,7 +31,7 @@ public class PlayerEvents implements Listener {
     public void onChunkBusterPlace(BlockPlaceEvent e) {
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
-            main.getChunkBusterLocations().put(e.getPlayer(), e.getBlock().getLocation());
+            chunkBusterLocations.put(e.getPlayer(), e.getBlock().getLocation());
             if (!e.getPlayer().getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
                 Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());
                 ItemStack acceptItem = main.getConfigValues().getConfirmBlockItemStack();
@@ -63,7 +66,7 @@ public class PlayerEvents implements Listener {
                 e.getClickedInventory().getName().contains(main.getConfigValues().getGUITitle())) {
             e.setCancelled(true);
             Player p = (Player)e.getWhoClicked();
-            Location chunkBusterLocation = main.getChunkBusterLocations().get(e.getWhoClicked());
+            Location chunkBusterLocation = chunkBusterLocations.get(e.getWhoClicked());
             if (chunkBusterLocation != null) {
                 int chunkBusterDiameter = e.getWhoClicked().getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE);
                 if (main.getHookUtils().hasFaction(p)) {
@@ -108,14 +111,14 @@ public class PlayerEvents implements Listener {
                 p.sendMessage(ChatColor.RED + "Error, please re-place your chunk buster.");
             }
             e.getWhoClicked().closeInventory();
-            main.getChunkBusterLocations().remove(e.getWhoClicked());
+            chunkBusterLocations.remove(e.getWhoClicked());
         }
     }
 
     @EventHandler
     public void onGUIClose(InventoryCloseEvent e) {
         if (e.getInventory().getName().contains(main.getConfigValues().getGUITitle())) {
-            main.getChunkBusterLocations().remove(e.getPlayer());
+            chunkBusterLocations.remove(e.getPlayer());
         }
     }
 }

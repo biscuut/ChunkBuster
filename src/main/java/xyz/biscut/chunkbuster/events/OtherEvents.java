@@ -18,7 +18,7 @@ public class OtherEvents implements Listener {
     public void onWaterFlow(BlockFromToEvent e) {
         if (e.getBlock().getType().equals(Material.WATER) || e.getBlock().getType().equals(Material.STATIONARY_WATER)
         || e.getBlock().getType().equals(Material.LAVA) || e.getBlock().getType().equals(Material.STATIONARY_LAVA)) {
-            if (main.getWaterChunks().contains(e.getToBlock().getChunk())) {
+            if (main.getUtils().getWaterChunks().contains(e.getToBlock().getChunk())) {
                 e.setCancelled(true);
             }
         }
