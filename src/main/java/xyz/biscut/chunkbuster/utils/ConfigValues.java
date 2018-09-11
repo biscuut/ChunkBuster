@@ -220,4 +220,12 @@ public class ConfigValues {
     public boolean dropFullInv() {
         return main.getConfig().getBoolean("full-inv-drop-on-floor");
     }
+
+    public String getMinimumRole() {
+        return main.getConfig().getString("minimum-factions-role").toLowerCase();
+    }
+
+    public String getMinimumRoleMessage() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.not-minimum-role"));
+    }
 }

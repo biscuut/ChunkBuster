@@ -2,6 +2,7 @@ package xyz.biscut.chunkbuster.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import xyz.biscut.chunkbuster.ChunkBuster;
 import xyz.biscut.chunkbuster.hooks.FactionsUUIDHook;
 import xyz.biscut.chunkbuster.hooks.MCoreFactionsHook;
 import xyz.biscut.chunkbuster.hooks.WorldGuardHook;
@@ -12,13 +13,15 @@ public class HookUtils {
     private FactionsUUIDHook factionsUUIDHook = null;
     private WorldGuardHook worldGuardHook = null;
     private HookType hook;
+    private ChunkBuster main;
 
     /**
      * Construct the instance with the correct hook
      * @param hook The appropriate {@link HookType}
      */
-    public HookUtils(HookType hook) {
+    public HookUtils(HookType hook, ChunkBuster main) {
         this.hook = hook;
+        this.main = main;
         if (hook == HookType.MCOREFACTIONS) {
             mCoreFactionsHook = new MCoreFactionsHook();
         } else if (hook == HookType.FACTIONSUUID) {
@@ -88,6 +91,26 @@ public class HookUtils {
             return factionsUUIDHook.compareLocPlayerFaction(loc, p);
         } else {
             return worldGuardHook.checkLocationBreakFlag(loc, p);
+        }
+    }
+
+    /**
+     * Check if a player has the minimum role to place chunkbusters
+     * <p>
+     * This method isn't always applicable since they may not be using
+     * a factions hook, so in that case it will return true. Otherwise
+     * it will check using the appropriate factions hook.
+     * <p>
+     * @param p The player to check
+     * @return If this player has the minimum role
+     */
+    public boolean checkRole(Player p) {
+        if (hook == HookType.MCOREFACTIONS) {
+            return mCoreFactionsHook.checkRole(p, main.getConfigValues().getMinimumRole());
+        } else if (hook == HookType.FACTIONSUUID) {
+            return factionsUUIDHook.checkRole(p, main.getConfigValues().getMinimumRole());
+        } else {
+            return true;
         }
     }
 

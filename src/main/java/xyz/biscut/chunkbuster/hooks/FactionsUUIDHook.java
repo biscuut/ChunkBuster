@@ -2,6 +2,7 @@ package xyz.biscut.chunkbuster.hooks;
 
 
 import com.massivecraft.factions.*;
+import com.massivecraft.factions.struct.Role;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -25,5 +26,34 @@ public class FactionsUUIDHook {
         Faction locFaction = Board.getInstance().getFactionAt(new FLocation(loc));
         Faction pFaction = FPlayers.getInstance().getByPlayer(p).getFaction();
         return locFaction.equals(pFaction);
+    }
+
+    public boolean checkRole(Player p, String role) {
+        Role playerRole = FPlayers.getInstance().getByPlayer(p).getRole();
+        switch (role) {
+            case "leader": case "admin":
+                if (playerRole.equals(Role.ADMIN)) {
+                    return true;
+                }
+                break;
+            case "coleader":
+                if (playerRole.equals(Role.COLEADER) || playerRole.equals(Role.ADMIN)) {
+                    return true;
+                }
+                break;
+            case "moderator":
+                if (playerRole.equals(Role.MODERATOR) || playerRole.equals(Role.COLEADER) || playerRole.equals(Role.ADMIN)) {
+                    return true;
+                }
+                break;
+            case "member": case "normal":
+                if (playerRole.equals(Role.NORMAL) || playerRole.equals(Role.MODERATOR) || playerRole.equals(Role.COLEADER) || playerRole.equals(Role.ADMIN)) {
+                    return true;
+                }
+                break;
+            case "recruit": case "any":
+                return true;
+        }
+        return false;
     }
 }

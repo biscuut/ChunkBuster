@@ -32,33 +32,45 @@ public class PlayerEvents implements Listener {
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
             if (e.getPlayer().hasPermission("chunkbuster.use")) {
-                chunkBusterLocations.put(e.getPlayer(), e.getBlock().getLocation());
-                if (!e.getPlayer().getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
-                    Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());
-                    ItemStack acceptItem = main.getConfigValues().getConfirmBlockItemStack();
-                    ItemMeta acceptItemMeta = acceptItem.getItemMeta();
-                    acceptItemMeta.setDisplayName(main.getConfigValues().getConfirmName());
-                    acceptItemMeta.setLore(main.getConfigValues().getConfirmLore());
-                    acceptItem.setItemMeta(acceptItemMeta);
-                    ItemStack cancelItem = main.getConfigValues().getCancelBlockItemStack();
-                    ItemMeta cancelItemMeta = cancelItem.getItemMeta();
-                    cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
-                    cancelItemMeta.setLore(main.getConfigValues().getCancelLore());
-                    cancelItem.setItemMeta(cancelItemMeta);
-                    int slotCounter = 1;
-                    for (int i = 0; i < 9 * main.getConfigValues().getGUIRows(); i++) {
-                        if (slotCounter < 5) {
-                            confirmInv.setItem(i, acceptItem);
-                        } else if (slotCounter > 5) {
-                            confirmInv.setItem(i, cancelItem);
+                if (main.getHookUtils().hasFaction(e.getPlayer())) {
+                    if (main.getHookUtils().checkRole(e.getPlayer())) {
+                        chunkBusterLocations.put(e.getPlayer(), e.getBlock().getLocation());
+                        if (!e.getPlayer().getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
+                            Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());
+                            ItemStack acceptItem = main.getConfigValues().getConfirmBlockItemStack();
+                            ItemMeta acceptItemMeta = acceptItem.getItemMeta();
+                            acceptItemMeta.setDisplayName(main.getConfigValues().getConfirmName());
+                            acceptItemMeta.setLore(main.getConfigValues().getConfirmLore());
+                            acceptItem.setItemMeta(acceptItemMeta);
+                            ItemStack cancelItem = main.getConfigValues().getCancelBlockItemStack();
+                            ItemMeta cancelItemMeta = cancelItem.getItemMeta();
+                            cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
+                            cancelItemMeta.setLore(main.getConfigValues().getCancelLore());
+                            cancelItem.setItemMeta(cancelItemMeta);
+                            int slotCounter = 1;
+                            for (int i = 0; i < 9 * main.getConfigValues().getGUIRows(); i++) {
+                                if (slotCounter < 5) {
+                                    confirmInv.setItem(i, acceptItem);
+                                } else if (slotCounter > 5) {
+                                    confirmInv.setItem(i, cancelItem);
+                                }
+                                if (slotCounter >= 9) {
+                                    slotCounter = 1;
+                                } else {
+                                    slotCounter++;
+                                }
+                            }
+                            e.getPlayer().openInventory(confirmInv);
                         }
-                        if (slotCounter >= 9) {
-                            slotCounter = 1;
-                        } else {
-                            slotCounter++;
+                    } else {
+                        if (!main.getConfigValues().getMinimumRoleMessage().equals("")) {
+                            e.getPlayer().sendMessage(main.getConfigValues().getMinimumRoleMessage());
                         }
                     }
-                    e.getPlayer().openInventory(confirmInv);
+                } else {
+                    if (!main.getConfigValues().getNoFactionMessage().equals("")) {
+                        e.getPlayer().sendMessage(main.getConfigValues().getNoFactionMessage());
+                    }
                 }
             } else {
                 if (!main.getConfigValues().getNoPermissionMessagePlace().equals("")) {
@@ -76,53 +88,55 @@ public class PlayerEvents implements Listener {
             Player p = (Player)e.getWhoClicked();
             Location chunkBusterLocation = chunkBusterLocations.get(e.getWhoClicked());
             if (chunkBusterLocation != null) {
-                int chunkBusterDiameter = e.getWhoClicked().getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE);
-                if (main.getHookUtils().hasFaction(p)) {
-                    if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
-                        if (main.getHookUtils().isWilderness(chunkBusterLocation) && !main.getConfigValues().canPlaceInWilderness()) {
-                            if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
-                                p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
-                            }
-                        } else {
-                            if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
-                                if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
-                                    if (p.getItemInHand().getAmount() <= 1) {
-                                        p.getInventory().setItemInHand(null);
+                if (p.getItemInHand() != null && p.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && p.getItemInHand().hasItemMeta() && p.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
+                    int chunkBusterDiameter = e.getWhoClicked().getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE);
+                    if (main.getHookUtils().hasFaction(p)) {
+                        if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
+                            if (main.getHookUtils().isWilderness(chunkBusterLocation) && !main.getConfigValues().canPlaceInWilderness()) {
+                                if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                }
+                            } else {
+                                if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
+                                    if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
+                                        if (p.getItemInHand().getAmount() <= 1) {
+                                            p.getInventory().setItemInHand(null);
+                                        } else {
+                                            ItemStack chunkBusterItem = p.getItemInHand();
+                                            chunkBusterItem.setAmount(p.getItemInHand().getAmount() - 1);
+                                            p.getInventory().setItemInHand(chunkBusterItem);
+                                        }
+                                    }
+                                    if (main.getConfigValues().getChunkBusterWarmup() > 0) {
+                                        int seconds = main.getConfigValues().getChunkBusterWarmup();
+                                        new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
+                                        Bukkit.getScheduler().runTaskLater(main, () -> main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p), 20L * seconds);
                                     } else {
-                                        ItemStack chunkBusterItem = p.getItemInHand();
-                                        chunkBusterItem.setAmount(p.getItemInHand().getAmount() - 1);
-                                        p.getInventory().setItemInHand(chunkBusterItem);
+                                        main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
                                     }
                                 }
-                                if (main.getConfigValues().getChunkBusterWarmup() > 0) {
-                                    int seconds = main.getConfigValues().getChunkBusterWarmup();
-                                    new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
-                                    Bukkit.getScheduler().runTaskLater(main, () -> main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p), 20L * seconds);
+                            }
+                        } else {
+                            if (main.getHookUtils().getHookType() == HookType.WORLDGUARD) {
+                                if (!main.getConfigValues().getRegionProtectedMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
+                                }
+                            } else {
+                                if (main.getConfigValues().canPlaceInWilderness()) {
+                                    if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
+                                        p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                                    }
                                 } else {
-                                    main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                    if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                        p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                    }
                                 }
                             }
                         }
                     } else {
-                        if (main.getHookUtils().getHookType() == HookType.WORLDGUARD) {
-                            if (!main.getConfigValues().getRegionProtectedMessage().equals("")) {
-                                p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
-                            }
-                        } else {
-                            if (main.getConfigValues().canPlaceInWilderness()) {
-                                if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
-                                    p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
-                                }
-                            } else {
-                                if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
-                                    p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
-                                }
-                            }
+                        if (!main.getConfigValues().getNoFactionMessage().equals("")) {
+                            p.sendMessage(main.getConfigValues().getNoFactionMessage());
                         }
-                    }
-                } else {
-                    if (!main.getConfigValues().getNoFactionMessage().equals("")) {
-                        p.sendMessage(main.getConfigValues().getNoFactionMessage());
                     }
                 }
             } else {

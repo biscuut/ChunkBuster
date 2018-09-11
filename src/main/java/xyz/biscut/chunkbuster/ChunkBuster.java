@@ -37,7 +37,7 @@ public class ChunkBuster extends JavaPlugin {
                 return;
             }
         }
-        hookUtils = new HookUtils(hookType);
+        hookUtils = new HookUtils(hookType, this);
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         utils.updateConfig(this);

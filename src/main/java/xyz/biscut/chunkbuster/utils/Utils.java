@@ -125,6 +125,16 @@ public class Utils {
             main.getConfig().set("config-version", 1.2);
             main.saveConfig();
         }
+        if (main.getConfig().getDouble("config-version") < 1.3) {
+            if (!main.getConfig().isSet("minimum-factions-role")) {
+                main.getConfig().set("minimum-factions-role", "any");
+            }
+            if (!main.getConfig().isSet("messages.not-minimum-role")) {
+                main.getConfig().set("messages.not-minimum-role", "&cYou must be a faction (insert role) to use chunkbusters.");
+            }
+            main.getConfig().set("config-version", 1.3);
+            main.saveConfig();
+        }
     }
 
     public HashSet<Chunk> getWaterChunks() { return waterChunks; }
