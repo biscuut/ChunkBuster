@@ -31,31 +31,39 @@ public class PlayerEvents implements Listener {
     public void onChunkBusterPlace(BlockPlaceEvent e) {
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
-            chunkBusterLocations.put(e.getPlayer(), e.getBlock().getLocation());
-            if (!e.getPlayer().getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
-                Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());
-                ItemStack acceptItem = main.getConfigValues().getConfirmBlockItemStack();
-                ItemMeta acceptItemMeta = acceptItem.getItemMeta();
-                acceptItemMeta.setDisplayName(main.getConfigValues().getConfirmName());
-                acceptItem.setItemMeta(acceptItemMeta);
-                ItemStack cancelItem = main.getConfigValues().getCancelBlockItemStack();
-                ItemMeta cancelItemMeta = cancelItem.getItemMeta();
-                cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
-                cancelItem.setItemMeta(cancelItemMeta);
-                int slotCounter = 1;
-                for (int i = 0; i < 9 * main.getConfigValues().getGUIRows(); i++) {
-                    if (slotCounter < 5) {
-                        confirmInv.setItem(i, acceptItem);
-                    } else if (slotCounter > 5) {
-                        confirmInv.setItem(i, cancelItem);
+            if (e.getPlayer().hasPermission("chunkbuster.use")) {
+                chunkBusterLocations.put(e.getPlayer(), e.getBlock().getLocation());
+                if (!e.getPlayer().getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
+                    Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());
+                    ItemStack acceptItem = main.getConfigValues().getConfirmBlockItemStack();
+                    ItemMeta acceptItemMeta = acceptItem.getItemMeta();
+                    acceptItemMeta.setDisplayName(main.getConfigValues().getConfirmName());
+                    acceptItemMeta.setLore(main.getConfigValues().getConfirmLore());
+                    acceptItem.setItemMeta(acceptItemMeta);
+                    ItemStack cancelItem = main.getConfigValues().getCancelBlockItemStack();
+                    ItemMeta cancelItemMeta = cancelItem.getItemMeta();
+                    cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
+                    cancelItemMeta.setLore(main.getConfigValues().getCancelLore());
+                    cancelItem.setItemMeta(cancelItemMeta);
+                    int slotCounter = 1;
+                    for (int i = 0; i < 9 * main.getConfigValues().getGUIRows(); i++) {
+                        if (slotCounter < 5) {
+                            confirmInv.setItem(i, acceptItem);
+                        } else if (slotCounter > 5) {
+                            confirmInv.setItem(i, cancelItem);
+                        }
+                        if (slotCounter >= 9) {
+                            slotCounter = 1;
+                        } else {
+                            slotCounter++;
+                        }
                     }
-                    if (slotCounter >= 9) {
-                        slotCounter = 1;
-                    } else {
-                        slotCounter++;
-                    }
+                    e.getPlayer().openInventory(confirmInv);
                 }
-                e.getPlayer().openInventory(confirmInv);
+            } else {
+                if (!main.getConfigValues().getNoPermissionMessagePlace().equals("")) {
+                    e.getPlayer().sendMessage(main.getConfigValues().getNoPermissionMessagePlace());
+                }
             }
         }
     }
@@ -72,7 +80,9 @@ public class PlayerEvents implements Listener {
                 if (main.getHookUtils().hasFaction(p)) {
                     if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
                         if (main.getHookUtils().isWilderness(chunkBusterLocation) && !main.getConfigValues().canPlaceInWilderness()) {
-                            p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                            if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                            }
                         } else {
                             if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
                                 if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
@@ -95,17 +105,25 @@ public class PlayerEvents implements Listener {
                         }
                     } else {
                         if (main.getHookUtils().getHookType() == HookType.WORLDGUARD) {
-                            p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
+                            if (!main.getConfigValues().getRegionProtectedMessage().equals("")) {
+                                p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
+                            }
                         } else {
                             if (main.getConfigValues().canPlaceInWilderness()) {
-                                p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                                if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                                }
                             } else {
-                                p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                }
                             }
                         }
                     }
                 } else {
-                    p.sendMessage(main.getConfigValues().getNoFactionMessage());
+                    if (!main.getConfigValues().getNoFactionMessage().equals("")) {
+                        p.sendMessage(main.getConfigValues().getNoFactionMessage());
+                    }
                 }
             } else {
                 p.sendMessage(ChatColor.RED + "Error, please re-place your chunk buster.");

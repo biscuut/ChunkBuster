@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.biscut.chunkbuster.ChunkBuster;
 import xyz.biscut.chunkbuster.timers.RemovalQueue;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Utils {
@@ -47,7 +48,9 @@ public class Utils {
                 }
             }
             removalQueue.runTaskTimer(main, 1L, 1L);
-            p.sendMessage(main.getConfigValues().getClearingMessage());
+            if (!main.getConfigValues().getClearingMessage().equals("")) {
+                p.sendMessage(main.getConfigValues().getClearingMessage());
+            }
         } else if (chunkBusterArea > 2 && chunkBusterArea % 2 != 0) {
             RemovalQueue removalQueue = new RemovalQueue(main);
             int upperSearchBound = ((chunkBusterArea - 1) / 2) + 1;
@@ -77,7 +80,9 @@ public class Utils {
                 }
             }
             removalQueue.runTaskTimer(main, 1L, 1L);
-            p.sendMessage(main.getConfigValues().getClearingMessage());
+            if (!main.getConfigValues().getClearingMessage().equals("")) {
+                p.sendMessage(main.getConfigValues().getClearingMessage());
+            }
         } else {
             p.sendMessage(ChatColor.RED + "Invalid chunk buster!");
         }
@@ -89,6 +94,35 @@ public class Utils {
                 main.getConfig().set("messages.region-protected", "&cYou cannot place chunk busters in this region!");
             }
             main.getConfig().set("config-version", 1.1);
+            main.saveConfig();
+        }
+        if (main.getConfig().getDouble("config-version") < 1.2) {
+            if (!main.getConfig().isSet("confirm-gui.confirm-block-lore")) {
+                main.getConfig().set("confirm-gui.confirm-block-lore", new ArrayList<String>());
+            }
+            if (!main.getConfig().isSet("confirm-gui.cancel-block-lore")) {
+                main.getConfig().set("confirm-gui.cancel-block-lore", new ArrayList<String>().add(""));
+            }
+            if (!main.getConfig().isSet("messages.no-permission-command")) {
+                if (!main.getConfig().isSet("messages.no-permission")) {
+                    main.getConfig().set("messages.no-permission-command", main.getConfig().get("messages.no-permission"));
+                } else {
+                    main.getConfig().set("messages.no-permission-command", "&cNo permission!");
+                }
+            }
+            if (!main.getConfig().isSet("messages.no-permission-place")) {
+                main.getConfig().set("messages.no-permission-place", "&cYou cannot place chunkbusters!");
+            }
+            if (!main.getConfig().isSet("warmup-message-every-second")) {
+                main.getConfig().set("warmup-message-every-second", true);
+            }
+            if (!main.getConfig().isSet("full-inv-drop-on-floor")) {
+                main.getConfig().set("full-inv-drop-on-floor", false);
+            }
+            if (!main.getConfig().isSet("messages.no-permission")) {
+                main.getConfig().set("messages.no-permission", null);
+            }
+            main.getConfig().set("config-version", 1.2);
             main.saveConfig();
         }
     }

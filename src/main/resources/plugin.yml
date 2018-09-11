@@ -1,5 +1,5 @@
 main: xyz.biscut.chunkbuster.ChunkBuster
-version: 1.1.1
+version: 1.1.2
 name: ChunkBuster
 author: Biscut
 softdepend: [MassiveCore, Factions, WorldGuard]
@@ -11,3 +11,6 @@ permissions:
   chunkbuster.admin:
     description: Access to the /cb command.
     default: op
+  chunkbuster.use:
+    description: Be able to place chunkbusters.
+    default: true

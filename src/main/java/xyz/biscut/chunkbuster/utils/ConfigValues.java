@@ -152,6 +152,24 @@ public class ConfigValues {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.cancel-block-name"));
     }
 
+    public List<String> getConfirmLore() {
+        List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.confirm-block-lore");
+        List<String> colouredList = new ArrayList<>();
+        for (String s : uncolouredList) {
+            colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        return colouredList;
+    }
+
+    public List<String> getCancelLore() {
+        List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.cancel-block-lore");
+        List<String> colouredList = new ArrayList<>();
+        for (String s : uncolouredList) {
+            colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        return colouredList;
+    }
+
     public String getGiveMessage(Player p, int amount) {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.give"))
                 .replace("{player}", p.getName()).replace("{amount}", String.valueOf(amount));
@@ -162,8 +180,12 @@ public class ConfigValues {
                 .replace("{amount}", String.valueOf(amount));
     }
 
-    public String getNoPermissionMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-permission"));
+    public String getNoPermissionMessageCommand() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-permission-command"));
+    }
+
+    public String getNoPermissionMessagePlace() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-permission-place"));
     }
 
     public String getNoFactionMessage() {
@@ -189,5 +211,13 @@ public class ConfigValues {
 
     public String getRegionProtectedMessage() {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.region-protected"));
+    }
+
+    public boolean sendWarmupEverySecond() {
+        return main.getConfig().getBoolean("warmup-message-every-second");
+    }
+
+    public boolean dropFullInv() {
+        return main.getConfig().getBoolean("full-inv-drop-on-floor");
     }
 }

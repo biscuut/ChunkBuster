@@ -22,7 +22,13 @@ public class MessageTimer extends BukkitRunnable {
             cancel();
             return;
         }
-        p.sendMessage(main.getConfigValues().getClearingSecondsMessage(seconds));
+        if (!main.getConfigValues().getClearingSecondsMessage(seconds).equals("")) {
+            p.sendMessage(main.getConfigValues().getClearingSecondsMessage(seconds));
+        }
+        if (!main.getConfigValues().sendWarmupEverySecond()) {
+            cancel();
+            return;
+        }
         seconds--;
     }
 }

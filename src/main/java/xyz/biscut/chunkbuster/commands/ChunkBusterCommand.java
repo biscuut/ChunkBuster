@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.biscut.chunkbuster.ChunkBuster;
 
+import java.util.HashMap;
+
 public class ChunkBusterCommand implements CommandExecutor {
 
     private ChunkBuster main;
@@ -46,23 +48,42 @@ public class ChunkBusterCommand implements CommandExecutor {
                                                 return false;
                                             }
                                         }
-                                        if (giveAmount < 65) {
-                                            if (p.getInventory().firstEmpty() != -1) {
-                                                ItemStack item = new ItemStack(main.getConfigValues().getChunkBusterMaterial(), giveAmount, main.getConfigValues().getChunkBusterDamage());
-                                                ItemMeta itemMeta = item.getItemMeta();
-                                                itemMeta.setDisplayName(main.getConfigValues().getChunkBusterName());
-                                                itemMeta.setLore(main.getConfigValues().getChunkBusterLore(chunkArea));
-                                                item.setItemMeta(itemMeta);
-                                                item = main.getUtils().addGlow(item, chunkArea);
-                                                p.getInventory().addItem(item);
-                                                sender.sendMessage(main.getConfigValues().getGiveMessage(p, giveAmount));
-                                                p.sendMessage(main.getConfigValues().getReceiveMessage(giveAmount));
-
+                                        ItemStack item = new ItemStack(main.getConfigValues().getChunkBusterMaterial(), giveAmount, main.getConfigValues().getChunkBusterDamage());
+                                        ItemMeta itemMeta = item.getItemMeta();
+                                        itemMeta.setDisplayName(main.getConfigValues().getChunkBusterName());
+                                        itemMeta.setLore(main.getConfigValues().getChunkBusterLore(chunkArea));
+                                        item.setItemMeta(itemMeta);
+                                        item = main.getUtils().addGlow(item, chunkArea);
+                                        HashMap excessItems;
+                                        if (!main.getConfigValues().dropFullInv()) {
+                                            if (giveAmount < 65) {
+                                                if (p.getInventory().firstEmpty() == -1) {
+                                                    sender.sendMessage(ChatColor.RED + "This player doesn't have any empty slots in their inventory!");
+                                                    return true;
+                                                }
                                             } else {
-                                                sender.sendMessage(ChatColor.RED + "This player doesn't have any empty slots in their inventory!");
+                                                sender.sendMessage(ChatColor.RED + "You can only give 64 at a time!");
+                                                return true;
                                             }
-                                        } else {
-                                            sender.sendMessage(ChatColor.RED + "You can only give 64 at a time!");
+                                        }
+                                        excessItems = p.getInventory().addItem(item);
+                                        for (Object excessItem : excessItems.values()) {
+                                            int itemCount = ((ItemStack)excessItem).getAmount();
+                                            while (itemCount > 64) {
+                                                ((ItemStack) excessItem).setAmount(64);
+                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack)excessItem);
+                                                itemCount = itemCount - 64;
+                                            }
+                                            if (itemCount > 0) {
+                                                ((ItemStack) excessItem).setAmount(itemCount);
+                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack)excessItem);
+                                            }
+                                        }
+                                        if (!main.getConfigValues().getGiveMessage(p, giveAmount).equals("")) {
+                                            sender.sendMessage(main.getConfigValues().getGiveMessage(p, giveAmount));
+                                        }
+                                        if (!main.getConfigValues().getReceiveMessage(giveAmount).equals("")) {
+                                            p.sendMessage(main.getConfigValues().getReceiveMessage(giveAmount));
                                         }
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "The area must be greater than 0 and be an odd number!");
@@ -92,7 +113,9 @@ public class ChunkBusterCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------------------");
             }
         } else {
-            sender.sendMessage(main.getConfigValues().getNoPermissionMessage());
+            if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
+                sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
+            }
         }
         return false;
     }

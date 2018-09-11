@@ -6,7 +6,7 @@
 
     <groupId>xyz.biscut.chunkbuster</groupId>
     <artifactId>ChunkBuster</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <name>ChunkBuster</name>
 
     <build>
