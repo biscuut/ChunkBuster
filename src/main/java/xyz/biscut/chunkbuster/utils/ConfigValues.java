@@ -301,11 +301,11 @@ public class ConfigValues {
     }
 
     public float getClearingSoundVolume() {
-        return (float)main.getConfig().getDouble("warmup.clearing-sound-volume");
+        return (float)main.getConfig().getDouble("warmup.clearing-volume");
     }
 
     public float getClearingSoundPitch() {
-        return (float)main.getConfig().getDouble("warmup.clearing-sound-pitch");
+        return (float)main.getConfig().getDouble("warmup.clearing-pitch");
     }
 
     public boolean confirmSoundEnabled() {
@@ -317,11 +317,11 @@ public class ConfigValues {
     }
 
     public float getConfirmSoundVolume() {
-        return (float)main.getConfig().getDouble("confirm-gui.confirm-sound-volume");
+        return (float)main.getConfig().getDouble("confirm-gui.confirm-volume");
     }
 
     public float getConfirmSoundPitch() {
-        return (float)main.getConfig().getDouble("confirm-gui.confirm-sound-pitch");
+        return (float)main.getConfig().getDouble("confirm-gui.confirm-pitch");
     }
 
     public boolean cancelSoundEnabled() {
@@ -333,11 +333,11 @@ public class ConfigValues {
     }
 
     public float getCancelSoundVolume() {
-        return (float)main.getConfig().getDouble("confirm-gui.cancel-sound-volume");
+        return (float)main.getConfig().getDouble("confirm-gui.cancel-volume");
     }
 
     public float getCancelSoundPitch() {
-        return (float)main.getConfig().getDouble("confirm-gui.cancel-sound-pitch");
+        return (float)main.getConfig().getDouble("confirm-gui.cancel-pitch");
     }
 
     public String getGUICancelMessage() {

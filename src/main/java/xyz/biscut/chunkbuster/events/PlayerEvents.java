@@ -31,20 +31,9 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onChunkBusterPlace(BlockPlaceEvent e) {
-        Player p = e.getPlayer();
-        if (playerCooldowns.containsKey(p)) {
-            if (System.currentTimeMillis() < playerCooldowns.get(p)) {
-                long longDifference = playerCooldowns.get(e.getPlayer()) - System.currentTimeMillis();
-                int secondsDifference = (int)(longDifference / 1000);
-                int seconds = secondsDifference % 60;
-                int minutes = secondsDifference / 60;
-                p.sendMessage(main.getConfigValues().getCooldownMessage(minutes, seconds));
-                return;
-            }
-        }
-        playerCooldowns.put(e.getPlayer(), System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
+            Player p = e.getPlayer();
             if (p.hasPermission("chunkbuster.use")) {
                 if (main.getHookUtils().hasFaction(p)) {
                     if (main.getHookUtils().checkRole(p)) {
@@ -54,6 +43,19 @@ public class PlayerEvents implements Listener {
                                     p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
                                 }
                             } else {
+                                if (main.getConfigValues().getCooldown() > 0) {
+                                    if (playerCooldowns.containsKey(p)) {
+                                        if (System.currentTimeMillis() < playerCooldowns.get(p)) {
+                                            long longDifference = playerCooldowns.get(e.getPlayer()) - System.currentTimeMillis();
+                                            int secondsDifference = (int)(longDifference / 1000);
+                                            int seconds = secondsDifference % 60;
+                                            int minutes = secondsDifference / 60;
+                                            p.sendMessage(main.getConfigValues().getCooldownMessage(minutes, seconds));
+                                            return;
+                                        }
+                                    }
+                                    playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
+                                }
                                 chunkBusterLocations.put(p, e.getBlock().getLocation());
                                 if (!p.getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
                                     Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());

@@ -107,7 +107,6 @@ public class Utils {
             if (!main.getConfig().isSet("messages.no-permission-command")) {
                 if (main.getConfig().isSet("messages.no-permission")) {
                     main.getConfig().set("messages.no-permission-command", main.getConfig().get("messages.no-permission"));
-                    main.getConfig().set("messages.no-permission", null);
                 } else {
                     main.getConfig().set("messages.no-permission-command", "&cNo permission!");
                 }
@@ -121,6 +120,7 @@ public class Utils {
             if (!main.getConfig().isSet("full-inv-drop-on-floor")) {
                 main.getConfig().set("full-inv-drop-on-floor", false);
             }
+            main.getConfig().set("messages.no-permission", null);
             main.getConfig().set("config-version", 1.2);
             main.saveConfig();
         }
@@ -147,7 +147,6 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.seconds")) {
                 if (main.getConfig().isSet("chunkbuster-warmup")) {
                     main.getConfig().set("warmup.seconds", main.getConfig().get("chunkbuster-warmup"));
-                    main.getConfig().set("chunkbuster-warmup", null);
                 } else {
                     main.getConfig().set("warmup.seconds", 0);
                 }
@@ -175,6 +174,7 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.sound-interval-seconds")) {
                 main.getConfig().set("warmup.sound-interval-seconds", 1);
             }
+            main.getConfig().set("chunkbuster-warmup", null);
             main.getConfig().set("config-version", 1.4);
             main.saveConfig();
         }
@@ -182,7 +182,6 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.warmup-sound-enabled")) {
                 if (main.getConfig().isSet("warmup.sound-enabled")) {
                     main.getConfig().set("warmup.warmup-sound-enabled", main.getConfig().get("warmup.sound-enabled"));
-                    main.getConfig().set("warmup.sound-enabled", null);
                 } else {
                     main.getConfig().set("warmup.warmup-sound-enabled", false);
                 }
@@ -190,7 +189,6 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.warmup-sound")) {
                 if (main.getConfig().isSet("warmup.sound")) {
                     main.getConfig().set("warmup.warmup-sound", main.getConfig().get("warmup.sound"));
-                    main.getConfig().set("warmup.sound", null);
                 } else {
                     main.getConfig().set("warmup.warmup-sound", "random.levelup");
                 }
@@ -198,7 +196,6 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.warmup-sound-volume")) {
                 if (main.getConfig().isSet("warmup.sound-volume")) {
                     main.getConfig().set("warmup.warmup-sound-volume", main.getConfig().get("warmup.sound-volume"));
-                    main.getConfig().set("warmup.sound-volume", null);
                 } else {
                     main.getConfig().set("warmup.warmup-sound-volume", 1.0);
                 }
@@ -206,7 +203,6 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.warmup-sound-pitch")) {
                 if (main.getConfig().isSet("warmup.sound-pitch")) {
                     main.getConfig().set("warmup.warmup-sound-pitch", main.getConfig().get("warmup.sound-pitch"));
-                    main.getConfig().set("warmup.sound-pitch", null);
                 } else {
                     main.getConfig().set("warmup.warmup-sound-pitch", 1.0);
                 }
@@ -214,7 +210,6 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.warmup-sound-interval")) {
                 if (main.getConfig().isSet("warmup.sound-interval-seconds")) {
                     main.getConfig().set("warmup.warmup-sound-interval", main.getConfig().get("warmup.sound-interval-seconds"));
-                    main.getConfig().set("warmup.sound-interval-seconds", null);
                 } else {
                     main.getConfig().set("warmup.warmup-sound-interval", 1);
                 }
@@ -247,7 +242,7 @@ public class Utils {
                 main.getConfig().set("confirm-gui.cancel-sound-enabled", false);
             }
             if (!main.getConfig().isSet("confirm-gui.cancel-sound")) {
-                main.getConfig().set("confirm-gui.cancel-sound", "random.levelup");
+                main.getConfig().set("confirm-gui.cancel-sound", "mob.villager.hit");
             }
             if (!main.getConfig().isSet("confirm-gui.cancel-volume")) {
                 main.getConfig().set("confirm-gui.cancel-volume", 1.0);
@@ -264,6 +259,11 @@ public class Utils {
             if (!main.getConfig().isSet("cooldown")) {
                 main.getConfig().set("cooldown", 0);
             }
+            main.getConfig().set("warmup.sound-enabled", null);
+            main.getConfig().set("warmup.sound", null);
+            main.getConfig().set("warmup.sound-volume", null);
+            main.getConfig().set("warmup.sound-pitch", null);
+            main.getConfig().set("warmup.sound-interval-seconds", null);
             main.getConfig().set("config-version", 1.5);
             main.saveConfig();
         }

@@ -6,7 +6,7 @@
 # | \__/\| | | || |_| || | | ||   < | |_/ /| |_| |\__ \| |_|  __/| |    #
 #  \____/|_| |_| \__,_||_| |_||_|\_\\____/  \__,_||___/ \__|\___||_|    #
 #                                                                       #
-#                           v1.1.4 by Biscut                            #
+#                           v1.1.5 by Biscut                            #
 #########################################################################
 
 chunkbuster:
@@ -87,7 +87,7 @@ confirm-gui:
   confirm-pitch: 1.0
   # Sound when the cancel block is clicked
   cancel-sound-enabled: false
-  cancel-sound: 'random.levelup'
+  cancel-sound: 'mob.villager.hit'
   cancel-volume: 1.0
   cancel-pitch: 1.0
 
@@ -113,4 +113,4 @@ ignored-materials:
   - 'BEDROCK'
 
 # Please do not edit :)
-config-version: 1.4
+config-version: 1.5
