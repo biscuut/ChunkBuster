@@ -46,20 +46,26 @@ public class PlayerEvents implements Listener {
                                 if (!p.getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
                                     Inventory confirmInv = Bukkit.createInventory(null, 9 * main.getConfigValues().getGUIRows(), main.getConfigValues().getGUITitle());
                                     ItemStack acceptItem = main.getConfigValues().getConfirmBlockItemStack();
-                                    ItemMeta acceptItemMeta = acceptItem.getItemMeta();
-                                    acceptItemMeta.setDisplayName(main.getConfigValues().getConfirmName());
-                                    acceptItemMeta.setLore(main.getConfigValues().getConfirmLore());
-                                    acceptItem.setItemMeta(acceptItemMeta);
+                                    if (!acceptItem.getType().equals(Material.AIR)) {
+                                        ItemMeta acceptItemMeta = acceptItem.getItemMeta();
+                                        acceptItemMeta.setDisplayName(main.getConfigValues().getConfirmName());
+                                        acceptItemMeta.setLore(main.getConfigValues().getConfirmLore());
+                                        acceptItem.setItemMeta(acceptItemMeta);
+                                    }
                                     ItemStack cancelItem = main.getConfigValues().getCancelBlockItemStack();
-                                    ItemMeta cancelItemMeta = cancelItem.getItemMeta();
-                                    cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
-                                    cancelItemMeta.setLore(main.getConfigValues().getCancelLore());
-                                    cancelItem.setItemMeta(cancelItemMeta);
+                                    if (!cancelItem.getType().equals(Material.AIR)) {
+                                        ItemMeta cancelItemMeta = cancelItem.getItemMeta();
+                                        cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
+                                        cancelItemMeta.setLore(main.getConfigValues().getCancelLore());
+                                        cancelItem.setItemMeta(cancelItemMeta);
+                                    }
                                     ItemStack fillItem = main.getConfigValues().getFillItemStack();
-                                    ItemMeta fillItemMeta = fillItem.getItemMeta();
-                                    fillItemMeta.setDisplayName(main.getConfigValues().getFillName());
-                                    fillItemMeta.setLore(main.getConfigValues().getFillLore());
-                                    fillItem.setItemMeta(fillItemMeta);
+                                    if (!fillItem.getType().equals(Material.AIR)) {
+                                        ItemMeta fillItemMeta = fillItem.getItemMeta();
+                                        fillItemMeta.setDisplayName(main.getConfigValues().getFillName());
+                                        fillItemMeta.setLore(main.getConfigValues().getFillLore());
+                                        fillItem.setItemMeta(fillItemMeta);
+                                    }
                                     int slotCounter = 1;
                                     for (int i = 0; i < 9 * main.getConfigValues().getGUIRows(); i++) {
                                         if (slotCounter < 5) {

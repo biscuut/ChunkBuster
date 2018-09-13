@@ -12,6 +12,7 @@ public class SoundTimer extends BukkitRunnable {
 
     public SoundTimer(ChunkBuster main, Player p, int count) {
         this.main = main;
+        this.p = p;
         this.count = count;
     }
 
