@@ -19,7 +19,7 @@ public class SoundTimer extends BukkitRunnable {
     @Override
     public void run() {
         if (p != null) {
-            p.playSound(p.getLocation(), main.getConfigValues().getSoundString(), main.getConfigValues().getSoundVolume(), main.getConfigValues().getSoundPitch());
+            p.playSound(p.getLocation(), main.getConfigValues().getWarmupSoundString(), main.getConfigValues().getWarmupSoundVolume(), main.getConfigValues().getWarmupSoundPitch());
         }
         count--;
         if (count <= 0) {

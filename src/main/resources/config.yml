@@ -36,13 +36,20 @@ warmup:
   # If true, the "clearing-in-seconds" message will send every second, and then finally the "clearing-chunks" message.
   # If false, it will only say the first clearing message and then the "clearing-chunks" message.
   send-message-every-second: true
-  sound-enabled: false
+  warmup-sound-enabled: false
   # These are the sound names, not the ones from the bukkit enum. Make sure
   # to get the right names for your minecraft version (google search them).
-  sound: 'random.levelup' # random.levelup is for 1.8 only
-  sound-volume: 1.0 # 0.0 to 1.0
-  sound-pitch: 1.0 # 0.0 to 2.0 (ex. 0.5 is half sound speed, 1 is normal speed, 2 is double speed)
-  sound-interval-seconds: 1
+  # This sound plays when the warmup starts.
+  warmup-sound: 'random.levelup' # random.levelup is for 1.8 only
+  warmup-sound-volume: 1.0 # 0.0 to 1.0
+  warmup-sound-pitch: 1.0 # 0.0 to 2.0 (ex. 0.5 is half sound speed, 1 is normal speed, 2 is double speed)
+  # Choose the interval for the warmup sound. 1 means the sound will play every second.
+  warmup-sound-interval-seconds: 1
+  # Sound played when the chunks start clearing. (After the warmup if it's set)
+  clearing-sound-enabled: false
+  clearing-sound: 'random.levelup'
+  clearing-volume: 1.0
+  clearing-pitch: 1.0
 
 # Whether to drop the items on the floor if inventory is full.
 full-inv-drop-on-floor: false
@@ -70,6 +77,16 @@ confirm-gui:
   cancel-block-lore: # One empty lore line
     - ''
   fill-lore: []
+  # Sound when the confirm block is clicked
+  confirm-sound-enabled: false
+  confirm-sound: 'random.levelup'
+  confirm-volume: 1.0
+  confirm-pitch: 1.0
+  # Sound when the cancel block is clicked
+  cancel-sound-enabled: false
+  cancel-sound: 'random.levelup'
+  cancel-volume: 1.0
+  cancel-pitch: 1.0
 
 messages:
   give: '&aYou gave {player} {amount} chunkbuster(s).'
@@ -85,6 +102,11 @@ messages:
   #This will only show if "chunkbuster-activation-delay" is above 0
   clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'
   not-minimum-role: '&cYou must be a faction (insert role) to use chunkbusters.'
+  gui-cancel: '&cThe chunkbuster has been cancelled.'
+
+# Blocks that will not get cleared by chunkbusters. Use material enum names.
+ignored-materials:
+  - 'BEDROCK'
 
 # Please do not edit :)
 config-version: 1.4

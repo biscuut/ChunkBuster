@@ -272,23 +272,86 @@ public class ConfigValues {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.not-minimum-role"));
     }
 
-    public boolean soundEnabled() {
-        return main.getConfig().getBoolean("warmup.sound-enabled");
+    public boolean warmupSoundEnabled() {
+        return main.getConfig().getBoolean("warmup.warmup-sound-enabled");
     }
 
-    public String getSoundString() {
-        return main.getConfig().getString("warmup.sound");
+    public String getWarmupSoundString() {
+        return main.getConfig().getString("warmup.warmup-sound");
     }
 
-    public int getSoundInterval() {
-        return main.getConfig().getInt("warmup.sound-interval-seconds");
+    public int getWarmupSoundInterval() {
+        return main.getConfig().getInt("warmup.warmup-sound-interval-seconds");
     }
 
-    public float getSoundVolume() {
-        return (float)main.getConfig().getDouble("warmup.sound-volume");
+    public float getWarmupSoundVolume() {
+        return (float)main.getConfig().getDouble("warmup.warmup-sound-volume");
     }
 
-    public float getSoundPitch() {
-        return (float)main.getConfig().getDouble("warmup.sound-pitch");
+    public float getWarmupSoundPitch() {
+        return (float)main.getConfig().getDouble("warmup.warmup-sound-pitch");
+    }
+
+    public boolean clearingSoundEnabled() {
+        return main.getConfig().getBoolean("warmup.clearing-sound-enabled");
+    }
+
+    public String getClearingSoundString() {
+        return main.getConfig().getString("warmup.clearing-sound");
+    }
+
+    public float getClearingSoundVolume() {
+        return (float)main.getConfig().getDouble("warmup.clearing-sound-volume");
+    }
+
+    public float getClearingSoundPitch() {
+        return (float)main.getConfig().getDouble("warmup.clearing-sound-pitch");
+    }
+
+    public boolean confirmSoundEnabled() {
+        return main.getConfig().getBoolean("confirm-gui.confirm-sound-enabled");
+    }
+
+    public String getConfirmSoundString() {
+        return main.getConfig().getString("confirm-gui.confirm-sound");
+    }
+
+    public float getConfirmSoundVolume() {
+        return (float)main.getConfig().getDouble("confirm-gui.confirm-sound-volume");
+    }
+
+    public float getConfirmSoundPitch() {
+        return (float)main.getConfig().getDouble("confirm-gui.confirm-sound-pitch");
+    }
+
+    public boolean cancelSoundEnabled() {
+        return main.getConfig().getBoolean("confirm-gui.cancel-sound-enabled");
+    }
+
+    public String getCancelSoundString() {
+        return main.getConfig().getString("confirm-gui.cancel-sound");
+    }
+
+    public float getCancelSoundVolume() {
+        return (float)main.getConfig().getDouble("confirm-gui.cancel-sound-volume");
+    }
+
+    public float getCancelSoundPitch() {
+        return (float)main.getConfig().getDouble("confirm-gui.cancel-sound-pitch");
+    }
+
+    public String getGUICancelMessage() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.gui-cancel"));
+    }
+
+    public List<Material> getIgnoredBlocks() {
+        List<String> stringList = main.getConfig().getStringList("ignored-materials");
+        List<Material> materialList = new ArrayList<>();
+        for (String s : stringList) {
+            try {
+                materialList.add(Material.valueOf(s));
+            } catch (IllegalArgumentException ignored) {}
+        }
+        return materialList;
     }
 }

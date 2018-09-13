@@ -34,6 +34,7 @@ public class Utils {
     }
 
     public void clearChunks(int chunkBusterArea, Location chunkBusterLocation, Player p) {
+        HashSet<Material> ignoredBlocks = new HashSet<>(main.getConfigValues().getIgnoredBlocks());
         if (chunkBusterArea == 1) {
             RemovalQueue removalQueue = new RemovalQueue(main);
             waterChunks.add(chunkBusterLocation.getChunk());
@@ -41,7 +42,7 @@ public class Utils {
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         Block b = chunkBusterLocation.getChunk().getBlock(x, y, z);
-                        if (!b.getType().equals(Material.BEDROCK) && !b.getType().equals(Material.AIR)) {
+                        if (!b.getType().equals(Material.AIR) && !ignoredBlocks.contains(b.getType())) {
                             removalQueue.getBlocks().add(b);
                         }
                     }
@@ -70,7 +71,7 @@ public class Utils {
                             for (int x = 0; x < 16; x++) {
                                 for (int z = 0; z < 16; z++) {
                                     Block b = chunk.getBlock(x, y, z);
-                                    if (!b.getType().equals(Material.BEDROCK) && !b.getType().equals(Material.AIR)) {
+                                    if (!b.getType().equals(Material.AIR) && !ignoredBlocks.contains(b.getType())) {
                                         removalQueue.getBlocks().add(b);
                                     }
                                 }
@@ -165,16 +166,102 @@ public class Utils {
             if (!main.getConfig().isSet("warmup.sound")) {
                 main.getConfig().set("warmup.sound", "random.levelup");
             }
-            if (!main.getConfig().isSet("warmup.sound-interval-seconds")) {
-                main.getConfig().set("warmup.sound-interval-seconds", 1);
-            }
             if (!main.getConfig().isSet("warmup.sound-volume")) {
                 main.getConfig().set("warmup.sound-volume", 1.0);
             }
             if (!main.getConfig().isSet("warmup.sound-pitch")) {
                 main.getConfig().set("warmup.sound-pitch", 1.0);
             }
+            if (!main.getConfig().isSet("warmup.sound-interval-seconds")) {
+                main.getConfig().set("warmup.sound-interval-seconds", 1);
+            }
             main.getConfig().set("config-version", 1.4);
+            main.saveConfig();
+        }
+        if (main.getConfig().getDouble("config-version") < 1.5) {
+            if (!main.getConfig().isSet("warmup.warmup-sound-enabled")) {
+                if (main.getConfig().isSet("warmup.sound-enabled")) {
+                    main.getConfig().set("warmup.warmup-sound-enabled", main.getConfig().get("warmup.sound-enabled"));
+                    main.getConfig().set("warmup.sound-enabled", null);
+                } else {
+                    main.getConfig().set("warmup.warmup-sound-enabled", false);
+                }
+            }
+            if (!main.getConfig().isSet("warmup.warmup-sound")) {
+                if (main.getConfig().isSet("warmup.sound")) {
+                    main.getConfig().set("warmup.warmup-sound", main.getConfig().get("warmup.sound"));
+                    main.getConfig().set("warmup.sound", null);
+                } else {
+                    main.getConfig().set("warmup.warmup-sound", "random.levelup");
+                }
+            }
+            if (!main.getConfig().isSet("warmup.warmup-sound-volume")) {
+                if (main.getConfig().isSet("warmup.sound-volume")) {
+                    main.getConfig().set("warmup.warmup-sound-volume", main.getConfig().get("warmup.sound-volume"));
+                    main.getConfig().set("warmup.sound-volume", null);
+                } else {
+                    main.getConfig().set("warmup.warmup-sound-volume", 1.0);
+                }
+            }
+            if (!main.getConfig().isSet("warmup.warmup-sound-pitch")) {
+                if (main.getConfig().isSet("warmup.sound-pitch")) {
+                    main.getConfig().set("warmup.warmup-sound-pitch", main.getConfig().get("warmup.sound-pitch"));
+                    main.getConfig().set("warmup.sound-pitch", null);
+                } else {
+                    main.getConfig().set("warmup.warmup-sound-pitch", 1.0);
+                }
+            }
+            if (!main.getConfig().isSet("warmup.warmup-sound-interval-seconds")) {
+                if (main.getConfig().isSet("warmup.sound-interval-seconds")) {
+                    main.getConfig().set("warmup.warmup-sound-interval-seconds", main.getConfig().get("warmup.sound-interval-seconds"));
+                    main.getConfig().set("warmup.sound-interval-seconds", null);
+                } else {
+                    main.getConfig().set("warmup.warmup-sound-interval-seconds", 1);
+                }
+            }
+            if (!main.getConfig().isSet("warmup.clearing-sound-enabled")) {
+                main.getConfig().set("warmup.clearing-sound-enabled", false);
+            }
+            if (!main.getConfig().isSet("warmup.clearing-sound")) {
+                main.getConfig().set("warmup.clearing-sound", "random.levelup");
+            }
+            if (!main.getConfig().isSet("warmup.clearing-volume")) {
+                main.getConfig().set("warmup.clearing-volume", 1.0);
+            }
+            if (!main.getConfig().isSet("warmup.clearing-pitch")) {
+                main.getConfig().set("warmup.clearing-pitch", 1.0);
+            }
+            if (!main.getConfig().isSet("confirm-gui.confirm-sound-enabled")) {
+                main.getConfig().set("confirm-gui.confirm-sound-enabled", false);
+            }
+            if (!main.getConfig().isSet("confirm-gui.confirm-sound")) {
+                main.getConfig().set("confirm-gui.confirm-sound", "random.levelup");
+            }
+            if (!main.getConfig().isSet("confirm-gui.confirm-volume")) {
+                main.getConfig().set("confirm-gui.confirm-volume", 1.0);
+            }
+            if (!main.getConfig().isSet("confirm-gui.confirm-pitch")) {
+                main.getConfig().set("confirm-gui.confirm-pitch", 1.0);
+            }
+            if (!main.getConfig().isSet("confirm-gui.cancel-sound-enabled")) {
+                main.getConfig().set("confirm-gui.cancel-sound-enabled", false);
+            }
+            if (!main.getConfig().isSet("confirm-gui.cancel-sound")) {
+                main.getConfig().set("confirm-gui.cancel-sound", "random.levelup");
+            }
+            if (!main.getConfig().isSet("confirm-gui.cancel-volume")) {
+                main.getConfig().set("confirm-gui.cancel-volume", 1.0);
+            }
+            if (!main.getConfig().isSet("confirm-gui.cancel-pitch")) {
+                main.getConfig().set("confirm-gui.cancel-pitch", 1.0);
+            }
+            if (!main.getConfig().isSet("messages.gui-cancel")) {
+                main.getConfig().set("messages.gui-cancel", "&cThe chunkbuster has been cancelled.");
+            }
+            if (!main.getConfig().isSet("ignored-materials")) {
+                main.getConfig().set("ignored-materials", new ArrayList<String>().add("BEDROCK"));
+            }
+            main.getConfig().set("config-version", 1.5);
             main.saveConfig();
         }
     }

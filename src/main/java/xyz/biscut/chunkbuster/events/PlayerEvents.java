@@ -138,6 +138,9 @@ public class PlayerEvents implements Listener {
                                     }
                                 } else {
                                     if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
+                                        if (main.getConfigValues().confirmSoundEnabled()) {
+                                            p.playSound(p.getLocation(), main.getConfigValues().getConfirmSoundString(), main.getConfigValues().getConfirmSoundVolume(), main.getConfigValues().getConfirmSoundPitch());
+                                        }
                                         if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
                                             if (p.getItemInHand().getAmount() <= 1) {
                                                 p.getInventory().setItemInHand(null);
@@ -150,12 +153,27 @@ public class PlayerEvents implements Listener {
                                         if (main.getConfigValues().getChunkBusterWarmup() > 0) {
                                             int seconds = main.getConfigValues().getChunkBusterWarmup();
                                             new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
-                                            if (main.getConfigValues().soundEnabled()) {
-                                                new SoundTimer(main, p, (int)((double)seconds / main.getConfigValues().getSoundInterval())).runTaskTimer(main, 0L, 20L * main.getConfigValues().getSoundInterval());
+                                            if (main.getConfigValues().warmupSoundEnabled()) {
+                                                new SoundTimer(main, p, (int)((double)seconds / main.getConfigValues().getWarmupSoundInterval())).runTaskTimer(main, 0L, 20L * main.getConfigValues().getWarmupSoundInterval());
                                             }
-                                            Bukkit.getScheduler().runTaskLater(main, () -> main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p), 20L * seconds);
+                                            Bukkit.getScheduler().runTaskLater(main, () -> {
+                                                if (main.getConfigValues().clearingSoundEnabled()) {
+                                                    p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
+                                                }
+                                                main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                            }, 20L * seconds);
                                         } else {
+                                            if (main.getConfigValues().clearingSoundEnabled()) {
+                                                p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
+                                            }
                                             main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                        }
+                                    } else if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getCancelName())) {
+                                        if (main.getConfigValues().cancelSoundEnabled()) {
+                                            p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
+                                        }
+                                        if (!main.getConfigValues().getGUICancelMessage().equals("")) {
+                                            p.sendMessage(main.getConfigValues().getGUICancelMessage());
                                         }
                                     }
                                 }
