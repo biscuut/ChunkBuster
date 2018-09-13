@@ -104,8 +104,9 @@ public class Utils {
                 main.getConfig().set("confirm-gui.cancel-block-lore", new ArrayList<String>().add(""));
             }
             if (!main.getConfig().isSet("messages.no-permission-command")) {
-                if (!main.getConfig().isSet("messages.no-permission")) {
+                if (main.getConfig().isSet("messages.no-permission")) {
                     main.getConfig().set("messages.no-permission-command", main.getConfig().get("messages.no-permission"));
+                    main.getConfig().set("messages.no-permission", null);
                 } else {
                     main.getConfig().set("messages.no-permission-command", "&cNo permission!");
                 }
@@ -119,9 +120,6 @@ public class Utils {
             if (!main.getConfig().isSet("full-inv-drop-on-floor")) {
                 main.getConfig().set("full-inv-drop-on-floor", false);
             }
-            if (!main.getConfig().isSet("messages.no-permission")) {
-                main.getConfig().set("messages.no-permission", null);
-            }
             main.getConfig().set("config-version", 1.2);
             main.saveConfig();
         }
@@ -133,6 +131,50 @@ public class Utils {
                 main.getConfig().set("messages.not-minimum-role", "&cYou must be a faction (insert role) to use chunkbusters.");
             }
             main.getConfig().set("config-version", 1.3);
+            main.saveConfig();
+        }
+        if (main.getConfig().getDouble("config-version") < 1.4) {
+            if (!main.getConfig().isSet("confirm-gui.fill-material")) {
+                main.getConfig().set("confirm-gui.fill-material", "AIR");
+            }
+            if (!main.getConfig().isSet("confirm-gui.fill-name")) {
+                main.getConfig().set("confirm-gui.fill-name", "");
+            }
+            if (!main.getConfig().isSet("confirm-gui.fill-lore")) {
+                main.getConfig().set("confirm-gui.fill-lore", new ArrayList<String>());
+            }
+            if (!main.getConfig().isSet("warmup.seconds")) {
+                if (main.getConfig().isSet("chunkbuster-warmup")) {
+                    main.getConfig().set("warmup.seconds", main.getConfig().get("chunkbuster-warmup"));
+                    main.getConfig().set("chunkbuster-warmup", null);
+                } else {
+                    main.getConfig().set("warmup.seconds", 0);
+                }
+            }
+            if (!main.getConfig().isSet("warmup.send-message-every-second")) {
+                if (main.getConfig().isSet("warmup-message-every-second")) {
+                    main.getConfig().set("warmup.send-message-every-second", main.getConfig().get("warmup-message-every-second"));
+                    main.getConfig().set("warmup-message-every-second", null);
+                } else {
+                    main.getConfig().set("warmup.send-message-every-second", true);
+                }
+            }
+            if (!main.getConfig().isSet("warmup.sound-enabled")) {
+                main.getConfig().set("warmup.sound-enabled", false);
+            }
+            if (!main.getConfig().isSet("warmup.sound")) {
+                main.getConfig().set("warmup.sound", "random.levelup");
+            }
+            if (!main.getConfig().isSet("warmup.sound-interval-seconds")) {
+                main.getConfig().set("warmup.sound-interval-seconds", 1);
+            }
+            if (!main.getConfig().isSet("warmup.sound-volume")) {
+                main.getConfig().set("warmup.sound-volume", 1.0);
+            }
+            if (!main.getConfig().isSet("warmup.sound-pitch")) {
+                main.getConfig().set("warmup.sound-pitch", 1.0);
+            }
+            main.getConfig().set("config-version", 1.4);
             main.saveConfig();
         }
     }

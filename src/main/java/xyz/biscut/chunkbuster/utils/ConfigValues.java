@@ -75,7 +75,7 @@ public class ConfigValues {
     }
 
     public int getChunkBusterWarmup() {
-        return main.getConfig().getInt("chunkbuster-warmup");
+        return main.getConfig().getInt("warmup.seconds");
     }
 
     public int getGUIRows() { return main.getConfig().getInt("confirm-gui.rows"); }
@@ -140,6 +140,36 @@ public class ConfigValues {
         }
     }
 
+    public ItemStack getFillItemStack() {
+        String rawMaterial = main.getConfig().getString("confirm-gui.fill-material");
+        Material mat;
+        if (rawMaterial.contains(":")) {
+            String[] materialSplit = rawMaterial.split(":");
+            try {
+                mat = Material.valueOf(materialSplit[0]);
+            } catch (IllegalArgumentException ex) {
+                mat = Material.AIR;
+                Bukkit.getLogger().severe("Your fill-block material is invalid!");
+            }
+            short damage;
+            try {
+                damage = Short.valueOf(materialSplit[1]);
+            } catch (IllegalArgumentException ex) {
+                damage = 0;
+                Bukkit.getLogger().severe("Your fill-block damage is invalid!");
+            }
+            return new ItemStack(mat, 1, damage);
+        } else {
+            try {
+                mat = Material.valueOf(rawMaterial);
+            } catch (IllegalArgumentException ex) {
+                mat = Material.AIR;
+                Bukkit.getLogger().severe("Your fill-block material is invalid!");
+            }
+            return new ItemStack(mat, 1);
+        }
+    }
+
     public String getGUITitle() {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.title"));
     }
@@ -150,6 +180,10 @@ public class ConfigValues {
 
     public String getCancelName() {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.cancel-block-name"));
+    }
+
+    public String getFillName() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.fill-name"));
     }
 
     public List<String> getConfirmLore() {
@@ -163,6 +197,15 @@ public class ConfigValues {
 
     public List<String> getCancelLore() {
         List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.cancel-block-lore");
+        List<String> colouredList = new ArrayList<>();
+        for (String s : uncolouredList) {
+            colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        return colouredList;
+    }
+
+    public List<String> getFillLore() {
+        List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.fill-lore");
         List<String> colouredList = new ArrayList<>();
         for (String s : uncolouredList) {
             colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
@@ -214,7 +257,7 @@ public class ConfigValues {
     }
 
     public boolean sendWarmupEverySecond() {
-        return main.getConfig().getBoolean("warmup-message-every-second");
+        return main.getConfig().getBoolean("warmup.send-message-every-second");
     }
 
     public boolean dropFullInv() {
@@ -227,5 +270,25 @@ public class ConfigValues {
 
     public String getMinimumRoleMessage() {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.not-minimum-role"));
+    }
+
+    public boolean soundEnabled() {
+        return main.getConfig().getBoolean("warmup.sound-enabled");
+    }
+
+    public String getSoundString() {
+        return main.getConfig().getString("warmup.sound");
+    }
+
+    public int getSoundInterval() {
+        return main.getConfig().getInt("warmup.sound-interval-seconds");
+    }
+
+    public float getSoundVolume() {
+        return (float)main.getConfig().getDouble("warmup.sound-volume");
+    }
+
+    public float getSoundPitch() {
+        return (float)main.getConfig().getDouble("warmup.sound-pitch");
     }
 }

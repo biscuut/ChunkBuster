@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.biscut.chunkbuster.ChunkBuster;
 import xyz.biscut.chunkbuster.timers.MessageTimer;
+import xyz.biscut.chunkbuster.timers.SoundTimer;
 import xyz.biscut.chunkbuster.utils.HookType;
 
 import java.util.HashMap;
@@ -54,12 +55,19 @@ public class PlayerEvents implements Listener {
                                     cancelItemMeta.setDisplayName(main.getConfigValues().getCancelName());
                                     cancelItemMeta.setLore(main.getConfigValues().getCancelLore());
                                     cancelItem.setItemMeta(cancelItemMeta);
+                                    ItemStack fillItem = main.getConfigValues().getFillItemStack();
+                                    ItemMeta fillItemMeta = fillItem.getItemMeta();
+                                    fillItemMeta.setDisplayName(main.getConfigValues().getFillName());
+                                    fillItemMeta.setLore(main.getConfigValues().getFillLore());
+                                    fillItem.setItemMeta(fillItemMeta);
                                     int slotCounter = 1;
                                     for (int i = 0; i < 9 * main.getConfigValues().getGUIRows(); i++) {
                                         if (slotCounter < 5) {
                                             confirmInv.setItem(i, acceptItem);
                                         } else if (slotCounter > 5) {
                                             confirmInv.setItem(i, cancelItem);
+                                        } else {
+                                            confirmInv.setItem(i, fillItem);
                                         }
                                         if (slotCounter >= 9) {
                                             slotCounter = 1;
@@ -136,6 +144,9 @@ public class PlayerEvents implements Listener {
                                         if (main.getConfigValues().getChunkBusterWarmup() > 0) {
                                             int seconds = main.getConfigValues().getChunkBusterWarmup();
                                             new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
+                                            if (main.getConfigValues().soundEnabled()) {
+                                                new SoundTimer(main, p, (int)((double)seconds / main.getConfigValues().getSoundInterval())).runTaskTimer(main, 0L, 20L * main.getConfigValues().getSoundInterval());
+                                            }
                                             Bukkit.getScheduler().runTaskLater(main, () -> main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p), 20L * seconds);
                                         } else {
                                             main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
