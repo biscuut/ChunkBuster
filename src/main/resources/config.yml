@@ -29,6 +29,9 @@ blocks-removed-per-tick: 600
 # Change this to false if you don't want to be able to destroy wilderness chunks.
 can-place-in-wilderness: true
 
+# The time you must wait before using another chunkbuster, in seconds. Set this to 0 for no cooldown.
+cooldown: 0
+
 warmup:
   # Wait this whole number of seconds before executing the chunkbuster.
   # This is useful if your players don't have fly etc. 0 means no warmup.
@@ -43,8 +46,8 @@ warmup:
   warmup-sound: 'random.levelup' # random.levelup is for 1.8 only
   warmup-sound-volume: 1.0 # 0.0 to 1.0
   warmup-sound-pitch: 1.0 # 0.0 to 2.0 (ex. 0.5 is half sound speed, 1 is normal speed, 2 is double speed)
-  # Choose the interval for the warmup sound. 1 means the sound will play every second.
-  warmup-sound-interval-seconds: 1
+  # Choose the interval for the warmup sound, in seconds. 1 means the sound will play every second.
+  warmup-sound-interval: 1
   # Sound played when the chunks start clearing. (After the warmup if it's set)
   clearing-sound-enabled: false
   clearing-sound: 'random.levelup'
@@ -103,6 +106,7 @@ messages:
   clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'
   not-minimum-role: '&cYou must be a faction (insert role) to use chunkbusters.'
   gui-cancel: '&cThe chunkbuster has been cancelled.'
+  cooldown: '&cYou must wait {minutes} minute(s) and {seconds} second(s) to use this again!'
 
 # Blocks that will not get cleared by chunkbusters. Use material enum names.
 ignored-materials:

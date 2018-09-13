@@ -211,12 +211,12 @@ public class Utils {
                     main.getConfig().set("warmup.warmup-sound-pitch", 1.0);
                 }
             }
-            if (!main.getConfig().isSet("warmup.warmup-sound-interval-seconds")) {
+            if (!main.getConfig().isSet("warmup.warmup-sound-interval")) {
                 if (main.getConfig().isSet("warmup.sound-interval-seconds")) {
-                    main.getConfig().set("warmup.warmup-sound-interval-seconds", main.getConfig().get("warmup.sound-interval-seconds"));
+                    main.getConfig().set("warmup.warmup-sound-interval", main.getConfig().get("warmup.sound-interval-seconds"));
                     main.getConfig().set("warmup.sound-interval-seconds", null);
                 } else {
-                    main.getConfig().set("warmup.warmup-sound-interval-seconds", 1);
+                    main.getConfig().set("warmup.warmup-sound-interval", 1);
                 }
             }
             if (!main.getConfig().isSet("warmup.clearing-sound-enabled")) {
@@ -260,6 +260,9 @@ public class Utils {
             }
             if (!main.getConfig().isSet("ignored-materials")) {
                 main.getConfig().set("ignored-materials", new ArrayList<String>().add("BEDROCK"));
+            }
+            if (!main.getConfig().isSet("cooldown")) {
+                main.getConfig().set("cooldown", 0);
             }
             main.getConfig().set("config-version", 1.5);
             main.saveConfig();

@@ -281,7 +281,7 @@ public class ConfigValues {
     }
 
     public int getWarmupSoundInterval() {
-        return main.getConfig().getInt("warmup.warmup-sound-interval-seconds");
+        return main.getConfig().getInt("warmup.warmup-sound-interval");
     }
 
     public float getWarmupSoundVolume() {
@@ -353,5 +353,13 @@ public class ConfigValues {
             } catch (IllegalArgumentException ignored) {}
         }
         return materialList;
+    }
+
+    public int getCooldown() {
+        return main.getConfig().getInt("cooldown");
+    }
+
+    public String getCooldownMessage(int minutes, int seconds) {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.cooldown")).replace("{minutes}", String.valueOf(minutes)).replace("{seconds}", String.valueOf(seconds));
     }
 }

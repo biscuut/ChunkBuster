@@ -23,6 +23,7 @@ public class PlayerEvents implements Listener {
 
     private ChunkBuster main;
     private HashMap<Player, Location> chunkBusterLocations = new HashMap<>();
+    private HashMap<Player, Long> playerCooldowns = new HashMap<>();
 
     public PlayerEvents(ChunkBuster main) {
         this.main = main;
@@ -30,9 +31,20 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onChunkBusterPlace(BlockPlaceEvent e) {
+        Player p = e.getPlayer();
+        if (playerCooldowns.containsKey(p)) {
+            if (System.currentTimeMillis() < playerCooldowns.get(p)) {
+                long longDifference = playerCooldowns.get(e.getPlayer()) - System.currentTimeMillis();
+                int secondsDifference = (int)(longDifference / 1000);
+                int seconds = secondsDifference % 60;
+                int minutes = secondsDifference / 60;
+                p.sendMessage(main.getConfigValues().getCooldownMessage(minutes, seconds));
+                return;
+            }
+        }
+        playerCooldowns.put(e.getPlayer(), System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
-            Player p = e.getPlayer();
             if (p.hasPermission("chunkbuster.use")) {
                 if (main.getHookUtils().hasFaction(p)) {
                     if (main.getHookUtils().checkRole(p)) {
