@@ -54,7 +54,6 @@ public class PlayerEvents implements Listener {
                                             return;
                                         }
                                     }
-                                    playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
                                 }
                                 chunkBusterLocations.put(p, e.getBlock().getLocation());
                                 if (!p.getOpenInventory().getTitle().contains(main.getConfigValues().getGUITitle())) {
@@ -152,6 +151,7 @@ public class PlayerEvents implements Listener {
                                     }
                                 } else {
                                     if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
+                                        playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
                                         if (main.getConfigValues().confirmSoundEnabled()) {
                                             p.playSound(p.getLocation(), main.getConfigValues().getConfirmSoundString(), main.getConfigValues().getConfirmSoundVolume(), main.getConfigValues().getConfirmSoundPitch());
                                         }
