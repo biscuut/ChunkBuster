@@ -152,6 +152,8 @@ public class PlayerEvents implements Listener {
                                 } else {
                                     if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
                                         playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
+                                        chunkBusterLocations.remove(e.getWhoClicked());
+                                        e.getWhoClicked().closeInventory();
                                         if (main.getConfigValues().confirmSoundEnabled()) {
                                             p.playSound(p.getLocation(), main.getConfigValues().getConfirmSoundString(), main.getConfigValues().getConfirmSoundVolume(), main.getConfigValues().getConfirmSoundPitch());
                                         }
@@ -183,6 +185,8 @@ public class PlayerEvents implements Listener {
                                             main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
                                         }
                                     } else if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getCancelName())) {
+                                        chunkBusterLocations.remove(e.getWhoClicked());
+                                        e.getWhoClicked().closeInventory();
                                         if (main.getConfigValues().cancelSoundEnabled()) {
                                             p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
                                         }
@@ -222,8 +226,6 @@ public class PlayerEvents implements Listener {
             } else {
                 p.sendMessage(ChatColor.RED + "Error, please re-place your chunk buster.");
             }
-            e.getWhoClicked().closeInventory();
-            chunkBusterLocations.remove(e.getWhoClicked());
         }
     }
 
