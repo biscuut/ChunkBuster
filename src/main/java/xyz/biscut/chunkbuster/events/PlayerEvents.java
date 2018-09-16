@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -233,6 +234,13 @@ public class PlayerEvents implements Listener {
     public void onGUIClose(InventoryCloseEvent e) {
         if (e.getInventory().getName().contains(main.getConfigValues().getGUITitle())) {
             chunkBusterLocations.remove(e.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        if (main.getConfigValues().showUpdateMessage() && e.getPlayer().isOp()) {
+            main.getUtils().checkUpdates(e.getPlayer());
         }
     }
 }

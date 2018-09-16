@@ -362,4 +362,8 @@ public class ConfigValues {
     public String getCooldownMessage(int minutes, int seconds) {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.cooldown")).replace("{minutes}", String.valueOf(minutes)).replace("{seconds}", String.valueOf(seconds));
     }
+
+    public boolean showUpdateMessage() {
+        return main.getConfig().getBoolean("show-update-messages");
+    }
 }

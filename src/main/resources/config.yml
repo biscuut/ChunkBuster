@@ -112,5 +112,9 @@ messages:
 ignored-materials:
   - 'BEDROCK'
 
+# Whether to show the newer version messages. I recommend to keep this true to
+# stay on top of the new bug fixes and features.
+show-update-messages: true
+
 # Please do not edit :)
-config-version: 1.5
+config-version: 1.6

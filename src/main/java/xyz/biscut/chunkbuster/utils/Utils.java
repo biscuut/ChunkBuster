@@ -1,6 +1,8 @@
 package xyz.biscut.chunkbuster.utils;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,8 +15,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.biscut.chunkbuster.ChunkBuster;
 import xyz.biscut.chunkbuster.timers.RemovalQueue;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -267,6 +273,60 @@ public class Utils {
             main.getConfig().set("config-version", 1.5);
             main.saveConfig();
         }
+        if (main.getConfig().getDouble("config-version") < 1.6) {
+            if (!main.getConfig().isSet("show-update-messages")) {
+                main.getConfig().set("show-update-messages", true);
+            }
+            main.getConfig().set("config-version", 1.6);
+            main.saveConfig();
+        }
+    }
+
+    public void checkUpdates(Player p) {
+        try {
+            URL url = new URL("https://raw.githubusercontent.com/biscuut/ChunkBuster/master/pom.xml");
+            URLConnection connection = url.openConnection();
+            connection.setReadTimeout(5000);
+            connection.addRequestProperty("User-Agent", "ChunkBuster update checker");
+            connection.setDoOutput(true);
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String currentLine;
+            String newestVersion = "";
+            while ((currentLine = reader.readLine()) != null) {
+                if (currentLine.contains("<version>")) {
+                    String[] newestVersionSplit = currentLine.split(Pattern.quote("<version>"));
+                    newestVersionSplit = newestVersionSplit[1].split(Pattern.quote("</version>"));
+                    newestVersion = newestVersionSplit[0];
+                    break;
+                }
+            }
+            reader.close();
+            ArrayList<Integer> newestVersionNumbers = new ArrayList<>();
+            try {
+                for (String s : newestVersion.split(Pattern.quote("."))) {
+                    newestVersionNumbers.add(Integer.parseInt(s));
+                }
+            } catch (Exception ex) {
+                return;
+            }
+            if (newestVersionNumbers.size() != 3) {
+                return;
+            }
+            ArrayList<Integer> thisVersionNumbers = new ArrayList<>();
+            try {
+                for (String s : main.getDescription().getVersion().split(Pattern.quote("."))) {
+                    thisVersionNumbers.add(Integer.parseInt(s));
+                }
+            } catch (Exception ex) {
+                return;
+            }
+            if (newestVersionNumbers.get(0) > thisVersionNumbers.get(0) || newestVersionNumbers.get(1) > thisVersionNumbers.get(1) || newestVersionNumbers.get(2) > thisVersionNumbers.get(2)) {
+                TextComponent one = new TextComponent("A new version of ChunkBuster, " + newestVersion + " is available. Download it by clicking here.");
+                one.setColor(ChatColor.RED);
+                one.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-12-clear-any-chunk-area.60057/"));
+                p.spigot().sendMessage(one);
+            }
+        } catch (Exception ignored) {}
     }
 
     public HashSet<Chunk> getWaterChunks() { return waterChunks; }
