@@ -325,6 +325,8 @@ public class Utils {
                 one.setColor(ChatColor.RED);
                 one.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-12-clear-any-chunk-area.60057/"));
                 p.spigot().sendMessage(one);
+            } else if (thisVersionNumbers.get(0) > newestVersionNumbers.get(0) || thisVersionNumbers.get(1) > newestVersionNumbers.get(1) || thisVersionNumbers.get(2) > newestVersionNumbers.get(2)) {
+                p.sendMessage(ChatColor.RED + "You are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + ".");
             }
         } catch (Exception ignored) {}
     }
