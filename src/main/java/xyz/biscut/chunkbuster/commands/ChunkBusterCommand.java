@@ -22,10 +22,10 @@ public class ChunkBusterCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
-            if (args.length > 0) {
-                switch (args[0].toLowerCase()) {
-                    case "give":
+        if (args.length > 0) {
+            switch (args[0].toLowerCase()) {
+                case "give":
+                    if (sender.hasPermission("chunkbuster.give") || sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
                         if (args.length > 1) {
                             Player p = Bukkit.getPlayerExact(args[1]);
                             if (p != null) {
@@ -67,15 +67,15 @@ public class ChunkBusterCommand implements CommandExecutor {
                                         }
                                         excessItems = p.getInventory().addItem(item);
                                         for (Object excessItem : excessItems.values()) {
-                                            int itemCount = ((ItemStack)excessItem).getAmount();
+                                            int itemCount = ((ItemStack) excessItem).getAmount();
                                             while (itemCount > 64) {
                                                 ((ItemStack) excessItem).setAmount(64);
-                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack)excessItem);
+                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack) excessItem);
                                                 itemCount = itemCount - 64;
                                             }
                                             if (itemCount > 0) {
                                                 ((ItemStack) excessItem).setAmount(itemCount);
-                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack)excessItem);
+                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack) excessItem);
                                             }
                                         }
                                         if (!main.getConfigValues().getGiveMessage(p, giveAmount).equals("")) {
@@ -96,25 +96,50 @@ public class ChunkBusterCommand implements CommandExecutor {
                         } else {
                             sender.sendMessage(ChatColor.RED + "Please specify a player!");
                         }
-                        break;
-                    case "reload":
+                    } else {
+                        if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
+                            sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
+                        }
+                    }
+                    break;
+                case "reload":
+                    if (sender.hasPermission("chunkbuster.reload") || sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
                         main.reloadConfig();
                         sender.sendMessage(ChatColor.GREEN + "Successfully reloaded the config. Most values have been instantly updated.");
-                        break;
-                    default:
-                        sender.sendMessage(ChatColor.RED + "Invalid argument!");
-                }
-            } else {
-                sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "--------------" + ChatColor.GRAY +"[" + ChatColor.GREEN + ChatColor.BOLD + " ChunkBuster " + ChatColor.GRAY + "]" + ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "--------------");
-                sender.sendMessage(ChatColor.GREEN + "● /cb give <player> <chunk-area> [amount] " + ChatColor.GRAY + "- Give a player a chunk buster");
-                sender.sendMessage(ChatColor.GREEN + "● /cb reload " + ChatColor.GRAY + "- Reload the config");
-                sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "v" + main.getDescription().getVersion() + " by Biscut");
-                sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------------------");
+                    } else {
+                        if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
+                            sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
+                        }
+                    }
+                    break;
+                case "water":
+                    if (sender.hasPermission("chunkbuster.water") || sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
+                        if (sender instanceof Player) {
+                            if (main.getUtils().getWaterChunks().contains(((Player)sender).getLocation().getChunk())) {
+                                main.getUtils().getWaterChunks().remove(((Player)sender).getLocation().getChunk());
+                                sender.sendMessage(ChatColor.GREEN + "Water can now flow normally into this chunk.");
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "This chunk doesn't have water flow disabled!");
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "You cannot use this command from here!");
+                        }
+                    } else {
+                        if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
+                            sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
+                        }
+                    }
+                    break;
+                default:
+                    sender.sendMessage(ChatColor.RED + "Invalid argument!");
             }
         } else {
-            if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
-                sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
-            }
+            sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "--------------" + ChatColor.GRAY +"[" + ChatColor.GREEN + ChatColor.BOLD + " ChunkBuster " + ChatColor.GRAY + "]" + ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "--------------");
+            sender.sendMessage(ChatColor.GREEN + "● /cb give <player> <chunk-area> [amount] " + ChatColor.GRAY + "- Give a player a chunk buster");
+            sender.sendMessage(ChatColor.GREEN + "● /cb reload " + ChatColor.GRAY + "- Reload the config");
+            sender.sendMessage(ChatColor.GREEN + "● /cb water " + ChatColor.GRAY + "- " + ChatColor.YELLOW + "[DEBUG]" + ChatColor.GRAY + " Allow water to flow normally in your current chunk");
+            sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "v" + main.getDescription().getVersion() + " by Biscut");
+            sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------------------");
         }
         return false;
     }

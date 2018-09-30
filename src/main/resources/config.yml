@@ -32,6 +32,10 @@ can-place-in-wilderness: true
 # The time you must wait before using another chunkbuster, in seconds. Set this to 0 for no cooldown.
 cooldown: 0
 
+# Chunkbusters clear between this minimum value and the maximum value (both inclusive). 0 and 255 means the whole chunk.
+minimum-y: 0
+maximum-y: 255
+
 warmup:
   # Wait this whole number of seconds before executing the chunkbuster.
   # This is useful if your players don't have fly etc. 0 means no warmup.
@@ -117,4 +121,4 @@ ignored-materials:
 show-update-messages: true
 
 # Please do not edit :)
-config-version: 1.6
+config-version: 1.7

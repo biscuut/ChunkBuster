@@ -366,4 +366,16 @@ public class ConfigValues {
     public boolean showUpdateMessage() {
         return main.getConfig().getBoolean("show-update-messages");
     }
+
+    public int getMinimumY() {
+        return main.getConfig().getInt("minimum-y");
+    }
+
+    public int getMaximumY() {
+        return main.getConfig().getInt("maximum-y");
+    }
+
+    public double getConfigVersion() {
+        return main.getConfig().getDouble("config-version");
+    }
 }
