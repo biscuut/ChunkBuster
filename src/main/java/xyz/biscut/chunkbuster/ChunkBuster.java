@@ -44,6 +44,7 @@ public class ChunkBuster extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerEvents(this), this);
         Bukkit.getPluginManager().registerEvents(new OtherEvents(this), this);
         getCommand("chunkbuster").setExecutor(new ChunkBusterCommand(this));
+        getCommand("chunkbuster").setTabCompleter(ChunkBusterCommand.TAB_COMPLETER);
     }
 
     @Override
