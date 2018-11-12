@@ -33,6 +33,7 @@ can-place-in-wilderness: true
 cooldown: 0
 
 # Chunkbusters clear between this minimum value and the maximum value (both inclusive). 0 and 255 means the whole chunk.
+# You can use '{player}' for the player's Y-coordinate.
 minimum-y: 0
 maximum-y: 255
 

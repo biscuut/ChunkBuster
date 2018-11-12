@@ -367,12 +367,30 @@ public class ConfigValues {
         return main.getConfig().getBoolean("show-update-messages");
     }
 
-    public int getMinimumY() {
-        return main.getConfig().getInt("minimum-y");
+    public int getMinimumY(Player p) {
+        if (main.getConfig().getString("minimum-y").toLowerCase().contains("{player}")) {
+            return (int)p.getLocation().getY();
+        } else {
+            try {
+                return Integer.valueOf(main.getConfig().getString("minimum-y"));
+            } catch (NumberFormatException ex) {
+                main.getLogger().warning("Your minimum-y value is invalid, please either change this to an integer or '{player}' in the config.");
+                return 0;
+            }
+        }
     }
 
-    public int getMaximumY() {
-        return main.getConfig().getInt("maximum-y");
+    public int getMaximumY(Player p) {
+        if (main.getConfig().getString("maximum-y").toLowerCase().contains("{player}")) {
+            return (int)p.getLocation().getY();
+        } else {
+            try {
+                return Integer.valueOf(main.getConfig().getString("maximum-y"));
+            } catch (NumberFormatException ex) {
+                main.getLogger().warning("Your maximum-y value is invalid, please either change this to an integer or '{player}' in the config.");
+                return 255;
+            }
+        }
     }
 
     public double getConfigVersion() {
