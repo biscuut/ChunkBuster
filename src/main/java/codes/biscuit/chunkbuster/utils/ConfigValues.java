@@ -27,14 +27,14 @@ public class ConfigValues {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
                 mat = getEnderPortalMaterial();
-                Bukkit.getLogger().severe("Your chunk buster material is invalid!");
+                main.getLogger().severe("Your chunk buster material is invalid!");
             }
         } else {
             try {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
                 mat = getEnderPortalMaterial();
-                Bukkit.getLogger().severe("Your chunk buster material is invalid!");
+                main.getLogger().severe("Your chunk buster material is invalid!");
             }
         }
         return mat;
@@ -49,7 +49,7 @@ public class ConfigValues {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
                 damage = 0;
-                Bukkit.getLogger().severe("Your chunk buster damage is invalid!");
+                main.getLogger().severe("Your chunk buster damage is invalid!");
             }
             return damage;
         } else {
@@ -89,14 +89,14 @@ public class ConfigValues {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
                 mat = getDefaultConfirmMaterial();
-                Bukkit.getLogger().severe("Your accept-block material is invalid!");
+                main.getLogger().severe("Your accept-block material is invalid!");
             }
             short damage;
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
                 damage = 0;
-                Bukkit.getLogger().severe("Your accept-block damage is invalid!");
+                main.getLogger().severe("Your accept-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
         } else {
@@ -104,7 +104,7 @@ public class ConfigValues {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
                 mat = getDefaultConfirmMaterial();
-                Bukkit.getLogger().severe("Your accept-block material is invalid!");
+                main.getLogger().severe("Your accept-block material is invalid!");
             }
             return new ItemStack(mat, 1);
         }
@@ -119,14 +119,14 @@ public class ConfigValues {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
                 mat = getDefaultCancelMaterial();
-                Bukkit.getLogger().severe("Your cancel-block material is invalid!");
+                main.getLogger().severe("Your cancel-block material is invalid!");
             }
             short damage;
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
                 damage = 0;
-                Bukkit.getLogger().severe("Your cancel-block damage is invalid!");
+                main.getLogger().severe("Your cancel-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
         } else {
@@ -134,7 +134,7 @@ public class ConfigValues {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
                 mat = getDefaultCancelMaterial();
-                Bukkit.getLogger().severe("Your cancel-block material is invalid!");
+                main.getLogger().severe("Your cancel-block material is invalid!");
             }
             return new ItemStack(mat, 1);
         }
@@ -149,14 +149,14 @@ public class ConfigValues {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
                 mat = Material.AIR;
-                Bukkit.getLogger().severe("Your fill-block material is invalid!");
+                main.getLogger().severe("Your fill-block material is invalid!");
             }
             short damage;
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
                 damage = 0;
-                Bukkit.getLogger().severe("Your fill-block damage is invalid!");
+                main.getLogger().severe("Your fill-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
         } else {
@@ -164,7 +164,7 @@ public class ConfigValues {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
                 mat = Material.AIR;
-                Bukkit.getLogger().severe("Your fill-block material is invalid!");
+                main.getLogger().severe("Your fill-block material is invalid!");
             }
             return new ItemStack(mat, 1);
         }
@@ -365,6 +365,10 @@ public class ConfigValues {
 
     public boolean showUpdateMessage() {
         return main.getConfig().getBoolean("show-update-messages");
+    }
+
+    public boolean logBlocks() {
+        return main.getConfig().getBoolean("coreprotect-enabled");
     }
 
     public int getMinimumY(Player p) {

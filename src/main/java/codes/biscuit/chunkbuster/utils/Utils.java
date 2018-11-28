@@ -42,7 +42,7 @@ public class Utils {
     public void clearChunks(int chunkBusterArea, Location chunkBusterLocation, Player p) {
         HashSet<Material> ignoredBlocks = new HashSet<>(main.getConfigValues().getIgnoredBlocks());
         if (chunkBusterArea == 1) {
-            RemovalQueue removalQueue = new RemovalQueue(main);
+            RemovalQueue removalQueue = new RemovalQueue(main, p);
             waterChunks.add(chunkBusterLocation.getChunk());
             for (int y = main.getConfigValues().getMaximumY(p); y >= main.getConfigValues().getMinimumY(p); y--) {
                 for (int x = 0; x < 16; x++) {
@@ -59,7 +59,7 @@ public class Utils {
                 p.sendMessage(main.getConfigValues().getClearingMessage());
             }
         } else if (chunkBusterArea > 2 && chunkBusterArea % 2 != 0) {
-            RemovalQueue removalQueue = new RemovalQueue(main);
+            RemovalQueue removalQueue = new RemovalQueue(main, p);
             int upperSearchBound = ((chunkBusterArea - 1) / 2) + 1;
             int lowerSearchBound = (chunkBusterArea - 1) / -2;
             int startingX = chunkBusterLocation.getChunk().getX();
@@ -96,7 +96,7 @@ public class Utils {
     }
 
     public void updateConfig(ChunkBuster main) {
-        if (main.getConfigValues().getConfigVersion() < 1.7) {
+        if (main.getConfigValues().getConfigVersion() < 1.8) {
             HashMap<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
                 oldValues.put(oldKey, main.getConfig().get(oldKey));
@@ -108,7 +108,7 @@ public class Utils {
                     main.getConfig().set(newKey, oldValues.get(newKey));
                 }
             }
-            main.getConfig().set("config-version", 1.7);
+            main.getConfig().set("config-version", 1.8);
             main.saveConfig();
         }
     }
@@ -133,31 +133,28 @@ public class Utils {
             }
             reader.close();
             ArrayList<Integer> newestVersionNumbers = new ArrayList<>();
+            ArrayList<Integer> thisVersionNumbers = new ArrayList<>();
             try {
                 for (String s : newestVersion.split(Pattern.quote("."))) {
                     newestVersionNumbers.add(Integer.parseInt(s));
                 }
-            } catch (Exception ex) {
-                return;
-            }
-            if (newestVersionNumbers.size() != 3) {
-                return;
-            }
-            ArrayList<Integer> thisVersionNumbers = new ArrayList<>();
-            try {
                 for (String s : main.getDescription().getVersion().split(Pattern.quote("."))) {
                     thisVersionNumbers.add(Integer.parseInt(s));
                 }
             } catch (Exception ex) {
                 return;
             }
-            if (newestVersionNumbers.get(0) > thisVersionNumbers.get(0) || newestVersionNumbers.get(1) > thisVersionNumbers.get(1) || newestVersionNumbers.get(2) > thisVersionNumbers.get(2)) {
-                TextComponent one = new TextComponent("A new version of ChunkBuster, " + newestVersion + " is available. Download it by clicking here.");
-                one.setColor(ChatColor.RED);
-                one.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-12-clear-any-chunk-area.60057/"));
-                p.spigot().sendMessage(one);
-            } else if (thisVersionNumbers.get(0) > newestVersionNumbers.get(0) || thisVersionNumbers.get(1) > newestVersionNumbers.get(1) || thisVersionNumbers.get(2) > newestVersionNumbers.get(2)) {
-                p.sendMessage(ChatColor.RED + "You are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + ".");
+            for (int i = 0; i < 3; i++) {
+                if (newestVersionNumbers.get(i) != null && thisVersionNumbers.get(i) != null) {
+                    if (newestVersionNumbers.get(i) > thisVersionNumbers.get(i)) {
+                        TextComponent newVersion = new TextComponent("A new version of ChunkBuster, " + newestVersion + " is available. Download it by clicking here.");
+                        newVersion.setColor(ChatColor.RED);
+                        newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-12-clear-any-chunk-area.60057/"));
+                        p.spigot().sendMessage(newVersion);
+                    } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
+                        p.sendMessage(ChatColor.RED + "You are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + ".");
+                    }
+                }
             }
         } catch (Exception ignored) {}
     }

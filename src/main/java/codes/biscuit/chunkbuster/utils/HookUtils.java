@@ -1,6 +1,8 @@
 package codes.biscuit.chunkbuster.utils;
 
+import codes.biscuit.chunkbuster.hooks.CoreProtectHook;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import codes.biscuit.chunkbuster.ChunkBuster;
 import codes.biscuit.chunkbuster.hooks.FactionsUUIDHook;
@@ -12,6 +14,7 @@ public class HookUtils {
     private MCoreFactionsHook mCoreFactionsHook = null;
     private FactionsUUIDHook factionsUUIDHook = null;
     private WorldGuardHook worldGuardHook = null;
+    private CoreProtectHook coreProtectHook = null;
     private HookType hook;
     private ChunkBuster main;
 
@@ -30,6 +33,10 @@ public class HookUtils {
             worldGuardHook = new WorldGuardHook();
         } else {
             this.hook = null;
+        }
+        if (main.getServer().getPluginManager().getPlugin("CoreProtect") != null) {
+            this.coreProtectHook = new CoreProtectHook();
+            main.getLogger().info("Hooked into CoreProtect");
         }
     }
 
@@ -112,6 +119,24 @@ public class HookUtils {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Whether CoreProtect is enabled or not
+     */
+    public boolean isCoreProtectEnabled() {
+        return coreProtectHook != null && main.getConfigValues().logBlocks();
+    }
+
+    /**
+     * Log a block as removed in CoreProtect
+     * @param p The player to log
+     * @param loc The block's location
+     * @param mat The block's material
+     * @param damage The block's damage value
+     */
+    public void logBlock(Player p, Location loc, Material mat, byte damage) {
+        coreProtectHook.logBlock(p.getName(), loc, mat, damage);
     }
 
     public HookType getHookType() {

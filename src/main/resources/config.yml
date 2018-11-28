@@ -6,7 +6,7 @@
 # | \__/\| | | || |_| || | | ||   < | |_/ /| |_| |\__ \| |_|  __/| |    #
 #  \____/|_| |_| \__,_||_| |_||_|\_\\____/  \__,_||___/ \__|\___||_|    #
 #                                                                       #
-#                           v${version} by Biscut                            #
+#                             v${version} by Biscut                            #
 #########################################################################
 
 chunkbuster:
@@ -118,9 +118,12 @@ messages:
 ignored-materials:
   - 'BEDROCK'
 
+# Whether CoreProtect should log all removed blocks or not. Will have no effect if coreprotect is not installed.
+coreprotect-enabled: false
+
 # Whether to show the newer version messages. I recommend to keep this true to
 # stay on top of the new bug fixes and features.
 show-update-messages: true
 
 # Please do not edit :)
-config-version: 1.7
+config-version: 1.8
