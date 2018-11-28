@@ -1,4 +1,4 @@
-package xyz.biscut.chunkbuster.commands;
+package codes.biscuit.chunkbuster.commands;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.biscut.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.ChunkBuster;
 
 import java.util.*;
 

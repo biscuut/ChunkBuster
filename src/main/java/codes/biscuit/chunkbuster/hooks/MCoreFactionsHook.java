@@ -1,4 +1,4 @@
-package xyz.biscut.chunkbuster.hooks;
+package codes.biscuit.chunkbuster.hooks;
 
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColl;

@@ -1,9 +1,9 @@
-package xyz.biscut.chunkbuster.timers;
+package codes.biscuit.chunkbuster.timers;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.biscut.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.ChunkBuster;
 
 import java.util.LinkedList;
 

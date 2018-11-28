@@ -1,8 +1,8 @@
-package xyz.biscut.chunkbuster.timers;
+package codes.biscuit.chunkbuster.timers;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.biscut.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.ChunkBuster;
 
 public class MessageTimer extends BukkitRunnable {
 

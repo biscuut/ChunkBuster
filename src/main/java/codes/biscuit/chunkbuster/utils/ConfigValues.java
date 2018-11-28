@@ -1,11 +1,11 @@
-package xyz.biscut.chunkbuster.utils;
+package codes.biscuit.chunkbuster.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import xyz.biscut.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.ChunkBuster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +26,14 @@ public class ConfigValues {
             try {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
-                mat = Material.ENDER_PORTAL_FRAME;
+                mat = getEnderPortalMaterial();
                 Bukkit.getLogger().severe("Your chunk buster material is invalid!");
             }
         } else {
             try {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
-                mat = Material.ENDER_PORTAL_FRAME;
+                mat = getEnderPortalMaterial();
                 Bukkit.getLogger().severe("Your chunk buster material is invalid!");
             }
         }
@@ -88,7 +88,7 @@ public class ConfigValues {
             try {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
-                mat = Material.WOOL;
+                mat = getDefaultConfirmMaterial();
                 Bukkit.getLogger().severe("Your accept-block material is invalid!");
             }
             short damage;
@@ -103,7 +103,7 @@ public class ConfigValues {
             try {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
-                mat = Material.WOOL;
+                mat = getDefaultConfirmMaterial();
                 Bukkit.getLogger().severe("Your accept-block material is invalid!");
             }
             return new ItemStack(mat, 1);
@@ -118,7 +118,7 @@ public class ConfigValues {
             try {
                 mat = Material.valueOf(materialSplit[0]);
             } catch (IllegalArgumentException ex) {
-                mat = Material.WOOL;
+                mat = getDefaultCancelMaterial();
                 Bukkit.getLogger().severe("Your cancel-block material is invalid!");
             }
             short damage;
@@ -133,7 +133,7 @@ public class ConfigValues {
             try {
                 mat = Material.valueOf(rawMaterial);
             } catch (IllegalArgumentException ex) {
-                mat = Material.WOOL;
+                mat = getDefaultCancelMaterial();
                 Bukkit.getLogger().severe("Your cancel-block material is invalid!");
             }
             return new ItemStack(mat, 1);
@@ -395,5 +395,35 @@ public class ConfigValues {
 
     public double getConfigVersion() {
         return main.getConfig().getDouble("config-version");
+    }
+
+    private Material getDefaultCancelMaterial() {
+        Material mat;
+        if (Bukkit.getVersion().contains("1.13")) {
+            mat = Material.valueOf("RED_WOOL");
+        } else {
+            mat = Material.valueOf("WOOL");
+        }
+        return mat;
+    }
+
+    private Material getDefaultConfirmMaterial() {
+        Material mat;
+        if (Bukkit.getVersion().contains("1.13")) {
+            mat = Material.valueOf("GREEN_WOOL");
+        } else {
+            mat = Material.valueOf("WOOL");
+        }
+        return mat;
+    }
+
+    private Material getEnderPortalMaterial() {
+        Material mat;
+        if (Bukkit.getVersion().contains("1.13")) {
+            mat = Material.valueOf("END_PORTAL_FRAME");
+        } else {
+            mat = Material.valueOf("ENDER_PORTAL_FRAME");
+        }
+        return mat;
     }
 }

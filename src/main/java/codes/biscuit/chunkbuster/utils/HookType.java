@@ -1,4 +1,4 @@
-package xyz.biscut.chunkbuster.utils;
+package codes.biscuit.chunkbuster.utils;
 
 public enum HookType {
     MCOREFACTIONS,

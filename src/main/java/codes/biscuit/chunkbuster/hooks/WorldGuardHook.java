@@ -1,4 +1,4 @@
-package xyz.biscut.chunkbuster.hooks;
+package codes.biscuit.chunkbuster.hooks;
 
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.RegionContainer;

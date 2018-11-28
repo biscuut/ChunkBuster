@@ -1,5 +1,6 @@
-main: xyz.biscut.chunkbuster.ChunkBuster
+main: codes.biscuit.chunkbuster.ChunkBuster
 version: ${version}
+api-version: 1.13
 name: ChunkBuster
 author: Biscut
 softdepend: [MassiveCore, Factions, WorldGuard]

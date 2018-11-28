@@ -1,14 +1,14 @@
-package xyz.biscut.chunkbuster;
+package codes.biscuit.chunkbuster;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.biscut.chunkbuster.commands.ChunkBusterCommand;
-import xyz.biscut.chunkbuster.events.OtherEvents;
-import xyz.biscut.chunkbuster.events.PlayerEvents;
-import xyz.biscut.chunkbuster.utils.HookType;
-import xyz.biscut.chunkbuster.utils.HookUtils;
-import xyz.biscut.chunkbuster.utils.ConfigValues;
-import xyz.biscut.chunkbuster.utils.Utils;
+import codes.biscuit.chunkbuster.commands.ChunkBusterCommand;
+import codes.biscuit.chunkbuster.events.OtherEvents;
+import codes.biscuit.chunkbuster.events.PlayerEvents;
+import codes.biscuit.chunkbuster.utils.HookType;
+import codes.biscuit.chunkbuster.utils.HookUtils;
+import codes.biscuit.chunkbuster.utils.ConfigValues;
+import codes.biscuit.chunkbuster.utils.Utils;
 
 public class ChunkBuster extends JavaPlugin {
 

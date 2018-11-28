@@ -1,4 +1,4 @@
-package xyz.biscut.chunkbuster.events;
+package codes.biscuit.chunkbuster.events;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -13,10 +13,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.biscut.chunkbuster.ChunkBuster;
-import xyz.biscut.chunkbuster.timers.MessageTimer;
-import xyz.biscut.chunkbuster.timers.SoundTimer;
-import xyz.biscut.chunkbuster.utils.HookType;
+import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.timers.MessageTimer;
+import codes.biscuit.chunkbuster.timers.SoundTimer;
+import codes.biscuit.chunkbuster.utils.HookType;
 
 import java.util.HashMap;
 
@@ -136,7 +136,7 @@ public class PlayerEvents implements Listener {
     @EventHandler
     public void onConfirmClick(InventoryClickEvent e) {
         if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null &&
-                e.getClickedInventory().getName().contains(main.getConfigValues().getGUITitle())) {
+                e.getClickedInventory().getName().equals(main.getConfigValues().getGUITitle())) {
             e.setCancelled(true);
             Player p = (Player)e.getWhoClicked();
             Location chunkBusterLocation = chunkBusterLocations.get(e.getWhoClicked());

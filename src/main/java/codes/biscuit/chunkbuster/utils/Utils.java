@@ -1,4 +1,4 @@
-package xyz.biscut.chunkbuster.utils;
+package codes.biscuit.chunkbuster.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.biscut.chunkbuster.ChunkBuster;
-import xyz.biscut.chunkbuster.timers.RemovalQueue;
+import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.timers.RemovalQueue;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

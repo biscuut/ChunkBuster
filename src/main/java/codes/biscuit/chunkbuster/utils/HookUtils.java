@@ -1,11 +1,11 @@
-package xyz.biscut.chunkbuster.utils;
+package codes.biscuit.chunkbuster.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import xyz.biscut.chunkbuster.ChunkBuster;
-import xyz.biscut.chunkbuster.hooks.FactionsUUIDHook;
-import xyz.biscut.chunkbuster.hooks.MCoreFactionsHook;
-import xyz.biscut.chunkbuster.hooks.WorldGuardHook;
+import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.hooks.FactionsUUIDHook;
+import codes.biscuit.chunkbuster.hooks.MCoreFactionsHook;
+import codes.biscuit.chunkbuster.hooks.WorldGuardHook;
 
 public class HookUtils {
 

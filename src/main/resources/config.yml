@@ -10,9 +10,10 @@
 #########################################################################
 
 chunkbuster:
-  # Please use 1.8 material names from here or any other 1.8 javadocs.
-  # https://biscut.xyz/javadocs/org/bukkit/Material.html
-  # Damage values supported.
+  # Please use item names for your specific version.
+  # 1.8: https://biscuit.codes/javadocs/org/bukkit/Material.html
+  # 1.13: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+  # Damage values supported for > 1.13.
   material: 'ENDER_PORTAL_FRAME'
   name: '&aChunk Buster'
   lore:
