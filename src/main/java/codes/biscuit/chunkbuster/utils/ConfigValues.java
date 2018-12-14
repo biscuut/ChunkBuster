@@ -48,7 +48,7 @@ public class ConfigValues {
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
-                damage = 0;
+                damage = 1;
                 main.getLogger().severe("Your chunk buster damage is invalid!");
             }
             return damage;
@@ -63,7 +63,7 @@ public class ConfigValues {
         List<String> uncolouredList = main.getConfig().getStringList("chunkbuster.lore");
         List<String> colouredList = new ArrayList<>();
         for (String s : uncolouredList) {
-            colouredList.add(ChatColor.translateAlternateColorCodes('&', s).replace("{area}", String.valueOf(chunkRadius) + "x" + String.valueOf(chunkRadius)));
+            colouredList.add(ChatColor.translateAlternateColorCodes('&', s).replace("{area}", chunkRadius+"x"+chunkRadius));
         }
         return colouredList;
     }
@@ -95,7 +95,7 @@ public class ConfigValues {
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
-                damage = 0;
+                damage = 1;
                 main.getLogger().severe("Your accept-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
@@ -125,7 +125,7 @@ public class ConfigValues {
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
-                damage = 0;
+                damage = 1;
                 main.getLogger().severe("Your cancel-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
@@ -155,7 +155,7 @@ public class ConfigValues {
             try {
                 damage = Short.valueOf(materialSplit[1]);
             } catch (IllegalArgumentException ex) {
-                damage = 0;
+                damage = 1;
                 main.getLogger().severe("Your fill-block damage is invalid!");
             }
             return new ItemStack(mat, 1, damage);
