@@ -3,7 +3,7 @@ version: ${version}
 api-version: 1.13
 name: ChunkBuster
 author: Biscut
-softdepend: [MassiveCore, Factions, WorldGuard]
+softdepend: [MassiveCore, Factions, WorldGuard, CoreProtect]
 commands:
   chunkbuster:
     description: Give a player (a) chunkbuster(s).
