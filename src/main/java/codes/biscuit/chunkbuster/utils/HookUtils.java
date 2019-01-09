@@ -9,13 +9,17 @@ import codes.biscuit.chunkbuster.hooks.FactionsUUIDHook;
 import codes.biscuit.chunkbuster.hooks.MCoreFactionsHook;
 import codes.biscuit.chunkbuster.hooks.WorldGuardHook;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class HookUtils {
 
     private MCoreFactionsHook mCoreFactionsHook = null;
     private FactionsUUIDHook factionsUUIDHook = null;
     private WorldGuardHook worldGuardHook = null;
     private CoreProtectHook coreProtectHook = null;
-    private HookType hook;
+    private Set<HookType> enabledHooks = EnumSet.noneOf(HookType.class); //TODO make hooks a set and not a single
+    private HookType hook; //TODO fix worldguard checks and towny support for that person
     private ChunkBuster main;
 
     /**

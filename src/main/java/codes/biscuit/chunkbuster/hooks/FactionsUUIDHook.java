@@ -46,7 +46,7 @@ public class FactionsUUIDHook {
                     return true;
                 }
                 break;
-            case "coleader":
+            case "coleader": case "co-leader":
                 if (playerRole.equals(Role.COLEADER) || playerRole.equals(adminRole)) {
                     return true;
                 }

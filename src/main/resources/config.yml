@@ -107,7 +107,6 @@ messages:
   # These 2 messages will display depending on what you chose for "can-place-in-wilderness".
   only-wilderness-and-claim: '&cYou can only place chunk busters in your territory or in wilderness!'
   only-claim: '&cYou can only place chunk busters in your territory!'
-  region-protected: '&cYou cannot place chunk busters in this region!'
   clearing-chunks: '&aClearing the chunk(s)!'
   #This will only show if "chunkbuster-activation-delay" is above 0
   clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'

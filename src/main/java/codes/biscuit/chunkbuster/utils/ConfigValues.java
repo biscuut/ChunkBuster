@@ -252,10 +252,6 @@ public class ConfigValues {
         .replace("{seconds}", String.valueOf(seconds)));
     }
 
-    public String getRegionProtectedMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.region-protected"));
-    }
-
     public boolean sendWarmupEverySecond() {
         return main.getConfig().getBoolean("warmup.send-message-every-second");
     }

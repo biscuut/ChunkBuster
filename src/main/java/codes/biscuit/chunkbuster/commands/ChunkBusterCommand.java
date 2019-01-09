@@ -2,10 +2,7 @@ package codes.biscuit.chunkbuster.commands;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,7 +10,7 @@ import codes.biscuit.chunkbuster.ChunkBuster;
 
 import java.util.*;
 
-public class ChunkBusterCommand implements CommandExecutor {
+public class ChunkBusterCommand implements TabExecutor {
 
     private ChunkBuster main;
 
@@ -21,18 +18,19 @@ public class ChunkBusterCommand implements CommandExecutor {
         this.main = main;
     }
 
-    public static final TabCompleter TAB_COMPLETER = (sender, cmd, alias, args) -> {
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (args.length == 1) {
             List<String> arguments = new ArrayList<>(Arrays.asList("give", "reload", "water"));
-                for (String arg : Arrays.asList("give", "reload", "water")) {
-                    if (!arg.startsWith(args[0].toLowerCase())) {
-                        arguments.remove(arg);
-                    }
+            for (String arg : Arrays.asList("give", "reload", "water")) {
+                if (!arg.startsWith(args[0].toLowerCase())) {
+                    arguments.remove(arg);
                 }
+            }
             return arguments;
         }
         return null;
-    };
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

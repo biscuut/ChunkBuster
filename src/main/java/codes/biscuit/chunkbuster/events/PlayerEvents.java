@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,21 +17,21 @@ import org.bukkit.inventory.meta.ItemMeta;
 import codes.biscuit.chunkbuster.ChunkBuster;
 import codes.biscuit.chunkbuster.timers.MessageTimer;
 import codes.biscuit.chunkbuster.timers.SoundTimer;
-import codes.biscuit.chunkbuster.utils.HookType;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerEvents implements Listener {
 
     private ChunkBuster main;
-    private HashMap<Player, Location> chunkBusterLocations = new HashMap<>();
-    private HashMap<Player, Long> playerCooldowns = new HashMap<>();
+    private Map<Player, Location> chunkBusterLocations = new HashMap<>();
+    private Map<Player, Long> playerCooldowns = new HashMap<>();
 
     public PlayerEvents(ChunkBuster main) {
         this.main = main;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true) //TODO experimental, test this more
     public void onChunkBusterPlace(BlockPlaceEvent e) {
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
@@ -38,7 +39,7 @@ public class PlayerEvents implements Listener {
             if (p.hasPermission("chunkbuster.use")) {
                 if (main.getHookUtils().hasFaction(p)) {
                     if (main.getHookUtils().checkRole(p)) {
-                        if (main.getHookUtils().compareLocToPlayer(e.getBlock().getLocation(), p) || main.getHookUtils().isWilderness(e.getBlock().getLocation())) {
+                        if (main.getHookUtils().compareLocToPlayer(e.getBlock().getLocation(), p) || main.getHookUtils().isWilderness(e.getBlock().getLocation())) { //TODO remove this check
                             if (main.getHookUtils().isWilderness(e.getBlock().getLocation()) && !main.getConfigValues().canPlaceInWilderness()) {
                                 if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
                                     p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
@@ -48,7 +49,7 @@ public class PlayerEvents implements Listener {
                                     if (playerCooldowns.containsKey(p)) {
                                         if (System.currentTimeMillis() < playerCooldowns.get(p)) {
                                             long longDifference = playerCooldowns.get(e.getPlayer()) - System.currentTimeMillis();
-                                            int secondsDifference = (int)(longDifference / 1000);
+                                            int secondsDifference = (int) (longDifference / 1000);
                                             int seconds = secondsDifference % 60;
                                             int minutes = secondsDifference / 60;
                                             p.sendMessage(main.getConfigValues().getCooldownMessage(minutes, seconds));
@@ -99,19 +100,13 @@ public class PlayerEvents implements Listener {
                                 }
                             }
                         } else {
-                            if (main.getHookUtils().getHookType() == HookType.WORLDGUARD) {
-                                if (!main.getConfigValues().getRegionProtectedMessage().equals("")) {
-                                    p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
+                            if (main.getConfigValues().canPlaceInWilderness()) {
+                                if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
                                 }
                             } else {
-                                if (main.getConfigValues().canPlaceInWilderness()) {
-                                    if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
-                                        p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
-                                    }
-                                } else {
-                                    if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
-                                        p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
-                                    }
+                                if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
                                 }
                             }
                         }
@@ -197,19 +192,13 @@ public class PlayerEvents implements Listener {
                                     }
                                 }
                             } else {
-                                if (main.getHookUtils().getHookType() == HookType.WORLDGUARD) {
-                                    if (!main.getConfigValues().getRegionProtectedMessage().equals("")) {
-                                        p.sendMessage(main.getConfigValues().getRegionProtectedMessage());
+                                if (main.getConfigValues().canPlaceInWilderness()) {
+                                    if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
+                                        p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
                                     }
                                 } else {
-                                    if (main.getConfigValues().canPlaceInWilderness()) {
-                                        if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
-                                            p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
-                                        }
-                                    } else {
-                                        if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
-                                            p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
-                                        }
+                                    if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                        p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
                                     }
                                 }
                             }
