@@ -107,7 +107,7 @@ public class HookUtils {
         }
         if (main.getConfigValues().worldguardHookEnabled() && enabledHooks.containsKey(HookType.WORLDGUARD)) {
             WorldGuardHook worldGuardHook = (WorldGuardHook)enabledHooks.get(HookType.WORLDGUARD);
-            if (!worldGuardHook.checkLocationBreakFlag(loc, p)) canBuild = false;
+            if (!worldGuardHook.checkLocationBreakFlag(loc.getChunk(), p)) canBuild = false;
         }
         if (main.getConfigValues().townyHookEnabled() && enabledHooks.containsKey(HookType.TOWNY)) {
             TownyHook townyHook = (TownyHook)enabledHooks.get(HookType.TOWNY);

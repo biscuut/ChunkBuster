@@ -16,7 +16,6 @@ class TownyHook {
         } else {
             Block[] cornerBlocks = {chunk.getBlock(0,chunk.getWorld().getMaxHeight()/2, 0), chunk.getBlock(0,chunk.getWorld().getMaxHeight()/2, 15),
                     chunk.getBlock(15,chunk.getWorld().getMaxHeight()/2, 0), chunk.getBlock(15,chunk.getWorld().getMaxHeight()/2, 15)};
-
             for (Block currentBlock : cornerBlocks) {
                 if (!PlayerCacheUtil.getCachePermission(p, currentBlock.getLocation(), currentBlock.getType(), TownyPermission.ActionType.DESTROY)) return false;
             }

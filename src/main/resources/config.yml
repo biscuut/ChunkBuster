@@ -105,7 +105,7 @@ messages:
   not-minimum-role: '&cYou must be a faction (insert role) to use chunkbusters.'
   gui-cancel: '&cThe chunkbuster has been cancelled.'
   cooldown: '&cYou must wait {minutes} minute(s) and {seconds} second(s) to use this again!'
-  no-item: 'You must have a chunk buster in your inventory!'
+  no-item: '&cYou must have a chunk buster in your inventory!'
 
 # Blocks that will not get cleared by chunkbusters. Use material enum names.
 ignored-materials:

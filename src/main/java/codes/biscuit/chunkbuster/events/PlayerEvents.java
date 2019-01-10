@@ -136,8 +136,13 @@ public class PlayerEvents implements Listener {
                                     itemSlot = p.getInventory().getHeldItemSlot();
                                 } else {
                                     for (int i = 0; i <= 40; i++) { // 40 should fix the offhand issue.
-                                        ItemStack currentItem = p.getInventory().getItem(i);
-                                        if (currentItem.getType().equals(main.getConfigValues().getChunkBusterMaterial()) && currentItem.hasItemMeta() && currentItem.getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
+                                        ItemStack currentItem;
+                                        try {
+                                            currentItem = p.getInventory().getItem(i);
+                                        } catch (IndexOutOfBoundsException ex) {
+                                            continue;
+                                        }
+                                        if (currentItem != null && currentItem.getType().equals(main.getConfigValues().getChunkBusterMaterial()) && currentItem.hasItemMeta() && currentItem.getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
                                             itemSlot = i;
                                             break;
                                         }
