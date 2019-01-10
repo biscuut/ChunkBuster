@@ -23,10 +23,10 @@ public class HookUtils {
         if (pm.getPlugin("MassiveCore") != null &&
                 pm.getPlugin("Factions") != null) {
             main.getLogger().info("Hooked into MassiveCore Factions");
-            enabledHooks.put(HookType.MCOREFACTIONS, new MCoreFactionsHook());
+            enabledHooks.put(HookType.MCOREFACTIONS, new MCoreFactionsHook(main));
         } else if (pm.getPlugin("Factions") != null) {
             main.getLogger().info("Hooked into FactionsUUID/SavageFactions");
-            enabledHooks.put(HookType.FACTIONSUUID, new FactionsUUIDHook());
+            enabledHooks.put(HookType.FACTIONSUUID, new FactionsUUIDHook(main));
         }
         if (pm.getPlugin("WorldGuard") != null) {
             main.getLogger().info("Hooked into WorldGuard");

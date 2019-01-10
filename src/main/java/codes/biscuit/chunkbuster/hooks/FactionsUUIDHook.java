@@ -1,6 +1,7 @@
 package codes.biscuit.chunkbuster.hooks;
 
 
+import codes.biscuit.chunkbuster.ChunkBuster;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.struct.Role;
 import org.bukkit.Location;
@@ -10,6 +11,12 @@ class FactionsUUIDHook {
 
     // This hook works with FactionsUUID but it should also work with
     // its forks like SavageFactions.
+
+    private ChunkBuster main;
+
+    FactionsUUIDHook(ChunkBuster main) {
+        this.main = main;
+    }
 
     boolean hasFaction(Player p) {
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(p);
@@ -25,7 +32,7 @@ class FactionsUUIDHook {
     boolean compareLocPlayerFaction(Location loc, Player p) {
         Faction locFaction = Board.getInstance().getFactionAt(new FLocation(loc));
         Faction pFaction = FPlayers.getInstance().getByPlayer(p).getFaction();
-        return locFaction.equals(pFaction);
+        return locFaction.equals(pFaction) || (locFaction.isWilderness() && main.getConfigValues().canPlaceInWilderness());
     }
 
     boolean checkRole(Player p, String role) {

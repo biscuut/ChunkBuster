@@ -19,6 +19,6 @@ class WorldGuardHook {
         RegionQuery query = container.createQuery();
         ApplicableRegionSet set = query.getApplicableRegions(loc);
         LocalPlayer localPlayer = worldGuardPlugin.wrapPlayer(p);
-        return !(set.queryState(localPlayer, DefaultFlag.BLOCK_BREAK) == StateFlag.State.DENY);
+        return !(set.queryState(localPlayer, DefaultFlag.BLOCK_BREAK) == StateFlag.State.DENY); // Block break isn't set to deny
     }
 }

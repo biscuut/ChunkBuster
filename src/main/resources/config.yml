@@ -6,7 +6,7 @@
 # | \__/\| | | || |_| || | | ||   < | |_/ /| |_| |\__ \| |_|  __/| |    #
 #  \____/|_| |_| \__,_||_| |_||_|\_\\____/  \__,_||___/ \__|\___||_|    #
 #                                                                       #
-#                             v${version} by Biscut                            #
+#                             v${version} by Biscut                          #
 #########################################################################
 
 chunkbuster:
@@ -64,12 +64,6 @@ warmup:
 # Whether to drop the items on the floor if inventory is full.
 full-inv-drop-on-floor: false
 
-# The minimum factions role for using chunkbusters
-# For FactionsUUID/SavageFactions, set this to either 'leader'/'admin', 'coleader', 'moderator', 'member'/'normal', 'recruit'/'any'
-# For MassiveCore Factions, set this to either 'leader'/'admin', 'officer', 'member'/'normal', 'recruit'/'any'
-# 'any' means everyone can use chunkbusters, regardless of faction role.
-minimum-factions-role: 'any'
-
 confirm-gui:
   # Maximum 6
   rows: 3
@@ -104,9 +98,7 @@ messages:
   no-permission-command: '&cNo permission!'
   no-permission-place: '&cYou cannot place chunkbusters!'
   no-faction: '&cYou must have a faction to use a chunk buster!'
-  # These 2 messages will display depending on what you chose for "can-place-in-wilderness".
-  only-wilderness-and-claim: '&cYou can only place chunk busters in your territory or in wilderness!'
-  only-claim: '&cYou can only place chunk busters in your territory!'
+  cannot-place: '&cYou cannot place chunk busters here! You can only place it in your territory or in wilderness!' # Change this to whatever makes sense
   clearing-chunks: '&aClearing the chunk(s)!'
   #This will only show if "chunkbuster-activation-delay" is above 0
   clearing-in-seconds: '&aChunk(s) will clear in {seconds} second(s).'
@@ -124,6 +116,11 @@ hooks:
   coreprotect: false # Whether CoreProtect should log all removed blocks or not. Will have no effect if coreprotect is not installed.
   worldguard: true
   towny: false
+
+# The minimum factions role for using chunkbusters
+# For FactionsUUID/SavageFactions, set this to either 'leader'/'admin', 'coleader', 'moderator', 'member'/'normal', 'recruit'/'any'
+# For MassiveCore Factions, set this to either 'leader'/'admin', 'officer', 'member'/'normal', 'recruit'/'any'
+minimum-factions-role: 'any'
 
 # Whether to show the newer version messages. I recommend to keep this true to
 # stay on top of the new bug fixes and features.

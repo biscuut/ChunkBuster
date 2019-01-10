@@ -1,5 +1,6 @@
 package codes.biscuit.chunkbuster.hooks;
 
+import codes.biscuit.chunkbuster.ChunkBuster;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
@@ -11,6 +12,11 @@ import org.bukkit.entity.Player;
 class MCoreFactionsHook {
 
     // This hook works with MassiveCore Factions only.
+    private ChunkBuster main;
+
+    MCoreFactionsHook(ChunkBuster main) {
+        this.main = main;
+    }
 
     boolean hasFaction(Player p) {
         return MPlayer.get(p).hasFaction();
@@ -23,7 +29,7 @@ class MCoreFactionsHook {
     boolean compareLocPlayerFaction(Location loc, Player p) {
         Faction locFaction = BoardColl.get().getFactionAt(PS.valueOf(loc));
         Faction pFaction = MPlayer.get(p).getFaction();
-        return locFaction.equals(pFaction);
+        return locFaction.equals(pFaction) || (locFaction.isNone() && main.getConfigValues().canPlaceInWilderness());
     }
 
     boolean checkRole(Player p, String role) {

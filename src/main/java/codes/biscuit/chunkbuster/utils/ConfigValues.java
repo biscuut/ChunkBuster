@@ -235,12 +235,8 @@ public class ConfigValues {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-faction"));
     }
 
-    public String getOnlyWildernessClaimMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.only-wilderness-and-claim"));
-    }
-
-    public String getOnlyClaimMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.only-claim"));
+    public String cannotPlaceLocation() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.cannot-place"));
     }
 
     String getClearingMessage() {

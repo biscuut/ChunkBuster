@@ -69,10 +69,7 @@ public class Utils {
                     for (int chunkZ = lowerSearchBound; chunkZ < upperSearchBound; chunkZ++) {
                         Chunk chunk = chunkBusterLocation.getWorld().getChunkAt(startingX + chunkX, startingZ + chunkZ);
                         Location chunkCheckLoc = chunk.getBlock(7, 60, 7).getLocation();
-                        if (main.getHookUtils().compareLocToPlayer(chunkCheckLoc, p) || main.getHookUtils().isWilderness(chunkCheckLoc)) {
-                            if (main.getHookUtils().isWilderness(chunkCheckLoc) && !main.getConfigValues().canPlaceInWilderness()) {
-                                continue;
-                            }
+                        if (main.getHookUtils().compareLocToPlayer(chunkCheckLoc, p)) {
                             waterChunks.add(chunk);
                             for (int x = 0; x < 16; x++) {
                                 for (int z = 0; z < 16; z++) {
@@ -132,8 +129,8 @@ public class Utils {
                 }
             }
             reader.close();
-            ArrayList<Integer> newestVersionNumbers = new ArrayList<>();
-            ArrayList<Integer> thisVersionNumbers = new ArrayList<>();
+            List<Integer> newestVersionNumbers = new ArrayList<>();
+            List<Integer> thisVersionNumbers = new ArrayList<>();
             try {
                 for (String s : newestVersion.split(Pattern.quote("."))) {
                     newestVersionNumbers.add(Integer.parseInt(s));
