@@ -1,14 +1,18 @@
 package codes.biscuit.chunkbuster.commands;
 
+import codes.biscuit.chunkbuster.ChunkBuster;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import codes.biscuit.chunkbuster.ChunkBuster;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class ChunkBusterCommand implements TabExecutor {
 
@@ -59,12 +63,7 @@ public class ChunkBusterCommand implements TabExecutor {
                                                 return false;
                                             }
                                         }
-                                        ItemStack item = new ItemStack(main.getConfigValues().getChunkBusterMaterial(), giveAmount, main.getConfigValues().getChunkBusterDamage());
-                                        ItemMeta itemMeta = item.getItemMeta();
-                                        itemMeta.setDisplayName(main.getConfigValues().getChunkBusterName());
-                                        itemMeta.setLore(main.getConfigValues().getChunkBusterLore(chunkArea));
-                                        item.setItemMeta(itemMeta);
-                                        item = main.getUtils().addGlow(item, chunkArea);
+                                        ItemStack item = main.getUtils().getChunkBusterItem(giveAmount, chunkArea);
                                         HashMap excessItems;
                                         if (!main.getConfigValues().dropFullInv()) {
                                             if (giveAmount < 65) {

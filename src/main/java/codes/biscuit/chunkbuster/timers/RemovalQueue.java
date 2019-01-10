@@ -19,15 +19,14 @@ public class RemovalQueue extends BukkitRunnable {
         this.p = p;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void run() {
         for (int count = 0; count < main.getConfigValues().getBlockPerTick(); count++) {
             if (!blocks.isEmpty()) {
                 Block b = blocks.getFirst();
                 if (!b.getType().equals(Material.AIR)) {
-                    if (main.getHookUtils().isCoreProtectEnabled()) {
-                        main.getHookUtils().logBlock(p, b.getLocation(), b.getType(), b.getData());
-                    }
+                    main.getHookUtils().logBlock(p, b.getLocation(), b.getType(), b.getData());
                     b.setType(Material.AIR);
                 } else {
                     count--;

@@ -31,7 +31,7 @@ public class Utils {
         this.main = main;
     }
 
-    public ItemStack addGlow(ItemStack item, int level) {
+    private ItemStack addGlow(ItemStack item, int level) {
         item.addUnsafeEnchantment(Enchantment.LURE, level);
         ItemMeta meta = item.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -96,7 +96,7 @@ public class Utils {
     }
 
     public void updateConfig(ChunkBuster main) {
-        if (main.getConfigValues().getConfigVersion() < 1.8) {
+        if (main.getConfigValues().getConfigVersion() < 1.9) {
             HashMap<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
                 oldValues.put(oldKey, main.getConfig().get(oldKey));
@@ -108,7 +108,7 @@ public class Utils {
                     main.getConfig().set(newKey, oldValues.get(newKey));
                 }
             }
-            main.getConfig().set("config-version", 1.8);
+            main.getConfig().set("config-version", 1.9);
             main.saveConfig();
         }
     }
@@ -160,4 +160,13 @@ public class Utils {
     }
 
     public HashSet<Chunk> getWaterChunks() { return waterChunks; }
+
+    public ItemStack getChunkBusterItem(int giveAmount, int chunkArea) {
+        ItemStack item = new ItemStack(main.getConfigValues().getChunkBusterMaterial(), giveAmount, main.getConfigValues().getChunkBusterDamage());
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.setDisplayName(main.getConfigValues().getChunkBusterName());
+        itemMeta.setLore(main.getConfigValues().getChunkBusterLore(chunkArea));
+        item.setItemMeta(itemMeta);
+        return main.getUtils().addGlow(item, chunkArea); // It must glow
+    }
 }

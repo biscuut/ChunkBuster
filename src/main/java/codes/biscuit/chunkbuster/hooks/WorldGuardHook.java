@@ -11,9 +11,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class WorldGuardHook {
+class WorldGuardHook {
 
-    public boolean checkLocationBreakFlag(Location loc, Player p) {
+    boolean checkLocationBreakFlag(Location loc, Player p) {
         WorldGuardPlugin worldGuardPlugin = (WorldGuardPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         RegionContainer container = worldGuardPlugin.getRegionContainer();
         RegionQuery query = container.createQuery();

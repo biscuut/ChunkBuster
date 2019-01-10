@@ -40,7 +40,7 @@ public class ConfigValues {
         return mat;
     }
 
-    public short getChunkBusterDamage() {
+    short getChunkBusterDamage() {
         String rawDamage = main.getConfig().getString("chunkbuster.material");
         if (rawDamage.contains(":")) {
             String[] materialSplit = rawDamage.split(":");
@@ -57,9 +57,9 @@ public class ConfigValues {
         }
     }
 
-    public String getChunkBusterName() { return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("chunkbuster.name")); }
+    String getChunkBusterName() { return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("chunkbuster.name")); }
 
-    public List<String> getChunkBusterLore(int chunkRadius) {
+    List<String> getChunkBusterLore(int chunkRadius) {
         List<String> uncolouredList = main.getConfig().getStringList("chunkbuster.lore");
         List<String> colouredList = new ArrayList<>();
         for (String s : uncolouredList) {
@@ -243,8 +243,12 @@ public class ConfigValues {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.only-claim"));
     }
 
-    public String getClearingMessage() {
+    String getClearingMessage() {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.clearing-chunks"));
+    }
+
+    public String getNoItemMessage() {
+        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-item"));
     }
 
     public String getClearingSecondsMessage(int seconds) {
@@ -340,7 +344,7 @@ public class ConfigValues {
         return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.gui-cancel"));
     }
 
-    public List<Material> getIgnoredBlocks() {
+    List<Material> getIgnoredBlocks() {
         List<String> stringList = main.getConfig().getStringList("ignored-materials");
         List<Material> materialList = new ArrayList<>();
         for (String s : stringList) {
@@ -363,11 +367,7 @@ public class ConfigValues {
         return main.getConfig().getBoolean("show-update-messages");
     }
 
-    public boolean logBlocks() {
-        return main.getConfig().getBoolean("coreprotect-enabled");
-    }
-
-    public int getMinimumY(Player p) {
+    int getMinimumY(Player p) {
         if (main.getConfig().getString("minimum-y").toLowerCase().contains("{player}")) {
             return (int)p.getLocation().getY();
         } else {
@@ -380,7 +380,7 @@ public class ConfigValues {
         }
     }
 
-    public int getMaximumY(Player p) {
+    int getMaximumY(Player p) {
         if (main.getConfig().getString("maximum-y").toLowerCase().contains("{player}")) {
             return (int)p.getLocation().getY();
         } else {
@@ -393,7 +393,7 @@ public class ConfigValues {
         }
     }
 
-    public double getConfigVersion() {
+    double getConfigVersion() {
         return main.getConfig().getDouble("config-version");
     }
 
@@ -425,5 +425,21 @@ public class ConfigValues {
             mat = Material.valueOf("ENDER_PORTAL_FRAME");
         }
         return mat;
+    }
+
+    public boolean factionsHookEnabled() {
+        return main.getConfig().getBoolean("hooks.factions");
+    }
+
+    public boolean coreprotectHookEnabled() {
+        return main.getConfig().getBoolean("hooks.coreprotect");
+    }
+
+    public boolean worldguardHookEnabled() {
+        return main.getConfig().getBoolean("hooks.worldguard");
+    }
+
+    public boolean townyHookEnabled() {
+        return main.getConfig().getBoolean("hooks.towny");
     }
 }

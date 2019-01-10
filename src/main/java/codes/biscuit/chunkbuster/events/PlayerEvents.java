@@ -1,7 +1,13 @@
 package codes.biscuit.chunkbuster.events;
 
+import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.timers.MessageTimer;
+import codes.biscuit.chunkbuster.timers.SoundTimer;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,9 +20,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import codes.biscuit.chunkbuster.ChunkBuster;
-import codes.biscuit.chunkbuster.timers.MessageTimer;
-import codes.biscuit.chunkbuster.timers.SoundTimer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +34,7 @@ public class PlayerEvents implements Listener {
         this.main = main;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true) //TODO experimental, test this more
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChunkBusterPlace(BlockPlaceEvent e) {
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
@@ -136,81 +139,98 @@ public class PlayerEvents implements Listener {
             Player p = (Player)e.getWhoClicked();
             Location chunkBusterLocation = chunkBusterLocations.get(e.getWhoClicked());
             if (chunkBusterLocation != null) {
-                if (p.getItemInHand() != null && p.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && p.getItemInHand().hasItemMeta() && p.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
-                    int chunkBusterDiameter = e.getWhoClicked().getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE);
-                    if (main.getHookUtils().hasFaction(p)) {
-                        if (main.getHookUtils().checkRole(p)) {
-                            if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
-                                if (main.getHookUtils().isWilderness(chunkBusterLocation) && !main.getConfigValues().canPlaceInWilderness()) {
-                                    if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
-                                        p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                if (main.getHookUtils().hasFaction(p)) {
+                    if (main.getHookUtils().checkRole(p)) {
+                        if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
+                            if (main.getHookUtils().isWilderness(chunkBusterLocation) && !main.getConfigValues().canPlaceInWilderness()) {
+                                if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                }
+                            } else {
+                                if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
+                                    int itemSlot = -1;
+                                    if (p.getItemInHand() != null && (p.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && p.getItemInHand().hasItemMeta() && p.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0)) {
+                                        itemSlot = p.getInventory().getHeldItemSlot();
+                                    } else {
+                                        for (int i = 0; i <= 40; i++) { // 40 should fix the offhand issue.
+                                            ItemStack currentItem = p.getInventory().getItem(i);
+                                            if (currentItem.getType().equals(main.getConfigValues().getChunkBusterMaterial()) && currentItem.hasItemMeta() && currentItem.getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
+                                                itemSlot = i;
+                                                break;
+                                            }
+                                        }
+                                        if (itemSlot == -1) {
+                                            p.closeInventory();
+                                            if (!main.getConfigValues().getNoItemMessage().equals("")) {
+                                                p.sendMessage(main.getConfigValues().getNoItemMessage());
+                                            }
+                                            return;
+                                        }
                                     }
-                                } else {
-                                    if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
-                                        playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
-                                        chunkBusterLocations.remove(e.getWhoClicked());
-                                        e.getWhoClicked().closeInventory();
-                                        if (main.getConfigValues().confirmSoundEnabled()) {
-                                            p.playSound(p.getLocation(), main.getConfigValues().getConfirmSoundString(), main.getConfigValues().getConfirmSoundVolume(), main.getConfigValues().getConfirmSoundPitch());
-                                        }
-                                        if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
-                                            if (p.getItemInHand().getAmount() <= 1) {
-                                                p.getInventory().setItemInHand(null);
-                                            } else {
-                                                ItemStack chunkBusterItem = p.getItemInHand();
-                                                chunkBusterItem.setAmount(p.getItemInHand().getAmount() - 1);
-                                                p.getInventory().setItemInHand(chunkBusterItem);
-                                            }
-                                        }
-                                        if (main.getConfigValues().getChunkBusterWarmup() > 0) {
-                                            int seconds = main.getConfigValues().getChunkBusterWarmup();
-                                            new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
-                                            if (main.getConfigValues().warmupSoundEnabled()) {
-                                                new SoundTimer(main, p, (int)((double)seconds / main.getConfigValues().getWarmupSoundInterval())).runTaskTimer(main, 0L, 20L * main.getConfigValues().getWarmupSoundInterval());
-                                            }
-                                            Bukkit.getScheduler().runTaskLater(main, () -> {
-                                                if (main.getConfigValues().clearingSoundEnabled()) {
-                                                    p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
-                                                }
-                                                main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
-                                            }, 20L * seconds);
+                                    ItemStack checkItem = p.getInventory().getItem(itemSlot);
+                                    int chunkBusterDiameter = checkItem.getItemMeta().getEnchantLevel(Enchantment.LURE);
+                                    playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
+                                    chunkBusterLocations.remove(p);
+                                    e.getWhoClicked().closeInventory();
+                                    if (main.getConfigValues().confirmSoundEnabled()) {
+                                        p.playSound(p.getLocation(), main.getConfigValues().getConfirmSoundString(), main.getConfigValues().getConfirmSoundVolume(), main.getConfigValues().getConfirmSoundPitch());
+                                    }
+                                    if (p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)) {
+                                        if (checkItem.getAmount() <= 1) {
+                                            p.getInventory().setItem(itemSlot, null);
                                         } else {
+                                            checkItem.setAmount(checkItem.getAmount() - 1);
+                                            p.getInventory().setItem(itemSlot, checkItem);
+                                        }
+                                    }
+                                    if (main.getConfigValues().getChunkBusterWarmup() > 0) {
+                                        int seconds = main.getConfigValues().getChunkBusterWarmup();
+                                        new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
+                                        if (main.getConfigValues().warmupSoundEnabled()) {
+                                            new SoundTimer(main, p, (int)((double)seconds / main.getConfigValues().getWarmupSoundInterval())).runTaskTimer(main, 0L, 20L * main.getConfigValues().getWarmupSoundInterval());
+                                        }
+                                        Bukkit.getScheduler().runTaskLater(main, () -> {
                                             if (main.getConfigValues().clearingSoundEnabled()) {
                                                 p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
                                             }
                                             main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                        }, 20L * seconds);
+                                    } else {
+                                        if (main.getConfigValues().clearingSoundEnabled()) {
+                                            p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
                                         }
-                                    } else if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getCancelName())) {
-                                        chunkBusterLocations.remove(e.getWhoClicked());
-                                        e.getWhoClicked().closeInventory();
-                                        if (main.getConfigValues().cancelSoundEnabled()) {
-                                            p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
-                                        }
-                                        if (!main.getConfigValues().getGUICancelMessage().equals("")) {
-                                            p.sendMessage(main.getConfigValues().getGUICancelMessage());
-                                        }
+                                        main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
                                     }
-                                }
-                            } else {
-                                if (main.getConfigValues().canPlaceInWilderness()) {
-                                    if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
-                                        p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                                } else if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getCancelName())) {
+                                    chunkBusterLocations.remove(p);
+                                    e.getWhoClicked().closeInventory();
+                                    if (main.getConfigValues().cancelSoundEnabled()) {
+                                        p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
                                     }
-                                } else {
-                                    if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
-                                        p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                    if (!main.getConfigValues().getGUICancelMessage().equals("")) {
+                                        p.sendMessage(main.getConfigValues().getGUICancelMessage());
                                     }
                                 }
                             }
                         } else {
-                            if (!main.getConfigValues().getMinimumRoleMessage().equals("")) {
-                                p.sendMessage(main.getConfigValues().getMinimumRoleMessage());
+                            if (main.getConfigValues().canPlaceInWilderness()) {
+                                if (!main.getConfigValues().getOnlyWildernessClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyWildernessClaimMessage());
+                                }
+                            } else {
+                                if (!main.getConfigValues().getOnlyClaimMessage().equals("")) {
+                                    p.sendMessage(main.getConfigValues().getOnlyClaimMessage());
+                                }
                             }
                         }
                     } else {
-                        if (!main.getConfigValues().getNoFactionMessage().equals("")) {
-                            p.sendMessage(main.getConfigValues().getNoFactionMessage());
+                        if (!main.getConfigValues().getMinimumRoleMessage().equals("")) {
+                            p.sendMessage(main.getConfigValues().getMinimumRoleMessage());
                         }
+                    }
+                } else {
+                    if (!main.getConfigValues().getNoFactionMessage().equals("")) {
+                        p.sendMessage(main.getConfigValues().getNoFactionMessage());
                     }
                 }
             } else {
@@ -221,7 +241,7 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onGUIClose(InventoryCloseEvent e) {
-        if (e.getInventory().getName().contains(main.getConfigValues().getGUITitle())) {
+        if (e.getInventory().getName().contains(main.getConfigValues().getGUITitle()) && e.getPlayer() instanceof Player) {
             chunkBusterLocations.remove(e.getPlayer());
         }
     }

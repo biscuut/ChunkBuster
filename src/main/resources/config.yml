@@ -113,17 +113,21 @@ messages:
   not-minimum-role: '&cYou must be a faction (insert role) to use chunkbusters.'
   gui-cancel: '&cThe chunkbuster has been cancelled.'
   cooldown: '&cYou must wait {minutes} minute(s) and {seconds} second(s) to use this again!'
+  no-item: 'You must have a chunk buster in your inventory!'
 
 # Blocks that will not get cleared by chunkbusters. Use material enum names.
 ignored-materials:
   - 'BEDROCK'
 
-# Whether CoreProtect should log all removed blocks or not. Will have no effect if coreprotect is not installed.
-coreprotect-enabled: false
+hooks:
+  factions: true
+  coreprotect: false # Whether CoreProtect should log all removed blocks or not. Will have no effect if coreprotect is not installed.
+  worldguard: true
+  towny: false
 
 # Whether to show the newer version messages. I recommend to keep this true to
 # stay on top of the new bug fixes and features.
 show-update-messages: true
 
 # Please do not edit :)
-config-version: 1.8
+config-version: 1.9
