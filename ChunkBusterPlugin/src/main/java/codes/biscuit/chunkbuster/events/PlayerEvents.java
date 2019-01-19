@@ -39,6 +39,7 @@ public class PlayerEvents implements Listener {
         if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
             e.setCancelled(true);
             Player p = e.getPlayer();
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("Player-Stats.View-Stats").replace("%wins%",  String.valueOf(main.getConfig().getInt("Players." + p.getUniqueId() + ".wins")))));
             if (p.hasPermission("chunkbuster.use")) {
                 if (main.getHookUtils().hasFaction(p)) {
                     if (main.getHookUtils().checkRole(p)) {

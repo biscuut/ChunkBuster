@@ -1,13 +1,13 @@
 package codes.biscuit.chunkbuster;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import codes.biscuit.chunkbuster.commands.ChunkBusterCommand;
 import codes.biscuit.chunkbuster.events.OtherEvents;
 import codes.biscuit.chunkbuster.events.PlayerEvents;
 import codes.biscuit.chunkbuster.hooks.HookUtils;
 import codes.biscuit.chunkbuster.utils.ConfigValues;
 import codes.biscuit.chunkbuster.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class ChunkBuster extends JavaPlugin {
 

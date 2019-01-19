@@ -1,5 +1,6 @@
 package codes.biscuit.chunkbuster.utils;
 
+import codes.biscuit.chunkbuster.timers.RemovalQueue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -13,7 +14,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import codes.biscuit.chunkbuster.ChunkBuster;
-import codes.biscuit.chunkbuster.timers.RemovalQueue;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -40,7 +40,7 @@ public class Utils {
     }
 
     public void clearChunks(int chunkBusterArea, Location chunkBusterLocation, Player p) {
-        HashSet<Material> ignoredBlocks = new HashSet<>(main.getConfigValues().getIgnoredBlocks());
+        Set<Material> ignoredBlocks = new HashSet<>(main.getConfigValues().getIgnoredBlocks());
         if (chunkBusterArea == 1) {
             RemovalQueue removalQueue = new RemovalQueue(main, p);
             waterChunks.add(chunkBusterLocation.getChunk());
@@ -94,14 +94,14 @@ public class Utils {
 
     public void updateConfig(ChunkBuster main) {
         if (main.getConfigValues().getConfigVersion() < 1.9) {
-            HashMap<String, Object> oldValues = new HashMap<>();
+            Map<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
                 oldValues.put(oldKey, main.getConfig().get(oldKey));
             }
             main.saveResource("config.yml", true);
             main.reloadConfig();
             for (String newKey : main.getConfig().getKeys(true)) {
-                if (oldValues.containsKey(newKey)) {
+                if (oldValues.containsKey(newKey) && !oldValues.get(newKey).equals(main.getConfig().get(newKey))) {
                     main.getConfig().set(newKey, oldValues.get(newKey));
                 }
             }

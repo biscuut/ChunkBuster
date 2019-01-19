@@ -1,6 +1,7 @@
 package codes.biscuit.chunkbuster.hooks;
 
 import codes.biscuit.chunkbuster.ChunkBuster;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,12 +30,18 @@ public class HookUtils {
             enabledHooks.put(HookType.FACTIONSUUID, new FactionsUUIDHook(main));
         }
         if (pm.getPlugin("WorldGuard") != null) {
-            main.getLogger().info("Hooked into WorldGuard");
-            enabledHooks.put(HookType.WORLDGUARD, new WorldGuardHook());
+            String pluginVersion = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
+            if (pluginVersion.startsWith("7") && pm.getPlugin("WorldEdit") != null) {
+                enabledHooks.put(HookType.WORLDGUARD, new WorldGuard_7());
+                main.getLogger().info("Hooked into WorldGuard 7");
+            } else if (pluginVersion.startsWith("6")) {
+                enabledHooks.put(HookType.WORLDGUARD, new WorldGuard_6());
+                main.getLogger().info("Hooked into WorldGuard 6");
+            }
         }
         if (pm.getPlugin("Towny") != null) {
             main.getLogger().info("Hooked into Towny");
-            enabledHooks.put(HookType.TOWNY, new WorldGuardHook());
+            enabledHooks.put(HookType.TOWNY, new TownyHook());
         }
         if (pm.getPlugin("CoreProtect") != null) {
             main.getLogger().info("Hooked into CoreProtect");

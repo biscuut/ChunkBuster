@@ -12,15 +12,16 @@ import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-class WorldGuardHook {
+public class WorldGuard_6 implements WorldGuardHook {
 
-    boolean checkLocationBreakFlag(Chunk chunk, Player p) {
-        WorldGuardPlugin worldGuardPlugin = (WorldGuardPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+    public boolean checkLocationBreakFlag(Chunk chunk, Player p) {
+        WorldGuardPlugin worldGuardPlugin = (WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         RegionContainer container = worldGuardPlugin.getRegionContainer();
         Block[] cornerBlocks = {chunk.getBlock(0,chunk.getWorld().getMaxHeight()/2, 0), chunk.getBlock(0,chunk.getWorld().getMaxHeight()/2, 15),
                 chunk.getBlock(15,chunk.getWorld().getMaxHeight()/2, 0), chunk.getBlock(15,chunk.getWorld().getMaxHeight()/2, 15)};
         for (Block currentBlock : cornerBlocks) {
             RegionQuery query = container.createQuery();
+
             ApplicableRegionSet set = query.getApplicableRegions(currentBlock.getLocation());
             LocalPlayer localPlayer = worldGuardPlugin.wrapPlayer(p);
             if (set.queryState(localPlayer, DefaultFlag.BLOCK_BREAK) == StateFlag.State.DENY) return false; // If block break is set to deny
