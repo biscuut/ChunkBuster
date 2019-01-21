@@ -121,11 +121,11 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onConfirmClick(InventoryClickEvent e) {
-        if (e.getClickedInventory() != null && e.getClickedInventory().getName() != null &&
+        if (e.getWhoClicked() instanceof Player && e.getClickedInventory() != null && e.getClickedInventory().getName() != null &&
                 e.getClickedInventory().getName().equals(main.getConfigValues().getGUITitle())) {
             e.setCancelled(true);
             Player p = (Player)e.getWhoClicked();
-            Location chunkBusterLocation = chunkBusterLocations.get(e.getWhoClicked());
+            Location chunkBusterLocation = chunkBusterLocations.get(p);
             if (chunkBusterLocation != null) {
                 if (main.getHookUtils().hasFaction(p)) {
                     if (main.getHookUtils().checkRole(p)) {
@@ -148,7 +148,11 @@ public class PlayerEvents implements Listener {
                                         }
                                     }
                                     if (itemSlot == -1) {
+                                        chunkBusterLocations.remove(p);
                                         p.closeInventory();
+                                        if (main.getConfigValues().cancelSoundEnabled()) {
+                                            p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
+                                        }
                                         if (!main.getConfigValues().getNoItemMessage().equals("")) {
                                             p.sendMessage(main.getConfigValues().getNoItemMessage());
                                         }
@@ -159,7 +163,7 @@ public class PlayerEvents implements Listener {
                                 int chunkBusterDiameter = checkItem.getItemMeta().getEnchantLevel(Enchantment.LURE);
                                 playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
                                 chunkBusterLocations.remove(p);
-                                e.getWhoClicked().closeInventory();
+                                p.closeInventory();
                                 if (main.getConfigValues().confirmSoundEnabled()) {
                                     p.playSound(p.getLocation(), main.getConfigValues().getConfirmSoundString(), main.getConfigValues().getConfirmSoundVolume(), main.getConfigValues().getConfirmSoundPitch());
                                 }
@@ -191,7 +195,7 @@ public class PlayerEvents implements Listener {
                                 }
                             } else if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getCancelName())) {
                                 chunkBusterLocations.remove(p);
-                                e.getWhoClicked().closeInventory();
+                                p.closeInventory();
                                 if (main.getConfigValues().cancelSoundEnabled()) {
                                     p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
                                 }
