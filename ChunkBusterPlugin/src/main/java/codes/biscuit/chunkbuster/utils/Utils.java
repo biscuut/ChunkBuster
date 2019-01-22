@@ -112,22 +112,13 @@ public class Utils {
 
     public void checkUpdates(Player p) {
         try {
-            URL url = new URL("https://raw.githubusercontent.com/biscuut/ChunkBuster/master/pom.xml");
+            URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=60057");
             URLConnection connection = url.openConnection();
             connection.setReadTimeout(5000);
             connection.addRequestProperty("User-Agent", "ChunkBuster update checker");
             connection.setDoOutput(true);
             final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String currentLine;
-            String newestVersion = "";
-            while ((currentLine = reader.readLine()) != null) {
-                if (currentLine.contains("<version>")) {
-                    String[] newestVersionSplit = currentLine.split(Pattern.quote("<version>"));
-                    newestVersionSplit = newestVersionSplit[1].split(Pattern.quote("</version>"));
-                    newestVersion = newestVersionSplit[0];
-                    break;
-                }
-            }
+            String newestVersion = reader.readLine();
             reader.close();
             List<Integer> newestVersionNumbers = new ArrayList<>();
             List<Integer> thisVersionNumbers = new ArrayList<>();
@@ -148,8 +139,10 @@ public class Utils {
                         newVersion.setColor(ChatColor.RED);
                         newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-12-clear-any-chunk-area.60057/"));
                         p.spigot().sendMessage(newVersion);
+                        break;
                     } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
                         p.sendMessage(ChatColor.RED + "You are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + ".");
+                        break;
                     }
                 }
             }
