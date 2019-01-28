@@ -28,7 +28,7 @@ chunkbuster:
 # chunkbusters with 5+ radius, it may lag the server.
 blocks-removed-per-tick: 600
 
-# Change this to false if you don"t want to be able to destroy wilderness chunks.
+# Change this to false if you don"t want to be able to destroy wilderness chunks. (factions)
 can-place-in-wilderness: true
 
 # The time you must wait before using another chunkbuster, in seconds. Set this to 0 for no cooldown.
@@ -86,7 +86,7 @@ confirm-gui:
   confirm-sound: "random.levelup"
   confirm-volume: 1.0
   confirm-pitch: 1.0
-  # Sound when the cancel block is clicked
+  # Sound when the cancel block is clicked or chunk buster is not found in player's inventory
   cancel-sound-enabled: false
   cancel-sound: "mob.villager.hit"
   cancel-volume: 1.0
@@ -112,10 +112,10 @@ ignored-materials:
   - "BEDROCK"
 
 hooks:
-  factions: true
+  factions: true # Check faction territories
   coreprotect: false # Whether CoreProtect should log all removed blocks or not. Will have no effect if coreprotect is not installed.
-  worldguard: true
-  towny: false
+  worldguard: true # Check for block-break flag in regions
+  towny: false # Check land build permissions
 
 # The minimum factions role for using chunkbusters
 # For FactionsUUID/SavageFactions, set this to either "leader"/"admin", "coleader", "moderator", "member"/"normal", "recruit"/"any"

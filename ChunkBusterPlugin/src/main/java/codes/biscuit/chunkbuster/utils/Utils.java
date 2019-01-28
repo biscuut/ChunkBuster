@@ -137,7 +137,7 @@ public class Utils {
                     if (newestVersionNumbers.get(i) > thisVersionNumbers.get(i)) {
                         TextComponent newVersion = new TextComponent("A new version of ChunkBuster, " + newestVersion + " is available. Download it by clicking here.");
                         newVersion.setColor(ChatColor.RED);
-                        newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-12-clear-any-chunk-area.60057/"));
+                        newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-13-clear-any-area-of-land.60057/"));
                         p.spigot().sendMessage(newVersion);
                         break;
                     } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {

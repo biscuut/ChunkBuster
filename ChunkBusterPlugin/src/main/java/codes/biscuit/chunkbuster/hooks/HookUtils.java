@@ -1,7 +1,6 @@
 package codes.biscuit.chunkbuster.hooks;
 
 import codes.biscuit.chunkbuster.ChunkBuster;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +21,8 @@ public class HookUtils {
         this.main = main;
         PluginManager pm = main.getServer().getPluginManager();
         if (pm.getPlugin("MassiveCore") != null &&
-                pm.getPlugin("Factions") != null) {
+                pm.getPlugin("Factions") != null &&
+                pm.getPlugin("Factions").getDescription().getDepend().contains("MassiveCore")) {
             main.getLogger().info("Hooked into MassiveCore Factions");
             enabledHooks.put(HookType.MCOREFACTIONS, new MCoreFactionsHook(main));
         } else if (pm.getPlugin("Factions") != null) {
@@ -30,7 +30,7 @@ public class HookUtils {
             enabledHooks.put(HookType.FACTIONSUUID, new FactionsUUIDHook(main));
         }
         if (pm.getPlugin("WorldGuard") != null) {
-            String pluginVersion = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
+            String pluginVersion = main.getServer().getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
             if (pluginVersion.startsWith("7") && pm.getPlugin("WorldEdit") != null) {
                 enabledHooks.put(HookType.WORLDGUARD, new WorldGuard_7());
                 main.getLogger().info("Hooked into WorldGuard 7");
