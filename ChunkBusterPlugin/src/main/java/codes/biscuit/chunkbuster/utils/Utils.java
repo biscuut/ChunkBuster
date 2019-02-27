@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public class Utils {
 
     private ChunkBuster main;
-    private HashSet<Chunk> waterChunks = new HashSet<>();
+    private Set<Chunk> waterChunks = new HashSet<>();
 
     public Utils(ChunkBuster main) {
         this.main = main;
@@ -93,7 +93,7 @@ public class Utils {
     }
 
     public void updateConfig(ChunkBuster main) {
-        if (main.getConfigValues().getConfigVersion() < 1.9) {
+        if (main.getConfigValues().getConfigVersion() < 2.0) {
             Map<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
                 oldValues.put(oldKey, main.getConfig().get(oldKey));
@@ -105,7 +105,7 @@ public class Utils {
                     main.getConfig().set(newKey, oldValues.get(newKey));
                 }
             }
-            main.getConfig().set("config-version", 1.9);
+            main.getConfig().set("config-version", 2.0);
             main.saveConfig();
         }
     }
@@ -149,7 +149,7 @@ public class Utils {
         } catch (Exception ignored) {}
     }
 
-    public HashSet<Chunk> getWaterChunks() { return waterChunks; }
+    public Set<Chunk> getWaterChunks() { return waterChunks; }
 
     public ItemStack getChunkBusterItem(int giveAmount, int chunkArea) {
         ItemStack item = new ItemStack(main.getConfigValues().getChunkBusterMaterial(), giveAmount, main.getConfigValues().getChunkBusterDamage());

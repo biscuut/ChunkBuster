@@ -4,16 +4,14 @@ import codes.biscuit.chunkbuster.ChunkBuster;
 import codes.biscuit.chunkbuster.timers.MessageTimer;
 import codes.biscuit.chunkbuster.timers.SoundTimer;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -27,8 +25,9 @@ import java.util.Map;
 public class PlayerEvents implements Listener {
 
     private ChunkBuster main;
-    private Map<Player, Location> chunkBusterLocations = new HashMap<>();
-    private Map<Player, Long> playerCooldowns = new HashMap<>();
+    private Map<OfflinePlayer, Location> chunkBusterLocations = new HashMap<>();
+    private Map<OfflinePlayer, Long> playerCooldowns = new HashMap<>();
+    private Map<OfflinePlayer, Long> noFallDamage = new HashMap<>();
 
     public PlayerEvents(ChunkBuster main) {
         this.main = main;
@@ -186,12 +185,18 @@ public class PlayerEvents implements Listener {
                                             p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
                                         }
                                         main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                        if (main.getConfigValues().getNoFallMillis() > 0) {
+                                            noFallDamage.put(p, System.currentTimeMillis() + main.getConfigValues().getNoFallMillis());
+                                        }
                                     }, 20L * seconds);
                                 } else {
                                     if (main.getConfigValues().clearingSoundEnabled()) {
                                         p.playSound(p.getLocation(), main.getConfigValues().getClearingSoundString(), main.getConfigValues().getClearingSoundVolume(), main.getConfigValues().getClearingSoundPitch());
                                     }
                                     main.getUtils().clearChunks(chunkBusterDiameter, chunkBusterLocation, p);
+                                    if (main.getConfigValues().getNoFallMillis() > 0) {
+                                        noFallDamage.put(p, System.currentTimeMillis() + main.getConfigValues().getNoFallMillis());
+                                    }
                                 }
                             } else if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getCancelName())) {
                                 chunkBusterLocations.remove(p);
@@ -235,6 +240,20 @@ public class PlayerEvents implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         if (main.getConfigValues().showUpdateMessage() && e.getPlayer().isOp()) {
             main.getUtils().checkUpdates(e.getPlayer());
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onDamage(EntityDamageEvent e) {
+        if (e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getEntity() instanceof Player) {
+            Player p = (Player)e.getEntity();
+            if (noFallDamage.containsKey(p)) {
+                if (noFallDamage.get(p) >= System.currentTimeMillis()) {
+                    e.setCancelled(true);
+                } else {
+                    noFallDamage.remove(p);
+                }
+            }
         }
     }
 }

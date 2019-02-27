@@ -34,6 +34,9 @@ can-place-in-wilderness: true
 # The time you must wait before using another chunkbuster, in seconds. Set this to 0 for no cooldown.
 cooldown: 0
 
+# The amount of time that the player takes no fall damage after a chunk starts clearing. Set to 0 to disable.
+no-fall-seconds: 5
+
 # Chunkbusters clear between this minimum value and the maximum value (both inclusive). 0 and 255 means the whole chunk.
 # You can use "{player}" for the player"s Y-coordinate.
 minimum-y: 0
@@ -127,4 +130,4 @@ minimum-factions-role: "any"
 show-update-messages: true
 
 # Please do not edit :)
-config-version: 1.9
+config-version: 2.0

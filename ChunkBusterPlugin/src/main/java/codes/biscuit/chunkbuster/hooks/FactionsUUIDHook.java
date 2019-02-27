@@ -37,6 +37,9 @@ class FactionsUUIDHook {
 
     boolean checkRole(Player p, String role) {
         Role playerRole = FPlayers.getInstance().getByPlayer(p).getRole();
+        if (playerRole == null) {
+            return false;
+        }
         Role adminRole;
         try {
             adminRole = Role.valueOf("ADMIN");
@@ -47,6 +50,10 @@ class FactionsUUIDHook {
                 return false;
             }
         }
+        Role coLeader = null;
+        try {
+            coLeader = Role.valueOf("COLEADER");
+        } catch (Exception ignored) {}
         switch (role) {
             case "leader": case "admin":
                 if (playerRole.equals(adminRole)) {
@@ -54,17 +61,17 @@ class FactionsUUIDHook {
                 }
                 break;
             case "coleader": case "co-leader":
-                if (playerRole.equals(Role.COLEADER) || playerRole.equals(adminRole)) {
+                if (playerRole.equals(coLeader) || playerRole.equals(adminRole)) {
                     return true;
                 }
                 break;
             case "moderator":
-                if (playerRole.equals(Role.MODERATOR) || playerRole.equals(Role.COLEADER) || playerRole.equals(adminRole)) {
+                if (playerRole.equals(Role.MODERATOR) || playerRole.equals(coLeader) || playerRole.equals(adminRole)) {
                     return true;
                 }
                 break;
             case "member": case "normal":
-                if (playerRole.equals(Role.NORMAL) || playerRole.equals(Role.MODERATOR) || playerRole.equals(Role.COLEADER) || playerRole.equals(adminRole)) {
+                if (playerRole.equals(Role.NORMAL) || playerRole.equals(Role.MODERATOR) || playerRole.equals(coLeader) || playerRole.equals(adminRole)) {
                     return true;
                 }
                 break;

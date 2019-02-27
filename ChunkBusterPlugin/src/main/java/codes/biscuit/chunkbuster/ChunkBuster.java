@@ -18,7 +18,6 @@ public class ChunkBuster extends JavaPlugin {
     @Override
     public void onEnable() {
         hookUtils = new HookUtils(this);
-        getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         utils.updateConfig(this);
         Bukkit.getPluginManager().registerEvents(new PlayerEvents(this), this);

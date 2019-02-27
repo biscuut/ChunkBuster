@@ -438,4 +438,8 @@ public class ConfigValues {
     public boolean townyHookEnabled() {
         return main.getConfig().getBoolean("hooks.towny");
     }
+
+    public int getNoFallMillis() {
+        return main.getConfig().getInt("no-fall-seconds")*1000;
+    }
 }
