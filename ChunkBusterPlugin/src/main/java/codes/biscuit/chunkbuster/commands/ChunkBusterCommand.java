@@ -1,6 +1,7 @@
 package codes.biscuit.chunkbuster.commands;
 
 import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.utils.ConfigValues;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -89,12 +90,8 @@ public class ChunkBusterCommand implements TabExecutor {
                                                 p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack) excessItem);
                                             }
                                         }
-                                        if (!main.getConfigValues().getGiveMessage(p, giveAmount).equals("")) {
-                                            sender.sendMessage(main.getConfigValues().getGiveMessage(p, giveAmount));
-                                        }
-                                        if (!main.getConfigValues().getReceiveMessage(giveAmount).equals("")) {
-                                            p.sendMessage(main.getConfigValues().getReceiveMessage(giveAmount));
-                                        }
+                                        main.getUtils().sendMessage(p, ConfigValues.Message.GIVE, p.getName(), giveAmount);
+                                        main.getUtils().sendMessage(p, ConfigValues.Message.RECEIVE, giveAmount);
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "The area must be greater than 0 and be an odd number!");
                                     }
@@ -108,9 +105,7 @@ public class ChunkBusterCommand implements TabExecutor {
                             sender.sendMessage(ChatColor.RED + "Please specify a player!");
                         }
                     } else {
-                        if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
-                            sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
-                        }
+                        main.getUtils().sendMessage(sender, ConfigValues.Message.NO_PERMISSION_COMMAND);
                     }
                     break;
                 case "reload":
@@ -118,9 +113,7 @@ public class ChunkBusterCommand implements TabExecutor {
                         main.reloadConfig();
                         sender.sendMessage(ChatColor.GREEN + "Successfully reloaded the config. Most values have been instantly updated.");
                     } else {
-                        if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
-                            sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
-                        }
+                        main.getUtils().sendMessage(sender, ConfigValues.Message.NO_PERMISSION_COMMAND);
                     }
                     break;
                 case "water":
@@ -136,9 +129,7 @@ public class ChunkBusterCommand implements TabExecutor {
                             sender.sendMessage(ChatColor.RED + "You cannot use this command from here!");
                         }
                     } else {
-                        if (!main.getConfigValues().getNoPermissionMessageCommand().equals("")) {
-                            sender.sendMessage(main.getConfigValues().getNoPermissionMessageCommand());
-                        }
+                        main.getUtils().sendMessage(sender, ConfigValues.Message.NO_PERMISSION_COMMAND);
                     }
                     break;
                 default:

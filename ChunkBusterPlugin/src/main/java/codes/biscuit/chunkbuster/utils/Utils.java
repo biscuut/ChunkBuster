@@ -1,5 +1,6 @@
 package codes.biscuit.chunkbuster.utils;
 
+import codes.biscuit.chunkbuster.nbt.NBTItem;
 import codes.biscuit.chunkbuster.timers.RemovalQueue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -8,6 +9,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -31,12 +33,51 @@ public class Utils {
         this.main = main;
     }
 
-    private ItemStack addGlow(ItemStack item, int level) {
-        item.addUnsafeEnchantment(Enchantment.LURE, level);
+    public static String color(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    public List<String> colorLore(List<String> lore) {
+        List<String> newLore = new ArrayList<>();
+        for (String loreLine : lore) {
+            newLore.add(color(loreLine));
+        }
+        return newLore;
+    }
+
+    public ItemStack itemFromString(String rawItem) {
+        Material material;
+        String[] rawSplit;
+        if (rawItem.contains(":")) {
+            rawSplit = rawItem.split(":");
+        } else {
+            rawSplit = new String[] {rawItem};
+        }
+        try {
+            material = Material.valueOf(rawSplit[0]);
+        } catch (IllegalArgumentException ex) {
+            material = Material.DIRT;
+        }
+        short damage = 1;
+        if (rawSplit.length > 1) {
+            try {
+                damage = Short.valueOf(rawSplit[1]);
+            } catch (IllegalArgumentException ignored) {}
+        }
+        return new ItemStack(material, 1, damage);
+    }
+
+    public void sendMessage(CommandSender p, ConfigValues.Message message, Object... params) {
+        if (!main.getConfigValues().getMessage(message, params).equals("")) {
+            p.sendMessage(main.getConfigValues().getMessage(message, params));
+        }
+    }
+
+    private void addGlow(ItemStack item) {
+        item.addUnsafeEnchantment(Enchantment.LURE, 1);
         ItemMeta meta = item.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
-        return item;
     }
 
     public void clearChunks(int chunkBusterArea, Location chunkBusterLocation, Player p) {
@@ -55,9 +96,7 @@ public class Utils {
                 }
             }
             removalQueue.runTaskTimer(main, 1L, 1L);
-            if (!main.getConfigValues().getClearingMessage().equals("")) {
-                p.sendMessage(main.getConfigValues().getClearingMessage());
-            }
+            main.getUtils().sendMessage(p, ConfigValues.Message.CLEARING_CHUNKS);
         } else if (chunkBusterArea > 2 && chunkBusterArea % 2 != 0) {
             RemovalQueue removalQueue = new RemovalQueue(main, p);
             int upperSearchBound = ((chunkBusterArea - 1) / 2) + 1;
@@ -84,16 +123,14 @@ public class Utils {
                 }
             }
             removalQueue.runTaskTimer(main, 1L, 1L);
-            if (!main.getConfigValues().getClearingMessage().equals("")) {
-                p.sendMessage(main.getConfigValues().getClearingMessage());
-            }
+            main.getUtils().sendMessage(p, ConfigValues.Message.CLEARING_CHUNKS);
         } else {
             p.sendMessage(ChatColor.RED + "Invalid chunk buster!");
         }
     }
 
     public void updateConfig(ChunkBuster main) {
-        if (main.getConfigValues().getConfigVersion() < 2.0) {
+        if (main.getConfigValues().getConfigVersion() < 2.1) {
             Map<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
                 oldValues.put(oldKey, main.getConfig().get(oldKey));
@@ -105,7 +142,7 @@ public class Utils {
                     main.getConfig().set(newKey, oldValues.get(newKey));
                 }
             }
-            main.getConfig().set("config-version", 2.0);
+            main.getConfig().set("config-version", 2.1);
             main.saveConfig();
         }
     }
@@ -157,6 +194,11 @@ public class Utils {
         itemMeta.setDisplayName(main.getConfigValues().getChunkBusterName());
         itemMeta.setLore(main.getConfigValues().getChunkBusterLore(chunkArea));
         item.setItemMeta(itemMeta);
-        return main.getUtils().addGlow(item, chunkArea); // It must glow
+        if (main.getConfigValues().itemShouldGlow()) {
+            addGlow(item);
+        }
+        NBTItem nbtItem = new NBTItem(item);
+        nbtItem.setInteger("chunkbuster.radius", chunkArea);
+        return nbtItem.getItem();
     }
 }

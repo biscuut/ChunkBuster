@@ -22,6 +22,7 @@ chunkbuster:
     - ""
     - "&7Right click to place and destroy"
     - "&7all the blocks in your chunk radius."
+  glow: true
 
 # This amount of blocks will be processed from the queue per second
 # High numbers will make the blocks disappear instantly, but especially with
@@ -130,4 +131,4 @@ minimum-factions-role: "any"
 show-update-messages: true
 
 # Please do not edit :)
-config-version: 2.0
+config-version: 2.1

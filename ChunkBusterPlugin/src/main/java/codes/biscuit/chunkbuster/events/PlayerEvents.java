@@ -1,11 +1,12 @@
 package codes.biscuit.chunkbuster.events;
 
 import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.nbt.NBTItem;
 import codes.biscuit.chunkbuster.timers.MessageTimer;
 import codes.biscuit.chunkbuster.timers.SoundTimer;
+import codes.biscuit.chunkbuster.utils.ConfigValues;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,7 +36,8 @@ public class PlayerEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChunkBusterPlace(BlockPlaceEvent e) {
-        if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && e.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
+        NBTItem nbtItem = new NBTItem(e.getItemInHand());
+        if (e.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && nbtItem.hasKey("chunkbuster.radius")) {
             e.setCancelled(true);
             Player p = e.getPlayer();
             if (p.hasPermission("chunkbuster.use")) {
@@ -49,7 +51,7 @@ public class PlayerEvents implements Listener {
                                         int secondsDifference = (int) (longDifference / 1000);
                                         int seconds = secondsDifference % 60;
                                         int minutes = secondsDifference / 60;
-                                        p.sendMessage(main.getConfigValues().getCooldownMessage(minutes, seconds));
+                                        main.getUtils().sendMessage(p, ConfigValues.Message.COOLDOWN, minutes, seconds);
                                         return;
                                     }
                                 }
@@ -96,24 +98,16 @@ public class PlayerEvents implements Listener {
                                 p.openInventory(confirmInv);
                             }
                         } else {
-                            if (!main.getConfigValues().cannotPlaceLocation().equals("")) {
-                                p.sendMessage(main.getConfigValues().cannotPlaceLocation());
-                            }
+                            main.getUtils().sendMessage(p, ConfigValues.Message.CANNOT_PLACE);
                         }
                     } else {
-                        if (!main.getConfigValues().getMinimumRoleMessage().equals("")) {
-                            p.sendMessage(main.getConfigValues().getMinimumRoleMessage());
-                        }
+                        main.getUtils().sendMessage(p, ConfigValues.Message.NOT_MINIMUM_ROLE);
                     }
                 } else {
-                    if (!main.getConfigValues().getNoFactionMessage().equals("")) {
-                        p.sendMessage(main.getConfigValues().getNoFactionMessage());
-                    }
+                    main.getUtils().sendMessage(p, ConfigValues.Message.NO_FACTION);
                 }
             } else {
-                if (!main.getConfigValues().getNoPermissionMessagePlace().equals("")) {
-                    p.sendMessage(main.getConfigValues().getNoPermissionMessagePlace());
-                }
+                main.getUtils().sendMessage(p, ConfigValues.Message.NO_PERMISSION_PLACE);
             }
         }
     }
@@ -131,7 +125,8 @@ public class PlayerEvents implements Listener {
                         if (main.getHookUtils().compareLocToPlayer(chunkBusterLocation, p) || main.getHookUtils().isWilderness(chunkBusterLocation)) {
                             if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().contains(main.getConfigValues().getConfirmName())) {
                                 int itemSlot = -1;
-                                if (p.getItemInHand() != null && (p.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && p.getItemInHand().hasItemMeta() && p.getItemInHand().getItemMeta().getEnchantLevel(Enchantment.LURE) > 0)) {
+                                NBTItem nbtItem = new NBTItem(p.getItemInHand());
+                                if (p.getItemInHand() != null && (p.getItemInHand().getType().equals(main.getConfigValues().getChunkBusterMaterial()) && nbtItem.hasKey("chunkbuster.radius"))) {
                                     itemSlot = p.getInventory().getHeldItemSlot();
                                 } else {
                                     for (int i = 0; i <= 40; i++) { // 40 should fix the offhand issue.
@@ -141,7 +136,8 @@ public class PlayerEvents implements Listener {
                                         } catch (IndexOutOfBoundsException ex) {
                                             continue;
                                         }
-                                        if (currentItem != null && currentItem.getType().equals(main.getConfigValues().getChunkBusterMaterial()) && currentItem.hasItemMeta() && currentItem.getItemMeta().getEnchantLevel(Enchantment.LURE) > 0) {
+                                        nbtItem = new NBTItem(currentItem);
+                                        if (currentItem != null && currentItem.getType().equals(main.getConfigValues().getChunkBusterMaterial()) && nbtItem.hasKey("chunkbuster.radius")) {
                                             itemSlot = i;
                                             break;
                                         }
@@ -152,14 +148,13 @@ public class PlayerEvents implements Listener {
                                         if (main.getConfigValues().cancelSoundEnabled()) {
                                             p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
                                         }
-                                        if (!main.getConfigValues().getNoItemMessage().equals("")) {
-                                            p.sendMessage(main.getConfigValues().getNoItemMessage());
-                                        }
+                                        main.getUtils().sendMessage(p, ConfigValues.Message.NO_ITEM);
                                         return;
                                     }
                                 }
                                 ItemStack checkItem = p.getInventory().getItem(itemSlot);
-                                int chunkBusterDiameter = checkItem.getItemMeta().getEnchantLevel(Enchantment.LURE);
+                                nbtItem = new NBTItem(checkItem);
+                                int chunkBusterDiameter = nbtItem.getInteger("chunkbuster.radius");
                                 playerCooldowns.put(p, System.currentTimeMillis() + (1000 * main.getConfigValues().getCooldown()));
                                 chunkBusterLocations.remove(p);
                                 p.closeInventory();
@@ -204,24 +199,16 @@ public class PlayerEvents implements Listener {
                                 if (main.getConfigValues().cancelSoundEnabled()) {
                                     p.playSound(p.getLocation(), main.getConfigValues().getCancelSoundString(), main.getConfigValues().getCancelSoundVolume(), main.getConfigValues().getCancelSoundPitch());
                                 }
-                                if (!main.getConfigValues().getGUICancelMessage().equals("")) {
-                                    p.sendMessage(main.getConfigValues().getGUICancelMessage());
-                                }
+                                main.getUtils().sendMessage(p, ConfigValues.Message.GUI_CANCEL);
                             }
                         } else {
-                            if (!main.getConfigValues().cannotPlaceLocation().equals("")) {
-                                p.sendMessage(main.getConfigValues().cannotPlaceLocation());
-                            }
+                            main.getUtils().sendMessage(p, ConfigValues.Message.CANNOT_PLACE);
                         }
                     } else {
-                        if (!main.getConfigValues().getMinimumRoleMessage().equals("")) {
-                            p.sendMessage(main.getConfigValues().getMinimumRoleMessage());
-                        }
+                        main.getUtils().sendMessage(p, ConfigValues.Message.NOT_MINIMUM_ROLE);
                     }
                 } else {
-                    if (!main.getConfigValues().getNoFactionMessage().equals("")) {
-                        p.sendMessage(main.getConfigValues().getNoFactionMessage());
-                    }
+                    main.getUtils().sendMessage(p, ConfigValues.Message.NO_FACTION);
                 }
             } else {
                 p.sendMessage(ChatColor.RED + "Error, please re-place your chunk buster.");

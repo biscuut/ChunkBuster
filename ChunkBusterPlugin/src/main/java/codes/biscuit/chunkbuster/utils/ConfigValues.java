@@ -1,11 +1,10 @@
 package codes.biscuit.chunkbuster.utils;
 
+import codes.biscuit.chunkbuster.ChunkBuster;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import codes.biscuit.chunkbuster.ChunkBuster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,53 +18,22 @@ public class ConfigValues {
     }
 
     public Material getChunkBusterMaterial() {
-        String rawMaterial = main.getConfig().getString("chunkbuster.material");
-        Material mat;
-        if (rawMaterial.contains(":")) {
-            String[] materialSplit = rawMaterial.split(":");
-            try {
-                mat = Material.valueOf(materialSplit[0]);
-            } catch (IllegalArgumentException ex) {
-                mat = getEnderPortalMaterial();
-                main.getLogger().severe("Your chunk buster material is invalid!");
-            }
-        } else {
-            try {
-                mat = Material.valueOf(rawMaterial);
-            } catch (IllegalArgumentException ex) {
-                mat = getEnderPortalMaterial();
-                main.getLogger().severe("Your chunk buster material is invalid!");
-            }
-        }
-        return mat;
+        return main.getUtils().itemFromString(main.getConfig().getString("chunkbuster.material")).getType();
     }
 
+    @SuppressWarnings("deprecation")
     short getChunkBusterDamage() {
-        String rawDamage = main.getConfig().getString("chunkbuster.material");
-        if (rawDamage.contains(":")) {
-            String[] materialSplit = rawDamage.split(":");
-            short damage;
-            try {
-                damage = Short.valueOf(materialSplit[1]);
-            } catch (IllegalArgumentException ex) {
-                damage = 1;
-                main.getLogger().severe("Your chunk buster damage is invalid!");
-            }
-            return damage;
-        } else {
-            return 0;
-        }
+        return main.getUtils().itemFromString(main.getConfig().getString("chunkbuster.material")).getData().getData();
     }
 
     String getChunkBusterName() { return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("chunkbuster.name")); }
 
     List<String> getChunkBusterLore(int chunkRadius) {
-        List<String> uncolouredList = main.getConfig().getStringList("chunkbuster.lore");
-        List<String> colouredList = new ArrayList<>();
-        for (String s : uncolouredList) {
-            colouredList.add(ChatColor.translateAlternateColorCodes('&', s).replace("{area}", chunkRadius+"x"+chunkRadius));
+        List<String> lore = main.getConfig().getStringList("chunkbuster.lore");
+        for (int i = 0; i < lore.size(); i++) {
+            lore.set(i, Utils.color(lore.get(i)).replace("{area}", chunkRadius+"x"+chunkRadius));
         }
-        return colouredList;
+        return lore; // For convenience
     }
 
     public int getBlockPerTick() { return main.getConfig().getInt("blocks-removed-per-tick"); }
@@ -81,93 +49,15 @@ public class ConfigValues {
     public int getGUIRows() { return main.getConfig().getInt("confirm-gui.rows"); }
 
     public ItemStack getConfirmBlockItemStack() {
-        String rawMaterial = main.getConfig().getString("confirm-gui.confirm-material");
-        Material mat;
-        if (rawMaterial.contains(":")) {
-            String[] materialSplit = rawMaterial.split(":");
-            try {
-                mat = Material.valueOf(materialSplit[0]);
-            } catch (IllegalArgumentException ex) {
-                mat = getDefaultConfirmMaterial();
-                main.getLogger().severe("Your accept-block material is invalid!");
-            }
-            short damage;
-            try {
-                damage = Short.valueOf(materialSplit[1]);
-            } catch (IllegalArgumentException ex) {
-                damage = 1;
-                main.getLogger().severe("Your accept-block damage is invalid!");
-            }
-            return new ItemStack(mat, 1, damage);
-        } else {
-            try {
-                mat = Material.valueOf(rawMaterial);
-            } catch (IllegalArgumentException ex) {
-                mat = getDefaultConfirmMaterial();
-                main.getLogger().severe("Your accept-block material is invalid!");
-            }
-            return new ItemStack(mat, 1);
-        }
+        return main.getUtils().itemFromString(main.getConfig().getString("confirm-gui.confirm-material"));
     }
 
     public ItemStack getCancelBlockItemStack() {
-        String rawMaterial = main.getConfig().getString("confirm-gui.cancel-material");
-        Material mat;
-        if (rawMaterial.contains(":")) {
-            String[] materialSplit = rawMaterial.split(":");
-            try {
-                mat = Material.valueOf(materialSplit[0]);
-            } catch (IllegalArgumentException ex) {
-                mat = getDefaultCancelMaterial();
-                main.getLogger().severe("Your cancel-block material is invalid!");
-            }
-            short damage;
-            try {
-                damage = Short.valueOf(materialSplit[1]);
-            } catch (IllegalArgumentException ex) {
-                damage = 1;
-                main.getLogger().severe("Your cancel-block damage is invalid!");
-            }
-            return new ItemStack(mat, 1, damage);
-        } else {
-            try {
-                mat = Material.valueOf(rawMaterial);
-            } catch (IllegalArgumentException ex) {
-                mat = getDefaultCancelMaterial();
-                main.getLogger().severe("Your cancel-block material is invalid!");
-            }
-            return new ItemStack(mat, 1);
-        }
+        return main.getUtils().itemFromString(main.getConfig().getString("confirm-gui.cancel-material"));
     }
 
     public ItemStack getFillItemStack() {
-        String rawMaterial = main.getConfig().getString("confirm-gui.fill-material");
-        Material mat;
-        if (rawMaterial.contains(":")) {
-            String[] materialSplit = rawMaterial.split(":");
-            try {
-                mat = Material.valueOf(materialSplit[0]);
-            } catch (IllegalArgumentException ex) {
-                mat = Material.AIR;
-                main.getLogger().severe("Your fill-block material is invalid!");
-            }
-            short damage;
-            try {
-                damage = Short.valueOf(materialSplit[1]);
-            } catch (IllegalArgumentException ex) {
-                damage = 1;
-                main.getLogger().severe("Your fill-block damage is invalid!");
-            }
-            return new ItemStack(mat, 1, damage);
-        } else {
-            try {
-                mat = Material.valueOf(rawMaterial);
-            } catch (IllegalArgumentException ex) {
-                mat = Material.AIR;
-                main.getLogger().severe("Your fill-block material is invalid!");
-            }
-            return new ItemStack(mat, 1);
-        }
+        return main.getUtils().itemFromString(main.getConfig().getString("confirm-gui.fill-material"));
     }
 
     public String getGUITitle() {
@@ -187,69 +77,15 @@ public class ConfigValues {
     }
 
     public List<String> getConfirmLore() {
-        List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.confirm-block-lore");
-        List<String> colouredList = new ArrayList<>();
-        for (String s : uncolouredList) {
-            colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
-        }
-        return colouredList;
+        return main.getUtils().colorLore(main.getConfig().getStringList("confirm-gui.confirm-block-lore"));
     }
 
     public List<String> getCancelLore() {
-        List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.cancel-block-lore");
-        List<String> colouredList = new ArrayList<>();
-        for (String s : uncolouredList) {
-            colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
-        }
-        return colouredList;
+        return main.getUtils().colorLore(main.getConfig().getStringList("confirm-gui.cancel-block-lore"));
     }
 
     public List<String> getFillLore() {
-        List<String> uncolouredList = main.getConfig().getStringList("confirm-gui.fill-lore");
-        List<String> colouredList = new ArrayList<>();
-        for (String s : uncolouredList) {
-            colouredList.add(ChatColor.translateAlternateColorCodes('&', s));
-        }
-        return colouredList;
-    }
-
-    public String getGiveMessage(Player p, int amount) {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.give"))
-                .replace("{player}", p.getName()).replace("{amount}", String.valueOf(amount));
-    }
-
-    public String getReceiveMessage(int amount) {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.receive"))
-                .replace("{amount}", String.valueOf(amount));
-    }
-
-    public String getNoPermissionMessageCommand() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-permission-command"));
-    }
-
-    public String getNoPermissionMessagePlace() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-permission-place"));
-    }
-
-    public String getNoFactionMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-faction"));
-    }
-
-    public String cannotPlaceLocation() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.cannot-place"));
-    }
-
-    String getClearingMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.clearing-chunks"));
-    }
-
-    public String getNoItemMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.no-item"));
-    }
-
-    public String getClearingSecondsMessage(int seconds) {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.clearing-in-seconds")
-        .replace("{seconds}", String.valueOf(seconds)));
+        return main.getUtils().colorLore(main.getConfig().getStringList("confirm-gui.fill-lore"));
     }
 
     public boolean sendWarmupEverySecond() {
@@ -262,10 +98,6 @@ public class ConfigValues {
 
     public String getMinimumRole() {
         return main.getConfig().getString("minimum-factions-role").toLowerCase();
-    }
-
-    public String getMinimumRoleMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.not-minimum-role"));
     }
 
     public boolean warmupSoundEnabled() {
@@ -336,10 +168,6 @@ public class ConfigValues {
         return (float)main.getConfig().getDouble("confirm-gui.cancel-pitch");
     }
 
-    public String getGUICancelMessage() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.gui-cancel"));
-    }
-
     List<Material> getIgnoredBlocks() {
         List<String> stringList = main.getConfig().getStringList("ignored-materials");
         List<Material> materialList = new ArrayList<>();
@@ -353,10 +181,6 @@ public class ConfigValues {
 
     public int getCooldown() {
         return main.getConfig().getInt("cooldown");
-    }
-
-    public String getCooldownMessage(int minutes, int seconds) {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.cooldown")).replace("{minutes}", String.valueOf(minutes)).replace("{seconds}", String.valueOf(seconds));
     }
 
     public boolean showUpdateMessage() {
@@ -393,36 +217,6 @@ public class ConfigValues {
         return main.getConfig().getDouble("config-version");
     }
 
-    private Material getDefaultCancelMaterial() {
-        Material mat;
-        if (Bukkit.getVersion().contains("1.13")) {
-            mat = Material.valueOf("RED_WOOL");
-        } else {
-            mat = Material.valueOf("WOOL");
-        }
-        return mat;
-    }
-
-    private Material getDefaultConfirmMaterial() {
-        Material mat;
-        if (Bukkit.getVersion().contains("1.13")) {
-            mat = Material.valueOf("GREEN_WOOL");
-        } else {
-            mat = Material.valueOf("WOOL");
-        }
-        return mat;
-    }
-
-    private Material getEnderPortalMaterial() {
-        Material mat;
-        if (Bukkit.getVersion().contains("1.13")) {
-            mat = Material.valueOf("END_PORTAL_FRAME");
-        } else {
-            mat = Material.valueOf("ENDER_PORTAL_FRAME");
-        }
-        return mat;
-    }
-
     public boolean factionsHookEnabled() {
         return main.getConfig().getBoolean("hooks.factions");
     }
@@ -441,5 +235,48 @@ public class ConfigValues {
 
     public int getNoFallMillis() {
         return main.getConfig().getInt("no-fall-seconds")*1000;
+    }
+
+    boolean itemShouldGlow() {
+        return main.getConfig().getBoolean("chunkbuster.glow");
+    }
+
+    String getMessage(Message message, Object... params) {
+        String messageText = Utils.color(main.getConfig().getString(message.getPath()));
+        if (message == Message.GIVE) { // name string, amount int
+            messageText = messageText.replace("{player}", (String)params[0]).replace("{amount}", String.valueOf(params[1]));
+        } else if (message == Message.RECEIVE) { // amount int
+            messageText = messageText.replace("{amount}", String.valueOf(params[0]));
+        } else if (message == Message.CLEARING_IN_SECONDS) { // seconds int
+            messageText = messageText.replace("{seconds}",  String.valueOf(params[0]));
+        } else if (message == Message.COOLDOWN) {
+            messageText = messageText.replace("{minutes}", String.valueOf(params[0])).replace("{seconds}", String.valueOf(params[1]));
+        }
+        return messageText;
+    }
+
+    public enum Message {
+        GIVE("give"),
+        RECEIVE("receive"),
+        NO_FACTION("no-faction"),
+        CANNOT_PLACE("cannot-place"),
+        CLEARING_CHUNKS("clearing-chunks"),
+        COOLDOWN("cooldown"),
+        NO_ITEM("no-item"),
+        NO_PERMISSION_PLACE("no-permission-place"),
+        NO_PERMISSION_COMMAND("no-permission-command"),
+        CLEARING_IN_SECONDS("clearing-in-seconds"),
+        NOT_MINIMUM_ROLE("not-minimum-role"),
+        GUI_CANCEL("gui-cancel");
+
+        private String path;
+
+        Message(String path) {
+            this.path = "messages."+path;
+        }
+
+        public String getPath() {
+            return path;
+        }
     }
 }

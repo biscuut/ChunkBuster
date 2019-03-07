@@ -1,5 +1,6 @@
 package codes.biscuit.chunkbuster.timers;
 
+import codes.biscuit.chunkbuster.utils.ConfigValues;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import codes.biscuit.chunkbuster.ChunkBuster;
@@ -22,9 +23,7 @@ public class MessageTimer extends BukkitRunnable {
             cancel();
             return;
         }
-        if (!main.getConfigValues().getClearingSecondsMessage(seconds).equals("")) {
-            p.sendMessage(main.getConfigValues().getClearingSecondsMessage(seconds));
-        }
+        main.getUtils().sendMessage(p, ConfigValues.Message.CLEARING_IN_SECONDS, seconds);
         if (!main.getConfigValues().sendWarmupEverySecond()) {
             cancel();
             return;
