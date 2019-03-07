@@ -1,13 +1,13 @@
 package codes.biscuit.chunkbuster.utils;
 
 import codes.biscuit.chunkbuster.ChunkBuster;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class ConfigValues {
 
@@ -26,7 +26,7 @@ public class ConfigValues {
         return main.getUtils().itemFromString(main.getConfig().getString("chunkbuster.material")).getData().getData();
     }
 
-    String getChunkBusterName() { return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("chunkbuster.name")); }
+    String getChunkBusterName() { return Utils.color(main.getConfig().getString("chunkbuster.name")); }
 
     List<String> getChunkBusterLore(int chunkRadius) {
         List<String> lore = main.getConfig().getStringList("chunkbuster.lore");
@@ -61,19 +61,19 @@ public class ConfigValues {
     }
 
     public String getGUITitle() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.title"));
+        return Utils.color(main.getConfig().getString("confirm-gui.title"));
     }
 
     public String getConfirmName() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.confirm-block-name"));
+        return Utils.color(main.getConfig().getString("confirm-gui.confirm-block-name"));
     }
 
     public String getCancelName() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.cancel-block-name"));
+        return Utils.color(main.getConfig().getString("confirm-gui.cancel-block-name"));
     }
 
     public String getFillName() {
-        return ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("confirm-gui.fill-name"));
+        return Utils.color(main.getConfig().getString("confirm-gui.fill-name"));
     }
 
     public List<String> getConfirmLore() {
@@ -168,15 +168,15 @@ public class ConfigValues {
         return (float)main.getConfig().getDouble("confirm-gui.cancel-pitch");
     }
 
-    List<Material> getIgnoredBlocks() {
-        List<String> stringList = main.getConfig().getStringList("ignored-materials");
-        List<Material> materialList = new ArrayList<>();
-        for (String s : stringList) {
+    Set<Material> getIgnoredBlocks() {
+        List<String> rawMaterials = main.getConfig().getStringList("ignored-materials");
+        Set<Material> materials = EnumSet.noneOf(Material.class);
+        for (String rawMaterial : rawMaterials) {
             try {
-                materialList.add(Material.valueOf(s));
+                materials.add(Material.valueOf(rawMaterial));
             } catch (IllegalArgumentException ignored) {}
         }
-        return materialList;
+        return materials;
     }
 
     public int getCooldown() {

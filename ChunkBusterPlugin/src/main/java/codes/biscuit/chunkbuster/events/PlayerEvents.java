@@ -5,7 +5,7 @@ import codes.biscuit.chunkbuster.nbt.NBTItem;
 import codes.biscuit.chunkbuster.timers.MessageTimer;
 import codes.biscuit.chunkbuster.timers.SoundTimer;
 import codes.biscuit.chunkbuster.utils.ConfigValues;
-import net.md_5.bungee.api.ChatColor;
+import codes.biscuit.chunkbuster.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -211,7 +211,7 @@ public class PlayerEvents implements Listener {
                     main.getUtils().sendMessage(p, ConfigValues.Message.NO_FACTION);
                 }
             } else {
-                p.sendMessage(ChatColor.RED + "Error, please re-place your chunk buster.");
+                p.sendMessage(Utils.color("&cError, please re-place your chunk buster."));
             }
         }
     }

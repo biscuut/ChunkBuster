@@ -2,7 +2,7 @@ package codes.biscuit.chunkbuster.commands;
 
 import codes.biscuit.chunkbuster.ChunkBuster;
 import codes.biscuit.chunkbuster.utils.ConfigValues;
-import net.md_5.bungee.api.ChatColor;
+import codes.biscuit.chunkbuster.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -42,7 +42,7 @@ public class ChunkBusterCommand implements TabExecutor {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case "give":
-                    if (sender.hasPermission("chunkbuster.give") || sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
+                    if (sender.hasPermission("chunkbuster.give") || sender.hasPermission("chunkbuster.admin")) {
                         if (args.length > 1) {
                             Player p = Bukkit.getPlayerExact(args[1]);
                             if (p != null) {
@@ -51,7 +51,7 @@ public class ChunkBusterCommand implements TabExecutor {
                                     try {
                                         chunkArea = Integer.parseInt(args[2]);
                                     } catch (NumberFormatException ex) {
-                                        sender.sendMessage(ChatColor.RED + "This isn't a valid number!");
+                                        sender.sendMessage(Utils.color("&cThis isn't a valid number!"));
                                         return false;
                                     }
                                     if (chunkArea > 0 && chunkArea % 2 != 0) { // Is positive and odd number
@@ -60,7 +60,7 @@ public class ChunkBusterCommand implements TabExecutor {
                                             try {
                                                 giveAmount = Integer.parseInt(args[3]);
                                             } catch (NumberFormatException ex) {
-                                                sender.sendMessage(ChatColor.RED + "This isn't a valid number!");
+                                                sender.sendMessage(Utils.color("&cThis isn't a valid number!"));
                                                 return false;
                                             }
                                         }
@@ -69,11 +69,11 @@ public class ChunkBusterCommand implements TabExecutor {
                                         if (!main.getConfigValues().dropFullInv()) {
                                             if (giveAmount < 65) {
                                                 if (p.getInventory().firstEmpty() == -1) {
-                                                    sender.sendMessage(ChatColor.RED + "This player doesn't have any empty slots in their inventory!");
+                                                    sender.sendMessage(Utils.color("&cThis player doesn't have any empty slots in their inventory!"));
                                                     return true;
                                                 }
                                             } else {
-                                                sender.sendMessage(ChatColor.RED + "You can only give 64 at a time!");
+                                                sender.sendMessage(Utils.color("&cYou can only give 64 at a time!"));
                                                 return true;
                                             }
                                         }
@@ -93,55 +93,55 @@ public class ChunkBusterCommand implements TabExecutor {
                                         main.getUtils().sendMessage(p, ConfigValues.Message.GIVE, p.getName(), giveAmount);
                                         main.getUtils().sendMessage(p, ConfigValues.Message.RECEIVE, giveAmount);
                                     } else {
-                                        sender.sendMessage(ChatColor.RED + "The area must be greater than 0 and be an odd number!");
+                                        sender.sendMessage(Utils.color("&cThe area must be greater than 0 and be an odd number!"));
                                     }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "Please specify the chunk area!");
+                                    sender.sendMessage(Utils.color("&cPlease specify the chunk area!"));
                                 }
                             } else {
-                                sender.sendMessage(ChatColor.RED + "This player is not online!");
+                                sender.sendMessage(Utils.color("&cThis player is not online!"));
                             }
                         } else {
-                            sender.sendMessage(ChatColor.RED + "Please specify a player!");
+                            sender.sendMessage(Utils.color("&cPlease specify a player!"));
                         }
                     } else {
                         main.getUtils().sendMessage(sender, ConfigValues.Message.NO_PERMISSION_COMMAND);
                     }
                     break;
                 case "reload":
-                    if (sender.hasPermission("chunkbuster.reload") || sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
+                    if (sender.hasPermission("chunkbuster.reload") || sender.hasPermission("chunkbuster.admin")) {
                         main.reloadConfig();
-                        sender.sendMessage(ChatColor.GREEN + "Successfully reloaded the config. Most values have been instantly updated.");
+                        sender.sendMessage(Utils.color("&aSuccessfully reloaded the config. Most values have been instantly updated."));
                     } else {
                         main.getUtils().sendMessage(sender, ConfigValues.Message.NO_PERMISSION_COMMAND);
                     }
                     break;
                 case "water":
-                    if (sender.hasPermission("chunkbuster.water") || sender.hasPermission("chunkbuster.admin") || sender.isOp()) {
+                    if (sender.hasPermission("chunkbuster.water") || sender.hasPermission("chunkbuster.admin")) {
                         if (sender instanceof Player) {
                             if (main.getUtils().getWaterChunks().contains(((Player)sender).getLocation().getChunk())) {
                                 main.getUtils().getWaterChunks().remove(((Player)sender).getLocation().getChunk());
-                                sender.sendMessage(ChatColor.GREEN + "Water can now flow normally into this chunk.");
+                                sender.sendMessage(Utils.color("&aWater can now flow normally into this chunk."));
                             } else {
-                                sender.sendMessage(ChatColor.RED + "This chunk doesn't have water flow disabled!");
+                                sender.sendMessage(Utils.color("&cThis chunk doesn't have water flow disabled!"));
                             }
                         } else {
-                            sender.sendMessage(ChatColor.RED + "You cannot use this command from here!");
+                            sender.sendMessage(Utils.color("&cYou cannot use this command from here!"));
                         }
                     } else {
                         main.getUtils().sendMessage(sender, ConfigValues.Message.NO_PERMISSION_COMMAND);
                     }
                     break;
                 default:
-                    sender.sendMessage(ChatColor.RED + "Invalid argument!");
+                    sender.sendMessage(Utils.color("&cInvalid argument!"));
             }
         } else {
-            sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "--------------" + ChatColor.GRAY +"[" + ChatColor.GREEN + ChatColor.BOLD + " ChunkBuster " + ChatColor.GRAY + "]" + ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "--------------");
-            sender.sendMessage(ChatColor.GREEN + "● /cb give <player> <chunk-area> [amount] " + ChatColor.GRAY + "- Give a player a chunk buster");
-            sender.sendMessage(ChatColor.GREEN + "● /cb reload " + ChatColor.GRAY + "- Reload the config");
-            sender.sendMessage(ChatColor.GREEN + "● /cb water " + ChatColor.GRAY + "- " + ChatColor.YELLOW + "[DEBUG]" + ChatColor.GRAY + " Allow water to flow normally in your current chunk");
-            sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "v" + main.getDescription().getVersion() + " by Biscut");
-            sender.sendMessage(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------------------");
+            sender.sendMessage(Utils.color("&7&m--------------&7[&a&l ChunkBuster &7]&7&m--------------"));
+            sender.sendMessage(Utils.color("&a● /cb give <player> <chunk-area> [amount] &7- Give a player a chunk buster"));
+            sender.sendMessage(Utils.color("&a● /cb reload &7- Reload the config"));
+            sender.sendMessage(Utils.color("&a● /cb water &7- &e[DEBUG] &7 Allow water to flow normally in your current chunk"));
+            sender.sendMessage(Utils.color("&7&ov" + main.getDescription().getVersion() + " by Biscut"));
+            sender.sendMessage(Utils.color("&7&m-------------------------------------------"));
         }
         return false;
     }

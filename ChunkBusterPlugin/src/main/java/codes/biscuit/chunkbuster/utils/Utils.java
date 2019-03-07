@@ -37,7 +37,7 @@ public class Utils {
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
-    public List<String> colorLore(List<String> lore) {
+    List<String> colorLore(List<String> lore) {
         List<String> newLore = new ArrayList<>();
         for (String loreLine : lore) {
             newLore.add(color(loreLine));
@@ -45,7 +45,7 @@ public class Utils {
         return newLore;
     }
 
-    public ItemStack itemFromString(String rawItem) {
+    ItemStack itemFromString(String rawItem) {
         Material material;
         String[] rawSplit;
         if (rawItem.contains(":")) {
@@ -81,32 +81,15 @@ public class Utils {
     }
 
     public void clearChunks(int chunkBusterArea, Location chunkBusterLocation, Player p) {
-        Set<Material> ignoredBlocks = new HashSet<>(main.getConfigValues().getIgnoredBlocks());
-        if (chunkBusterArea == 1) {
+        Set<Material> ignoredBlocks = main.getConfigValues().getIgnoredBlocks();
+        if (chunkBusterArea % 2 != 0) {
             RemovalQueue removalQueue = new RemovalQueue(main, p);
-            waterChunks.add(chunkBusterLocation.getChunk());
+            int upperBound = ((chunkBusterArea-1)/2)+1;
+            int lowerBound = (chunkBusterArea-1)/-2;
             for (int y = main.getConfigValues().getMaximumY(p); y >= main.getConfigValues().getMinimumY(p); y--) {
-                for (int x = 0; x < 16; x++) {
-                    for (int z = 0; z < 16; z++) {
-                        Block b = chunkBusterLocation.getChunk().getBlock(x, y, z);
-                        if (!b.getType().equals(Material.AIR) && !ignoredBlocks.contains(b.getType())) {
-                            removalQueue.getBlocks().add(b);
-                        }
-                    }
-                }
-            }
-            removalQueue.runTaskTimer(main, 1L, 1L);
-            main.getUtils().sendMessage(p, ConfigValues.Message.CLEARING_CHUNKS);
-        } else if (chunkBusterArea > 2 && chunkBusterArea % 2 != 0) {
-            RemovalQueue removalQueue = new RemovalQueue(main, p);
-            int upperSearchBound = ((chunkBusterArea - 1) / 2) + 1;
-            int lowerSearchBound = (chunkBusterArea - 1) / -2;
-            int startingX = chunkBusterLocation.getChunk().getX();
-            int startingZ = chunkBusterLocation.getChunk().getZ();
-            for (int y = main.getConfigValues().getMaximumY(p); y >= main.getConfigValues().getMinimumY(p); y--) {
-                for (int chunkX = lowerSearchBound; chunkX < upperSearchBound; chunkX++) {
-                    for (int chunkZ = lowerSearchBound; chunkZ < upperSearchBound; chunkZ++) {
-                        Chunk chunk = chunkBusterLocation.getWorld().getChunkAt(startingX + chunkX, startingZ + chunkZ);
+                for (int chunkX = lowerBound; chunkX < upperBound; chunkX++) {
+                    for (int chunkZ = lowerBound; chunkZ < upperBound; chunkZ++) {
+                        Chunk chunk = chunkBusterLocation.getWorld().getChunkAt(chunkBusterLocation.getChunk().getX() + chunkX, chunkBusterLocation.getChunk().getZ() + chunkZ);
                         Location chunkCheckLoc = chunk.getBlock(7, 60, 7).getLocation();
                         if (main.getHookUtils().compareLocToPlayer(chunkCheckLoc, p)) {
                             waterChunks.add(chunk);
@@ -125,7 +108,7 @@ public class Utils {
             removalQueue.runTaskTimer(main, 1L, 1L);
             main.getUtils().sendMessage(p, ConfigValues.Message.CLEARING_CHUNKS);
         } else {
-            p.sendMessage(ChatColor.RED + "Invalid chunk buster!");
+            p.sendMessage(color("&cInvalid chunk buster!"));
         }
     }
 
@@ -178,7 +161,7 @@ public class Utils {
                         p.spigot().sendMessage(newVersion);
                         break;
                     } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
-                        p.sendMessage(ChatColor.RED + "You are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + ".");
+                        p.sendMessage(color("&cYou are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + "."));
                         break;
                     }
                 }
