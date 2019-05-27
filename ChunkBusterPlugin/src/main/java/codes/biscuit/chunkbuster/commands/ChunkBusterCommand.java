@@ -10,10 +10,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ChunkBusterCommand implements TabExecutor {
 
@@ -65,7 +62,6 @@ public class ChunkBusterCommand implements TabExecutor {
                                             }
                                         }
                                         ItemStack item = main.getUtils().getChunkBusterItem(giveAmount, chunkArea);
-                                        HashMap excessItems;
                                         if (!main.getConfigValues().dropFullInv()) {
                                             if (giveAmount < 65) {
                                                 if (p.getInventory().firstEmpty() == -1) {
@@ -77,17 +73,17 @@ public class ChunkBusterCommand implements TabExecutor {
                                                 return true;
                                             }
                                         }
-                                        excessItems = p.getInventory().addItem(item);
-                                        for (Object excessItem : excessItems.values()) {
-                                            int itemCount = ((ItemStack) excessItem).getAmount();
+                                        Map<Integer, ItemStack> excessItems = p.getInventory().addItem(item);
+                                        for (ItemStack excessItem : excessItems.values()) {
+                                            int itemCount = excessItem.getAmount();
                                             while (itemCount > 64) {
-                                                ((ItemStack) excessItem).setAmount(64);
-                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack) excessItem);
+                                                excessItem.setAmount(64);
+                                                p.getWorld().dropItemNaturally(p.getLocation(), excessItem);
                                                 itemCount = itemCount - 64;
                                             }
                                             if (itemCount > 0) {
-                                                ((ItemStack) excessItem).setAmount(itemCount);
-                                                p.getWorld().dropItemNaturally(p.getLocation(), (ItemStack) excessItem);
+                                                excessItem.setAmount(itemCount);
+                                                p.getWorld().dropItemNaturally(p.getLocation(), excessItem);
                                             }
                                         }
                                         main.getUtils().sendMessage(p, ConfigValues.Message.GIVE, p.getName(), giveAmount);

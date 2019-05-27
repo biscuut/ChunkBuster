@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 public class Utils {
 
     private ChunkBuster main;
-    private Set<Chunk> waterChunks = new HashSet<>();
+    private Set<Chunk> waterChunks = new HashSet<>(); // The chunks that water should not flow in
 
     public Utils(ChunkBuster main) {
         this.main = main;
@@ -58,7 +58,7 @@ public class Utils {
         } catch (IllegalArgumentException ex) {
             material = Material.DIRT;
         }
-        short damage = 1;
+        short damage = 0;
         if (rawSplit.length > 1) {
             try {
                 damage = Short.valueOf(rawSplit[1]);
@@ -84,16 +84,17 @@ public class Utils {
         Set<Material> ignoredBlocks = main.getConfigValues().getIgnoredBlocks();
         if (chunkBusterArea % 2 != 0) {
             RemovalQueue removalQueue = new RemovalQueue(main, p);
+            // Variables for the area to loop through
             int upperBound = ((chunkBusterArea-1)/2)+1;
             int lowerBound = (chunkBusterArea-1)/-2;
             for (int y = main.getConfigValues().getMaximumY(p); y >= main.getConfigValues().getMinimumY(p); y--) {
-                for (int chunkX = lowerBound; chunkX < upperBound; chunkX++) {
-                    for (int chunkZ = lowerBound; chunkZ < upperBound; chunkZ++) {
+                for (int chunkX = lowerBound; chunkX < upperBound; chunkX++) { // Loop through the area
+                    for (int chunkZ = lowerBound; chunkZ < upperBound; chunkZ++) { // Get the chunk
                         Chunk chunk = chunkBusterLocation.getWorld().getChunkAt(chunkBusterLocation.getChunk().getX() + chunkX, chunkBusterLocation.getChunk().getZ() + chunkZ);
-                        Location chunkCheckLoc = chunk.getBlock(7, 60, 7).getLocation();
+                        Location chunkCheckLoc = chunk.getBlock(7, 60, 7).getLocation(); // Check the chunk
                         if (main.getHookUtils().compareLocToPlayer(chunkCheckLoc, p)) {
                             waterChunks.add(chunk);
-                            for (int x = 0; x < 16; x++) {
+                            for (int x = 0; x < 16; x++) { // Clear the chunk
                                 for (int z = 0; z < 16; z++) {
                                     Block b = chunk.getBlock(x, y, z);
                                     if (!b.getType().equals(Material.AIR) && !ignoredBlocks.contains(b.getType())) {
@@ -112,7 +113,7 @@ public class Utils {
         }
     }
 
-    public void updateConfig(ChunkBuster main) {
+    public void updateConfig(ChunkBuster main) { // Basic config updater that saves the old config, loads the new one, and inserts the old keys
         if (main.getConfigValues().getConfigVersion() < 2.1) {
             Map<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
@@ -130,7 +131,7 @@ public class Utils {
         }
     }
 
-    public void checkUpdates(Player p) {
+    public void checkUpdates(Player p) { // Grabs the version from the spigot api and checks it
         try {
             URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=60057");
             URLConnection connection = url.openConnection();
@@ -159,10 +160,10 @@ public class Utils {
                         newVersion.setColor(ChatColor.RED);
                         newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-13-clear-any-area-of-land.60057/"));
                         p.spigot().sendMessage(newVersion);
-                        break;
+                        return;
                     } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
                         p.sendMessage(color("&cYou are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + "."));
-                        break;
+                        return;
                     }
                 }
             }

@@ -13,6 +13,10 @@ public class ConfigValues {
 
     private ChunkBuster main;
 
+
+    /**
+     * This class simplifies retrieving config values. If trying to grab a message, please see {@link Utils#sendMessage}
+     */
     public ConfigValues(ChunkBuster main) {
         this.main = main;
     }

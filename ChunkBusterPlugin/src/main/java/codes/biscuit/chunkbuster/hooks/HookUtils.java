@@ -14,14 +14,16 @@ public class HookUtils {
     private Map<HookType, Object> enabledHooks = new EnumMap<>(HookType.class);
     private ChunkBuster main;
 
+
     /**
-     * Construct the instance with the correct hook
+     * This will automatically create all the hooks and add all the enabled hooks
+     * to the map above.
      */
     public HookUtils(ChunkBuster main) {
         this.main = main;
         PluginManager pm = main.getServer().getPluginManager();
         if (pm.getPlugin("MassiveCore") != null &&
-                pm.getPlugin("Factions") != null &&
+                pm.getPlugin("Factions") != null && // Many people have Massivecore on their server when they don't need it, so check dependencies.
                 pm.getPlugin("Factions").getDescription().getDepend().contains("MassiveCore")) {
             main.getLogger().info("Hooked into MassiveCore Factions");
             enabledHooks.put(HookType.MCOREFACTIONS, new MCoreFactionsHook(main));
@@ -50,15 +52,7 @@ public class HookUtils {
     }
 
     /**
-     * Check if a player has a faction
-     * <p>
-     * This method isn't always applicable since they may not be using
-     * a factions hook, so in that case it will return true (since
-     * as false it will stop all the logic). Otherwise
-     * it will check using the appropriate factions hook.
-     * <p>
-     * @param p The player to check
-     * @return If this player has a faction
+     * Check if a player has a faction if the factions hook is enabled
      */
     public boolean hasFaction(Player p) {
         if (main.getConfigValues().factionsHookEnabled() && enabledHooks.containsKey(HookType.MCOREFACTIONS)) {
@@ -73,14 +67,7 @@ public class HookUtils {
     }
 
     /**
-     * Check if a location is wilderness
-     * <p>
-     * This method isn't always applicable since they may not be using
-     * a factions hook, so in that case it will return false. Otherwise
-     * it will check using the appropriate factions hook.
-     * <p>
-     * @param loc The location to check
-     * @return If this chunk is wilderness
+     * Check if a location is wilderness if the factions hook is enabled
      */
     public boolean isWilderness(Location loc) {
         if (main.getConfigValues().factionsHookEnabled() && enabledHooks.containsKey(HookType.MCOREFACTIONS)) {
@@ -95,13 +82,7 @@ public class HookUtils {
     }
 
     /**
-     * Compare a location to a player using the appropriate hook
-     * <p>
-     * This method will check using all enabled hooks.
-     * <p>
-     * @param loc The location to be compared
-     * @param p The player to be compared
-     * @return If the player can clear this chunk
+     * Whether the player can place here, checking all appropriate hooks
      */
     public boolean compareLocToPlayer(Location loc, Player p) {
         boolean canBuild = true;
@@ -124,14 +105,7 @@ public class HookUtils {
     }
 
     /**
-     * Check if a player has the minimum role to place chunkbusters
-     * <p>
-     * This method isn't always applicable since they may not be using
-     * a factions hook, so in that case it will return true. Otherwise
-     * it will check using the appropriate factions hook.
-     * <p>
-     * @param p The player to check
-     * @return If this player has the minimum role
+     * Check if a player has the minimum role to place chunkbusters if the factions hook is enabled
      */
     public boolean checkRole(Player p) {
         if (main.getConfigValues().factionsHookEnabled() && enabledHooks.containsKey(HookType.MCOREFACTIONS)) {
@@ -147,10 +121,6 @@ public class HookUtils {
 
     /**
      * Log a block as removed in CoreProtect
-     * @param p The player to log
-     * @param loc The block's location
-     * @param mat The block's material
-     * @param damage The block's damage value
      */
     public void logBlock(Player p, Location loc, Material mat, byte damage) {
         if (main.getConfigValues().coreprotectHookEnabled() && enabledHooks.containsKey(HookType.COREPROTECT)) {

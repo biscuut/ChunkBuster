@@ -114,8 +114,8 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onConfirmClick(InventoryClickEvent e) {
-        if (e.getWhoClicked() instanceof Player && e.getClickedInventory() != null && e.getClickedInventory().getName() != null &&
-                e.getClickedInventory().getName().equals(main.getConfigValues().getGUITitle())) {
+        if (e.getWhoClicked() instanceof Player && e.getClickedInventory() != null && e.getView().getTitle() != null &&
+                e.getView().getTitle().equals(main.getConfigValues().getGUITitle())) {
             e.setCancelled(true);
             Player p = (Player)e.getWhoClicked();
             Location chunkBusterLocation = chunkBusterLocations.get(p);
@@ -171,7 +171,7 @@ public class PlayerEvents implements Listener {
                                 }
                                 if (main.getConfigValues().getChunkBusterWarmup() > 0) {
                                     int seconds = main.getConfigValues().getChunkBusterWarmup();
-                                    new MessageTimer(seconds, p, main).runTaskTimer(main, 0L, 20L);
+                                    new MessageTimer(seconds, p.getUniqueId(), main).runTaskTimer(main, 0L, 20L);
                                     if (main.getConfigValues().warmupSoundEnabled()) {
                                         new SoundTimer(main, p, (int)((double)seconds / main.getConfigValues().getWarmupSoundInterval())).runTaskTimer(main, 0L, 20L * main.getConfigValues().getWarmupSoundInterval());
                                     }
@@ -218,7 +218,7 @@ public class PlayerEvents implements Listener {
 
     @EventHandler
     public void onGUIClose(InventoryCloseEvent e) {
-        if (e.getInventory().getName().contains(main.getConfigValues().getGUITitle()) && e.getPlayer() instanceof Player) {
+        if (e.getView().getTitle().contains(main.getConfigValues().getGUITitle()) && e.getPlayer() instanceof Player) {
             chunkBusterLocations.remove(e.getPlayer());
         }
     }

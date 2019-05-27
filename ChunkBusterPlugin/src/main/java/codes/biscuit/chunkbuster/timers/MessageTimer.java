@@ -1,19 +1,20 @@
 package codes.biscuit.chunkbuster.timers;
 
-import codes.biscuit.chunkbuster.utils.ConfigValues;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import codes.biscuit.chunkbuster.ChunkBuster;
+import codes.biscuit.chunkbuster.utils.ConfigValues;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.UUID;
 
 public class MessageTimer extends BukkitRunnable {
 
     private int seconds;
-    private Player p;
+    private UUID uuid;
     private ChunkBuster main;
 
-    public MessageTimer(int seconds, Player p, ChunkBuster main) {
+    public MessageTimer(int seconds, UUID uuid, ChunkBuster main) {
         this.seconds = seconds;
-        this.p = p;
+        this.uuid = uuid;
         this.main = main;
     }
 
@@ -23,7 +24,7 @@ public class MessageTimer extends BukkitRunnable {
             cancel();
             return;
         }
-        main.getUtils().sendMessage(p, ConfigValues.Message.CLEARING_IN_SECONDS, seconds);
+        main.getUtils().sendMessage(main.getServer().getPlayer(uuid), ConfigValues.Message.CLEARING_IN_SECONDS, seconds);
         if (!main.getConfigValues().sendWarmupEverySecond()) {
             cancel();
             return;

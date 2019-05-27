@@ -35,6 +35,7 @@ class FactionsUUIDHook {
         return locFaction.equals(pFaction) || (locFaction.isWilderness() && main.getConfigValues().canPlaceInWilderness());
     }
 
+    // This is more complicated than it has to be because of different forks. Trust me, just keep it this way.
     boolean checkRole(Player p, String role) {
         Role playerRole = FPlayers.getInstance().getByPlayer(p).getRole();
         if (playerRole == null) {

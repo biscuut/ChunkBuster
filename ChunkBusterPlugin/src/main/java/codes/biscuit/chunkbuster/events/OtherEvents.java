@@ -7,9 +7,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import codes.biscuit.chunkbuster.ChunkBuster;
 
+import java.util.regex.Pattern;
+
 public class OtherEvents implements Listener {
 
     private ChunkBuster main;
+    private int version = -1;
 
     public OtherEvents(ChunkBuster main) {
         this.main = main;
@@ -17,7 +20,10 @@ public class OtherEvents implements Listener {
 
     @EventHandler
     public void onWaterFlow(BlockFromToEvent e) {
-        if (Bukkit.getVersion().contains("1.13")) {
+        if (version == -1) {
+            version = Integer.valueOf(Bukkit.getBukkitVersion().split(Pattern.quote("-"))[0].split(Pattern.quote("."))[1]);
+        }
+        if (version >= 13) { //Material names are different in 1.13+
             if (e.getBlock().getType().equals(Material.WATER) || e.getBlock().getType().equals(Material.LAVA)) {
                 if (!main.getUtils().getWaterChunks().contains(e.getBlock().getChunk()) && main.getUtils().getWaterChunks().contains(e.getToBlock().getChunk())) {
                     e.setCancelled(true);

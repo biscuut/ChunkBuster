@@ -27,11 +27,6 @@ public class ChunkBuster extends JavaPlugin {
         getCommand("chunkbuster").setTabCompleter(chunkBusterCommand);
     }
 
-    @Override
-    public void onDisable() {
-        Bukkit.getScheduler().cancelTasks(this);
-    }
-
     public Utils getUtils() { return utils; }
 
     public ConfigValues getConfigValues() { return configValues; }

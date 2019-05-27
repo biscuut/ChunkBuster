@@ -15,7 +15,7 @@ chunkbuster:
   # 1.12 - https://hub.spigotmc.org/nexus/service/local/repositories/snapshots/archive/org/spigotmc/spigot-api/1.12.2-R0.1-SNAPSHOT/spigot-api-1.12.2-R0.1-20180712.012057-156-javadoc.jar/!/org/bukkit/Material.html
   # 1.13 - https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
   # Damage values supported for < 1.13.
-  material: "ENDER_PORTAL_FRAME"
+  material: "ENDER_PORTAL_FRAME" # or END_PORTAL_FRAME in 1.13+
   name: "&e\u2734 &a&lChunk Buster &e\u2734"
   lore:
     - "&7Radius: &e{area}"
@@ -71,8 +71,8 @@ full-inv-drop-on-floor: false
 confirm-gui:
   # Maximum 6
   rows: 3
-  confirm-material: "WOOL:5"
-  cancel-material: "WOOL:14"
+  confirm-material: "WOOL:5" # or GREEN_WOOL
+  cancel-material: "WOOL:14" # or RED_WOOL
   fill-material: "AIR"
   # Please do not leave leave any of these below texts empty ("") please
   title: "&7CONFIRM CHUNK BUSTER"

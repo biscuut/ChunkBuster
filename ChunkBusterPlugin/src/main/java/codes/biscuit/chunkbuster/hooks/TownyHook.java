@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 class TownyHook {
 
     boolean canBuild(Chunk chunk, Player p) {
-        if (TownySettings.getTownBlockSize() % 16 == 0) {
+        if (TownySettings.getTownBlockSize() % 16 == 0) { // If claims are an even 16 block then its much simpler
             Block centerBlock = chunk.getBlock(7,chunk.getWorld().getMaxHeight()/2, 7);
             return PlayerCacheUtil.getCachePermission(p, centerBlock.getLocation(), centerBlock.getType(), TownyPermission.ActionType.DESTROY);
         } else {
