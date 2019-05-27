@@ -4,6 +4,7 @@ import codes.biscuit.chunkbuster.commands.ChunkBusterCommand;
 import codes.biscuit.chunkbuster.events.OtherEvents;
 import codes.biscuit.chunkbuster.events.PlayerEvents;
 import codes.biscuit.chunkbuster.hooks.HookUtils;
+import codes.biscuit.chunkbuster.hooks.MetricsLite;
 import codes.biscuit.chunkbuster.utils.ConfigValues;
 import codes.biscuit.chunkbuster.utils.Utils;
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ public class ChunkBuster extends JavaPlugin {
         ChunkBusterCommand chunkBusterCommand = new ChunkBusterCommand(this);
         getCommand("chunkbuster").setExecutor(chunkBusterCommand);
         getCommand("chunkbuster").setTabCompleter(chunkBusterCommand);
+        new MetricsLite(this);
     }
 
     public Utils getUtils() { return utils; }
