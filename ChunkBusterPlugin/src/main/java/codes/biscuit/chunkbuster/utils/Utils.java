@@ -5,9 +5,7 @@ import codes.biscuit.chunkbuster.timers.RemovalQueue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -84,6 +82,7 @@ public class Utils {
         Set<Material> ignoredBlocks = main.getConfigValues().getIgnoredBlocks();
         if (chunkBusterArea % 2 != 0) {
             RemovalQueue removalQueue = new RemovalQueue(main, p);
+            WorldBorder border = chunkBusterLocation.getWorld().getWorldBorder();
             // Variables for the area to loop through
             int upperBound = ((chunkBusterArea-1)/2)+1;
             int lowerBound = (chunkBusterArea-1)/-2;
@@ -98,7 +97,9 @@ public class Utils {
                                 for (int z = 0; z < 16; z++) {
                                     Block b = chunk.getBlock(x, y, z);
                                     if (!b.getType().equals(Material.AIR) && !ignoredBlocks.contains(b.getType())) {
-                                        removalQueue.getBlocks().add(b);
+                                        if (!main.getConfigValues().worldborderHookEnabled() || insideBorder(b, border)) {
+                                            removalQueue.getBlocks().add(b);
+                                        }
                                     }
                                 }
                             }
@@ -113,8 +114,17 @@ public class Utils {
         }
     }
 
+    private boolean insideBorder(Block block, WorldBorder border) {
+        Location blockLocation = block.getLocation().add(0.5, 0, 0.5);
+        double x = blockLocation.getX();
+        double z = blockLocation.getZ();
+        double size = border.getSize()/2;
+        Location center = border.getCenter();
+        return !((x >= center.clone().add(size, 0, 0).getX() || z >= center.clone().add(0, 0, size).getZ()) || (x <= center.clone().subtract(size,0,0).getX() || (z <= center.clone().subtract(0,0, size).getZ())));
+    }
+
     public void updateConfig(ChunkBuster main) { // Basic config updater that saves the old config, loads the new one, and inserts the old keys
-        if (main.getConfigValues().getConfigVersion() < 2.1) {
+        if (main.getConfigValues().getConfigVersion() < 2.2) {
             Map<String, Object> oldValues = new HashMap<>();
             for (String oldKey : main.getConfig().getKeys(true)) {
                 oldValues.put(oldKey, main.getConfig().get(oldKey));
@@ -126,7 +136,7 @@ public class Utils {
                     main.getConfig().set(newKey, oldValues.get(newKey));
                 }
             }
-            main.getConfig().set("config-version", 2.1);
+            main.getConfig().set("config-version", 2.2);
             main.saveConfig();
         }
     }

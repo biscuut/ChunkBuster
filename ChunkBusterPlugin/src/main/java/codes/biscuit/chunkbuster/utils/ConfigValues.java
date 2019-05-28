@@ -229,6 +229,10 @@ public class ConfigValues {
         return main.getConfig().getBoolean("hooks.coreprotect");
     }
 
+    boolean worldborderHookEnabled() {
+        return main.getConfig().getBoolean("hooks.worldborder");
+    }
+
     public boolean worldguardHookEnabled() {
         return main.getConfig().getBoolean("hooks.worldguard");
     }

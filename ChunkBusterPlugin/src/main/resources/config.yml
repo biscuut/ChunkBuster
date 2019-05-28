@@ -120,6 +120,7 @@ hooks:
   coreprotect: false # Whether CoreProtect should log all removed blocks or not. Will have no effect if coreprotect is not installed.
   worldguard: true # Check for block-break flag in regions
   towny: false # Check land build permissions
+  worldborder: true # Check for the worldborder, may or may not be a tiny bit slower
 
 # The minimum factions role for using chunkbusters
 # For FactionsUUID/SavageFactions, set this to either "leader"/"admin", "coleader", "moderator", "member"/"normal", "recruit"/"any"
@@ -131,4 +132,4 @@ minimum-factions-role: "any"
 show-update-messages: true
 
 # Please do not edit :)
-config-version: 2.1
+config-version: 2.2
