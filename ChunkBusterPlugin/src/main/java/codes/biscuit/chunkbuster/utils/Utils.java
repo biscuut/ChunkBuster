@@ -36,11 +36,10 @@ public class Utils {
     }
 
     List<String> colorLore(List<String> lore) {
-        List<String> newLore = new ArrayList<>();
-        for (String loreLine : lore) {
-            newLore.add(color(loreLine));
+        for (int i = 0; i < lore.size(); i++) {
+            lore.set(i, color(lore.get(i)));
         }
-        return newLore;
+        return lore; // For convenience
     }
 
     ItemStack itemFromString(String rawItem) {
