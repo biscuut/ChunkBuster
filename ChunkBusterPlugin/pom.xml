@@ -9,7 +9,7 @@
     <artifactId>ChunkBusterPlugin</artifactId>
     <packaging>jar</packaging>
     <name>ChunkBusterPlugin</name>
-    <version>1.2.7</version>
+    <version>1.2.8</version>
 
     <repositories>
         <repository>
@@ -77,6 +77,18 @@
             <artifactId>WG_7</artifactId>
             <groupId>codes.biscuit</groupId>
             <version>WG_7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <artifactId>UUID_NEW</artifactId>
+            <groupId>codes.biscuit</groupId>
+            <version>UUID_NEW</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <artifactId>UUID_OLD</artifactId>
+            <groupId>codes.biscuit</groupId>
+            <version>UUID_OLD</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

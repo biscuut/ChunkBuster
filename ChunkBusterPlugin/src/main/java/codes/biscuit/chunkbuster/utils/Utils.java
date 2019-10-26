@@ -1,11 +1,15 @@
 package codes.biscuit.chunkbuster.utils;
 
+import codes.biscuit.chunkbuster.ChunkBuster;
 import codes.biscuit.chunkbuster.nbt.NBTItem;
 import codes.biscuit.chunkbuster.timers.RemovalQueue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -13,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import codes.biscuit.chunkbuster.ChunkBuster;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -71,7 +74,7 @@ public class Utils {
     }
 
     private void addGlow(ItemStack item) {
-        item.addUnsafeEnchantment(Enchantment.LURE, 1);
+        item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
         ItemMeta meta = item.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);

@@ -30,6 +30,14 @@ public class HookUtils {
         } else if (pm.getPlugin("Factions") != null) {
             main.getLogger().info("Hooked into FactionsUUID/SavageFactions");
             enabledHooks.put(HookType.FACTIONSUUID, new FactionsUUIDHook(main));
+            try {
+                Class.forName("com.massivecraft.factions.perms.Role"); //old is com.massivecraft.factions.struct.Role
+                main.getLogger().info("Hooked into the new FactionsUUID/SavageFactions role system.");
+                enabledHooks.put(HookType.FACTIONSUUID_ROLE, new FactionsUUID_New());
+            } catch (ClassNotFoundException e) {
+                main.getLogger().info("Hooked into the old FactionsUUID/SavageFactions role system.");
+                enabledHooks.put(HookType.FACTIONSUUID_ROLE, new FactionsUUID_Old());
+            }
         }
         if (pm.getPlugin("WorldGuard") != null) {
             String pluginVersion = main.getServer().getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
@@ -94,7 +102,7 @@ public class HookUtils {
             if (!factionsUUIDHook.compareLocPlayerFaction(loc, p)) canBuild = false;
         }
         if (main.getConfigValues().worldguardHookEnabled() && enabledHooks.containsKey(HookType.WORLDGUARD)) {
-            WorldGuardHook worldGuardHook = (WorldGuardHook)enabledHooks.get(HookType.WORLDGUARD);
+            IWorldGuardHook worldGuardHook = (IWorldGuardHook)enabledHooks.get(HookType.WORLDGUARD);
             if (!worldGuardHook.checkLocationBreakFlag(loc.getChunk(), p)) canBuild = false;
         }
         if (main.getConfigValues().townyHookEnabled() && enabledHooks.containsKey(HookType.TOWNY)) {
@@ -111,8 +119,8 @@ public class HookUtils {
         if (main.getConfigValues().factionsHookEnabled() && enabledHooks.containsKey(HookType.MCOREFACTIONS)) {
             MCoreFactionsHook mCoreFactionsHook = (MCoreFactionsHook)enabledHooks.get(HookType.MCOREFACTIONS);
             return mCoreFactionsHook.checkRole(p, main.getConfigValues().getMinimumRole());
-        } else if (main.getConfigValues().factionsHookEnabled() && enabledHooks.containsKey(HookType.FACTIONSUUID)) {
-            FactionsUUIDHook factionsUUIDHook = (FactionsUUIDHook)enabledHooks.get(HookType.FACTIONSUUID);
+        } else if (main.getConfigValues().factionsHookEnabled() && enabledHooks.containsKey(HookType.FACTIONSUUID_ROLE)) {
+            IFactionsUUIDHook factionsUUIDHook = (IFactionsUUIDHook)enabledHooks.get(HookType.FACTIONSUUID_ROLE);
             return factionsUUIDHook.checkRole(p, main.getConfigValues().getMinimumRole());
         } else {
             return true;
@@ -132,6 +140,7 @@ public class HookUtils {
     public enum HookType {
         MCOREFACTIONS,
         FACTIONSUUID,
+        FACTIONSUUID_ROLE,
         WORLDGUARD,
         COREPROTECT,
         TOWNY

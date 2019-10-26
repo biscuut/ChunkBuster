@@ -13,7 +13,7 @@ import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class WorldGuard_7 implements WorldGuardHook {
+public class WorldGuard_7 implements IWorldGuardHook {
 
     public boolean checkLocationBreakFlag(Chunk chunk, Player p) {
         WorldGuard worldGuard = WorldGuard.getInstance();
