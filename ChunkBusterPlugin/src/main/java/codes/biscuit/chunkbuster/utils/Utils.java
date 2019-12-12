@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -74,7 +75,7 @@ public class Utils {
     }
 
     private void addGlow(ItemStack item) {
-        item.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
+        item.addUnsafeEnchantment(Enchantment.LURE, 1);
         ItemMeta meta = item.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
@@ -143,43 +144,48 @@ public class Utils {
         }
     }
 
-    public void checkUpdates(Player p) { // Grabs the version from the spigot api and checks it
-        try {
-            URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=60057");
-            URLConnection connection = url.openConnection();
-            connection.setReadTimeout(5000);
-            connection.addRequestProperty("User-Agent", "ChunkBuster update checker");
-            connection.setDoOutput(true);
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String newestVersion = reader.readLine();
-            reader.close();
-            List<Integer> newestVersionNumbers = new ArrayList<>();
-            List<Integer> thisVersionNumbers = new ArrayList<>();
-            try {
-                for (String s : newestVersion.split(Pattern.quote("."))) {
-                    newestVersionNumbers.add(Integer.parseInt(s));
-                }
-                for (String s : main.getDescription().getVersion().split(Pattern.quote("."))) {
-                    thisVersionNumbers.add(Integer.parseInt(s));
-                }
-            } catch (Exception ex) {
-                return;
-            }
-            for (int i = 0; i < 3; i++) {
-                if (newestVersionNumbers.get(i) != null && thisVersionNumbers.get(i) != null) {
-                    if (newestVersionNumbers.get(i) > thisVersionNumbers.get(i)) {
-                        TextComponent newVersion = new TextComponent("A new version of ChunkBuster, " + newestVersion + " is available. Download it by clicking here.");
-                        newVersion.setColor(ChatColor.RED);
-                        newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-13-clear-any-area-of-land.60057/"));
-                        p.spigot().sendMessage(newVersion);
-                        return;
-                    } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
-                        p.sendMessage(color("&cYou are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + "."));
+    public void checkUpdates(Player p) { // Grabs the version from the spigot api and checks it!
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=60057");
+                    URLConnection connection = url.openConnection();
+                    connection.setReadTimeout(5000);
+                    connection.addRequestProperty("User-Agent", "ChunkBuster update checker");
+                    connection.setDoOutput(true);
+                    final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String newestVersion = reader.readLine();
+                    reader.close();
+                    List<Integer> newestVersionNumbers = new ArrayList<>();
+                    List<Integer> thisVersionNumbers = new ArrayList<>();
+                    try {
+                        for (String s : newestVersion.split(Pattern.quote("."))) {
+                            newestVersionNumbers.add(Integer.parseInt(s));
+                        }
+                        for (String s : main.getDescription().getVersion().split(Pattern.quote("."))) {
+                            thisVersionNumbers.add(Integer.parseInt(s));
+                        }
+                    } catch (Exception ex) {
                         return;
                     }
-                }
+                    for (int i = 0; i < 3; i++) {
+                        if (newestVersionNumbers.get(i) != null && thisVersionNumbers.get(i) != null) {
+                            if (newestVersionNumbers.get(i) > thisVersionNumbers.get(i)) {
+                                TextComponent newVersion = new TextComponent("A new version of ChunkBuster, " + newestVersion + " is available. Download it by clicking here.");
+                                newVersion.setColor(ChatColor.RED);
+                                newVersion.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/chunkbuster-1-8-1-13-clear-any-area-of-land.60057/"));
+                                p.spigot().sendMessage(newVersion);
+                                return;
+                            } else if (thisVersionNumbers.get(i) > newestVersionNumbers.get(i)) {
+                                p.sendMessage(color("&cYou are running a development version of ChunkBuster, " + main.getDescription().getVersion() + ". The latest online version is " + newestVersion + "."));
+                                return;
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {}
             }
-        } catch (Exception ignored) {}
+        }.runTaskAsynchronously(main);
     }
 
     public Set<Chunk> getWaterChunks() { return waterChunks; }
